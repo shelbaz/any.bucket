@@ -1,25 +1,26 @@
 "use client";
-import { createContext, useState } from "react";
+import { createContext, useMemo, useRef, useState } from "react";
 
 interface MediaContextType {
-  isPlaying: boolean;
+  audioRef?: React.MutableRefObject<HTMLAudioElement | null>;
   mediaFile: string | null;
   isFullScreen: boolean;
-  setIsPlaying: (isPlaying: boolean) => void;
+  isPlaying: boolean;
   setMediaFile: (MediaFile: string | null) => void;
   setFullScreen: (isFullScreen: boolean) => void;
+  setIsPlaying: (isPlaying: boolean) => void;
   play: () => void;
   pause: () => void;
   close: () => void;
 }
 
 const initialValue: MediaContextType = {
-  isPlaying: false,
   mediaFile: null,
   isFullScreen: false,
-  setIsPlaying: () => {},
+  isPlaying: false,
   setMediaFile: () => {},
   setFullScreen: () => {},
+  setIsPlaying: () => {},
   play: () => {},
   pause: () => {},
   close: () => {},
@@ -28,6 +29,7 @@ const initialValue: MediaContextType = {
 export const MediaContext = createContext<MediaContextType>(initialValue);
 
 export const MediaProvider = ({ children }: { children: React.ReactNode }) => {
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState<MediaContextType["isPlaying"]>(
     initialValue.isPlaying
   );
@@ -39,24 +41,28 @@ export const MediaProvider = ({ children }: { children: React.ReactNode }) => {
   >(initialValue.isFullScreen);
 
   const play = () => {
+    audioRef?.current?.play();
     setIsPlaying(true);
   };
 
   const pause = () => {
+    audioRef?.current?.pause();
     setIsPlaying(false);
   };
 
   const close = () => {
-    setIsPlaying(false);
     setMediaFile(null);
+    setIsPlaying(false);
+    audioRef?.current?.pause();
   };
 
   return (
     <MediaContext.Provider
       value={{
-        isPlaying,
+        audioRef,
         mediaFile,
         isFullScreen,
+        isPlaying,
         setIsPlaying,
         setMediaFile,
         setFullScreen,

@@ -1,11 +1,17 @@
+import { MediaContext } from "@/app/_context/MediaContext";
 import {
   getEmojiFromExtension,
   getFileTypeFromExtension,
   getSize,
 } from "@/app/_helpers/files";
 import { useHandleFileClick } from "@/app/_hooks/files";
-import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
+import {
+  EllipsisHorizontalIcon,
+  PauseIcon,
+  PlayIcon,
+} from "@heroicons/react/20/solid";
 import Image from "next/image";
+import { useContext } from "react";
 
 interface Props {
   objectKey: string;
@@ -15,6 +21,7 @@ interface Props {
 }
 
 export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
+  const { audioRef, mediaFile, pause } = useContext(MediaContext);
   const fileType = getFileTypeFromExtension(extension);
   const noFilePreview = !["image", "audio", "video"].includes(fileType);
   const handleFileClick = useHandleFileClick(objectKey, fileType);
@@ -42,14 +49,12 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                 )}
 
                 {fileType === "audio" && (
-                  <div className="flex justify-center items-center bg-gray-100 h-8 w-8">
-                    <audio
-                      controls
-                      controlsList="nofullscreen nodownload"
-                      className="hidden"
-                    >
-                      <source src={fileUrl} />
-                    </audio>
+                  <div className="flex justify-center items-center bg-gray-100 rounded h-8 w-8">
+                    {!audioRef?.current?.paused && objectKey === mediaFile ? (
+                      <PauseIcon className="h5 w-5 text-gray-500" />
+                    ) : (
+                      <PlayIcon className="h-5 w-5 text-gray-500" />
+                    )}
                   </div>
                 )}
                 {fileType === "video" && (

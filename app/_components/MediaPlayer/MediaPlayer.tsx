@@ -3,12 +3,13 @@
 import { MediaContext } from "@/app/_context/MediaContext";
 import { getFileTypeFromExtension } from "@/app/_helpers/files";
 import { useContext, useEffect, useRef, useState } from "react";
+// @ts-ignore
+import AudioSpectrum from "react-audio-spectrum";
 
 export const MediaPlayer = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { mediaFile, setIsPlaying, isFullScreen, setFullScreen } =
+  const { mediaFile, setIsPlaying, isFullScreen, setFullScreen, audioRef } =
     useContext(MediaContext);
-  const audioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -26,20 +27,18 @@ export const MediaPlayer = () => {
   const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${mediaFile}`;
 
   return (
-    <div className="w-full bottom-0 left-0 py-3 px-4">
+    <div className="fixed bottom-4 right-4 p-4 bg-black">
       <audio
+        id="audio-element"
         ref={audioRef}
         controls
         controlsList="nofullscreen nodownload"
-        className="hidden"
         autoPlay={true}
-      >
-        <source
-          src={fileUrl}
-          onPlay={() => setIsPlaying(true)}
-          onPause={() => setIsPlaying(false)}
-        />
-      </audio>
+        src={fileUrl}
+        className="hidden"
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+      />
     </div>
   );
 };

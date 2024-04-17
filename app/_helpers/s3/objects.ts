@@ -20,10 +20,6 @@ export const useListObjects = ({ folder }: { folder?: string }) => {
 
     const hasAlreadyFetched = objects.length > 0 || folders.length > 0;
 
-    console.log("CONTINUATION:", continuationToken);
-    console.log("START AFTER:", startAfter);
-    console.log("TRUNCATED:", isTruncated);
-
     const listObjects = useCallback(async () => {
         if (!isTruncated || (!startAfter && hasAlreadyFetched) || isLoading) return;
         setIsLoading(true);
