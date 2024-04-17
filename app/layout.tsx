@@ -5,6 +5,7 @@ import { Sidebar } from "./_components/layout/Sidebar";
 import { Toaster } from "react-hot-toast";
 import { AppProvider } from "./_context/AppContext";
 import { AudioProvider } from "./_context/AudioContext";
+import { AudioPlayer } from "./_components/AudioPlayer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,12 @@ export default function RootLayout({
           <AudioProvider>
             <div>
               <Sidebar />
-              <main className="lg:pl-72">{children}</main>
+              <main className="lg:pl-72">
+                <>
+                  {children}
+                  <AudioPlayer />
+                </>
+              </main>
             </div>
           </AudioProvider>
         </AppProvider>
