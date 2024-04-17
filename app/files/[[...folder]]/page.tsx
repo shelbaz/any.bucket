@@ -18,14 +18,12 @@ const FilePage = () => {
 
   return (
     <div>
-      {crumbs.length > 0 && (
-        <div className="flex items-center py-2 px-3 border-t border-b border-gray-200">
-          <Breadcrumbs
-            basePath="/files"
-            crumbs={[{ segment: "/", title: "Files" }, ...crumbs]}
-          />
-        </div>
-      )}
+      <div className="flex items-center py-2 px-3 border-t border-b border-gray-200">
+        <Breadcrumbs
+          basePath="/files"
+          crumbs={[{ segment: "/", title: "Files" }, ...crumbs]}
+        />
+      </div>
       <div className="p-6">
         {/* FOLDERS */}
         <ul className="grid grid-cols-12 gap-4">
