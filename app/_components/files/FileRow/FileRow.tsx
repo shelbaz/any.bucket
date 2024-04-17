@@ -2,7 +2,6 @@ import {
   getEmojiFromExtension,
   getFileTypeFromExtension,
   getSize,
-  handleFileClick,
 } from "@/app/_helpers/files";
 import { useHandleFileClick } from "@/app/_hooks/files";
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
