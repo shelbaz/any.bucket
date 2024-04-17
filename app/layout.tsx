@@ -4,8 +4,8 @@ import "./globals.css";
 import { Sidebar } from "./_components/layout/Sidebar";
 import { Toaster } from "react-hot-toast";
 import { AppProvider } from "./_context/AppContext";
-import { AudioProvider } from "./_context/AudioContext";
-import { AudioPlayer } from "./_components/AudioPlayer";
+import { MediaProvider } from "./_context/MediaContext";
+import { MediaPlayer } from "./_components/MediaPlayer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,17 +23,17 @@ export default function RootLayout({
     <html className="h-full bg-white">
       <body className="h-full">
         <AppProvider>
-          <AudioProvider>
+          <MediaProvider>
             <div>
               <Sidebar />
               <main className="lg:pl-72">
                 <div className="relative min-h-screen">
                   {children}
-                  <AudioPlayer />
+                  <MediaPlayer />
                 </div>
               </main>
             </div>
-          </AudioProvider>
+          </MediaProvider>
         </AppProvider>
         <Toaster position="bottom-center" reverseOrder={false} />
       </body>

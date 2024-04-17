@@ -1,14 +1,14 @@
 "use client";
 
-import { AudioContext } from "@/app/_context/AudioContext";
+import { MediaContext } from "@/app/_context/MediaContext";
 import { useContext } from "react";
 
 export const useHandleFileClick = (objectKey: string, type: string) => {
-  const { play, setAudioFile } = useContext(AudioContext);
+  const { play, setMediaFile } = useContext(MediaContext);
   let handleFileClick = () => {};
   if (type === "audio") {
     handleFileClick = () => {
-      setAudioFile(objectKey);
+      setMediaFile(objectKey);
       play();
     };
   } else {
