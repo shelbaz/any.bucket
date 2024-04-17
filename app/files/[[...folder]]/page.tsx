@@ -3,6 +3,7 @@ import { Breadcrumbs } from "@/app/_components/layout/Breadcrumbs";
 import { useListObjects } from "../../_helpers/s3/objects";
 import { useRouter, useParams } from "next/navigation";
 import { FolderCard } from "@/app/_components/files/FolderCard";
+import { FileCard } from "@/app/_components/files/FileCard";
 
 const FilePage = () => {
   const router = useRouter();
@@ -13,7 +14,6 @@ const FilePage = () => {
     folder
       ?.split("/")
       .map((folder) => ({ title: decodeURI(folder), segment: folder })) ?? [];
-  console.log("CRUMBS:", crumbs);
 
   const { objects, folders } = useListObjects({ folder });
 
@@ -26,7 +26,6 @@ const FilePage = () => {
         />
       </div>
       <div className="p-6">
-        {/* FOLDERS */}
         <ul className="grid grid-cols-12 gap-4">
           {folders?.map((folder) => (
             <FolderCard
@@ -35,13 +34,14 @@ const FilePage = () => {
               onClick={() => router.push(`/files/${folder.prefix}`)}
             />
           ))}
-        </ul>
-        {/* OBJECTS */}
-        <ul>
           {objects?.map((object) => (
-            <li key={object.Key}>
-              {object.Key} - {(object.Size ?? 1) / 1000} kb
-            </li>
+            <FileCard
+              key={object.Key}
+              objectKey={object.Key ?? ""}
+              label={object.Key?.split("/").pop() ?? "File"}
+              bytes={object.Size}
+              extension={object.Key?.split(".").pop()?.toLowerCase() ?? "file"}
+            />
           ))}
         </ul>
       </div>
