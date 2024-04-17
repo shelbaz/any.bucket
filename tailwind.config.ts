@@ -16,5 +16,11 @@ const config: Config = {
     },
   },
   plugins: [],
+  variants: {
+    extend: {
+      textOpacity: ["group-hover"],
+      opacity: ["group-hover"],
+    },
+  }
 };
 export default config;

@@ -15,16 +15,18 @@ const FilePage = () => {
       <ul className="grid grid-cols-12 gap-4">
         {folders?.map((folder) => (
           <li
-            className="col-span-12 sm:col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer"
+            className="group col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer"
             key={folder.prefix}
             onClick={() => router.push(`/files/${folder.prefix}`)}
           >
             <div className="rounded-lg duration-100 shadow-none hover:shadow-md h-full border border-gray-200">
               <div className="flex justify-center items-center aspect-square">
-                <span className="text-8xl">📁</span>
+                <span className="text-7xl">📁</span>
               </div>
-              <div className="flex items-center p-2 border-t border-gray-200">
-                {folder.label}
+              <div className="flex items-center py-2 px-3 border-t border-gray-200 text-black">
+                <span className="text-sm font-medium group-hover:opacity-75">
+                  {folder.label}
+                </span>
               </div>
             </div>
           </li>

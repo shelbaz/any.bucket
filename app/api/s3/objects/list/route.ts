@@ -1,6 +1,5 @@
 import { S3Client, _Object, ListObjectsV2Command, CommonPrefix } from "@aws-sdk/client-s3";
-import { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const formatFolders = (prefixes?: CommonPrefix[]) => {
     if (!prefixes) return [];
@@ -46,7 +45,7 @@ const listObjects = async (options?: { prefix?: string, startsAfter?: string }) 
 };
 
 export async function GET(
-    req: NextApiRequest,
+    req: NextRequest,
   ) {
     const { searchParams } = new URL(req.url ?? "");
     const folder = searchParams.get("folder") as string | undefined;
