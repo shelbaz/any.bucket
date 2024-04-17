@@ -10,8 +10,9 @@ const FilePage = () => {
   const folder =
     typeof params.folder === "object" ? params.folder.join("/") : params.folder;
   const crumbs =
-    folder?.split("/").map((folder) => ({ title: folder, segment: folder })) ??
-    [];
+    folder
+      ?.split("/")
+      .map((folder) => ({ title: decodeURI(folder), segment: folder })) ?? [];
   console.log("CRUMBS:", crumbs);
 
   const { objects, folders } = useListObjects({ folder });
