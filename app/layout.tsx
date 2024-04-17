@@ -21,9 +21,7 @@ export default function RootLayout({
       <body className="h-full">
         <div>
           <Sidebar />
-          <main className="py-10 lg:pl-72">
-            <div className="px-4 sm:px-6 lg:px-8">{children}</div>
-          </main>
+          <main className="lg:pl-72">{children}</main>
         </div>
         <Toaster position="bottom-center" reverseOrder={false} />
       </body>
