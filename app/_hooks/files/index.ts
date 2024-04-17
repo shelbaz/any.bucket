@@ -1,0 +1,1 @@
+export { useHandleFileClick } from './use-handle-file-click';

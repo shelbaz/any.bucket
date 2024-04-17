@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "./_components/layout/Sidebar";
 import { Toaster } from "react-hot-toast";
+import { AppProvider } from "./_context/AppContext";
+import { AudioProvider } from "./_context/AudioContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,10 +21,14 @@ export default function RootLayout({
   return (
     <html className="h-full bg-white">
       <body className="h-full">
-        <div>
-          <Sidebar />
-          <main className="lg:pl-72">{children}</main>
-        </div>
+        <AppProvider>
+          <AudioProvider>
+            <div>
+              <Sidebar />
+              <main className="lg:pl-72">{children}</main>
+            </div>
+          </AudioProvider>
+        </AppProvider>
         <Toaster position="bottom-center" reverseOrder={false} />
       </body>
     </html>
