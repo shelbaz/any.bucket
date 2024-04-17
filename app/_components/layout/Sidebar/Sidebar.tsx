@@ -11,16 +11,18 @@ import {
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const navigation = [
-  { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "Create", href: "#", icon: SparklesIcon, current: false },
-  { name: "Files", href: "/files", icon: FolderIcon, current: false },
-  { name: "Keys", href: "#", icon: KeyIcon, current: false },
+  { name: "Dashboard", href: "/", icon: HomeIcon },
+  { name: "Create", href: "/create", icon: SparklesIcon },
+  { name: "Files", href: "/files", icon: FolderIcon },
+  { name: "Keys", href: "/keys", icon: KeyIcon },
 ];
 
 export const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const currentRootPath = usePathname().split("/")[1];
 
   return (
     <>
@@ -90,7 +92,7 @@ export const Sidebar = () => {
                               <a
                                 href={item.href}
                                 className={clsx(
-                                  item.current
+                                  item.href === `/${currentRootPath}`
                                     ? "bg-gray-50 text-black"
                                     : "text-gray-700 hover:text-black hover:bg-gray-50",
                                   "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -98,7 +100,7 @@ export const Sidebar = () => {
                               >
                                 <item.icon
                                   className={clsx(
-                                    item.current
+                                    item.href === `/${currentRootPath}`
                                       ? "text-black"
                                       : "text-gray-400 group-hover:text-black",
                                     "h-6 w-6 shrink-0"
@@ -136,7 +138,7 @@ export const Sidebar = () => {
                       <a
                         href={item.href}
                         className={clsx(
-                          item.current
+                          item.href === `/${currentRootPath}`
                             ? "bg-gray-50 text-black"
                             : "text-gray-700 hover:text-black hover:bg-gray-50",
                           "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
@@ -144,7 +146,7 @@ export const Sidebar = () => {
                       >
                         <item.icon
                           className={clsx(
-                            item.current
+                            item.href === `/${currentRootPath}`
                               ? "text-black"
                               : "text-gray-400 group-hover:text-black",
                             "h-6 w-6 shrink-0"
