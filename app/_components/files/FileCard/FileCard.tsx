@@ -1,3 +1,4 @@
+import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 
 const getFileTypeFromExtension = (extension: string) => {
@@ -85,14 +86,17 @@ export const FileCard = ({
   extension,
 }: Props) => {
   const fileType = getFileTypeFromExtension(extension);
-  const noFilePreview = !["image"].includes(fileType);
+  const noFilePreview = !["image", "audio"].includes(fileType);
 
   return (
     <li
       className="group col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer"
       onClick={onClick}
     >
-      <div className="rounded-lg duration-100 shadow-none hover:shadow-md h-full border border-gray-200 overflow-hidden">
+      <div className="relative rounded-lg duration-100 shadow-none hover:shadow-md h-full border border-gray-200 overflow-hidden">
+        <div className="absolute top-3 right-3 hover:bg-gray-100 text-gray-500 hover:text-black h-6 w-6 justify-center items-center flex rounded cursor-pointer">
+          <EllipsisHorizontalIcon className="h-5 w-5" />
+        </div>
         <div className="flex justify-center items-center aspect-square">
           {fileType === "image" && (
             <div className="w-full h-full relative">
@@ -104,6 +108,17 @@ export const FileCard = ({
               />
             </div>
           )}
+
+          {fileType === "audio" && (
+            <div className="flex justify-center items-center w-full h-full">
+              <audio controls controlsList="nofullscreen nodownload">
+                <source
+                  src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
+                />
+              </audio>
+            </div>
+          )}
+
           {noFilePreview && (
             <span className="text-7xl">{getEmojiFromExtension(extension)}</span>
           )}

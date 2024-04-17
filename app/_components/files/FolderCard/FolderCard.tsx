@@ -1,3 +1,5 @@
+import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
+
 interface Props {
   onClick?: () => void;
   label: string;
@@ -9,7 +11,10 @@ export const FolderCard = ({ onClick, label }: Props) => {
       className="group col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer"
       onClick={onClick}
     >
-      <div className="rounded-lg duration-100 shadow-none hover:shadow-md h-full border border-gray-200">
+      <div className="relative rounded-lg duration-100 shadow-none hover:shadow-md h-full border border-gray-200">
+        <div className="absolute top-3 right-3 hover:bg-gray-100 text-gray-500 hover:text-black h-6 w-6 justify-center items-center flex rounded cursor-pointer">
+          <EllipsisHorizontalIcon className="h-5 w-5" />
+        </div>
         <div className="flex justify-center items-center aspect-square">
           <span className="text-7xl">📁</span>
         </div>
