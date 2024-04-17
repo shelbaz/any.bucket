@@ -20,7 +20,11 @@ const FilePage = () => {
       ?.split("/")
       .map((folder) => ({ title: decodeURI(folder), segment: folder })) ?? [];
 
-  const { objects, folders } = useListObjects({ folder });
+  const { objects, folders, loadMore, isTruncated, isLoading } = useListObjects(
+    {
+      folder,
+    }
+  );
 
   const hasFolders = !!folders?.length;
   const hasObjects = !!objects?.length;
@@ -78,6 +82,8 @@ const FilePage = () => {
               ))}
             </ul>
           )}
+          {isLoading ? <div>Loading...</div> : null}
+          {isTruncated ? <div onClick={loadMore}>Load more</div> : null}
         </div>
       ) : null}
     </div>

@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import SVG from "react-inlinesvg";
-import { startCase } from "lodash";
 import { ChevronRightIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 
@@ -31,7 +29,7 @@ export const Breadcrumbs = ({ crumbs, basePath }: Props) => {
           return (
             <div key={segment.title} className="flex items-center">
               <span className="text-gray-700 text-sm font-medium tracking-tight">
-                {startCase(segment.title)}
+                {segment.title}
               </span>
               {isLast && <ChevronRight />}
             </div>
@@ -64,7 +62,7 @@ export const Breadcrumbs = ({ crumbs, basePath }: Props) => {
                       : "text-gray-900 hover:text-gray-800"
                   )}
                 >
-                  {startCase(segment.title)}
+                  {segment.title}
                 </span>
               </a>
             </Link>

@@ -12,9 +12,9 @@ const formatFolders = (prefixes?: CommonPrefix[]) => {
     });
 };
 
-const listObjects = async (options?: { prefix?: string, startsAfter?: string }) => {
+const listObjects = async (options?: { prefix?: string, startAfter?: string }) => {
     const prefix = options?.prefix;
-    const startsAfter = options?.startsAfter;
+    const startAfter = options?.startAfter;
     const s3Url = process.env.S3_ENDPOINT;
     const bucket = process.env.S3_BUCKET_NAME;
 
@@ -32,7 +32,8 @@ const listObjects = async (options?: { prefix?: string, startsAfter?: string }) 
         Bucket: bucket,
         Prefix: prefix,
         Delimiter: "/",
-        StartAfter: startsAfter,
+        ContinuationToken: startAfter,
+        MaxKeys: 24,
     });
 
     try {
@@ -47,13 +48,19 @@ const listObjects = async (options?: { prefix?: string, startsAfter?: string }) 
 export async function GET(
     req: NextRequest,
   ) {
-    const { searchParams } = new URL(req.url ?? "");
-    const folder = searchParams.get("folder") as string | undefined;
-    const objects = await listObjects({ prefix: folder });
-
-    if (!objects) {
+      const { searchParams } = new URL(req.url ?? "");
+      const folder = searchParams.get("folder") ?? undefined;
+      const startAfter = searchParams.get("startAfter") ?? undefined;
+      const response = await listObjects({ prefix: folder, startAfter: startAfter });
+    
+    if (!response) {
         return NextResponse.json("Failed to list objects", { status: 500 });
     }
 
-    return NextResponse.json({objects: objects?.Contents ?? [], folders: formatFolders(objects?.CommonPrefixes) }, { status: 200 });
-  }
+    return NextResponse.json({
+        objects: response.Contents ?? [],
+        folders: formatFolders(response.CommonPrefixes),
+        isTruncated: response.IsTruncated,
+        continuationToken: response.NextContinuationToken
+    }, { status: 200 });
+};

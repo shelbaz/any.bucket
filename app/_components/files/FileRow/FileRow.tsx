@@ -5,7 +5,6 @@ import {
 } from "@/app/_helpers/files";
 import { useHandleFileClick } from "@/app/_hooks/files";
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
-import { url } from "inspector";
 import Image from "next/image";
 
 interface Props {
@@ -17,8 +16,9 @@ interface Props {
 
 export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
   const fileType = getFileTypeFromExtension(extension);
-  const noFilePreview = !["image", "audio"].includes(fileType);
+  const noFilePreview = !["image", "audio", "video"].includes(fileType);
   const handleFileClick = useHandleFileClick(objectKey, fileType);
+  const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`;
 
   return (
     <li
@@ -48,10 +48,15 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                       controlsList="nofullscreen nodownload"
                       className="hidden"
                     >
-                      <source
-                        src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
-                      />
+                      <source src={fileUrl} />
                     </audio>
+                  </div>
+                )}
+                {fileType === "video" && (
+                  <div className="flex justify-center items-center h-6 w-6">
+                    <video width="400" controls={false} preload="metadata">
+                      <source src={`${fileUrl}#t=0.8`} type="video/mp4" />
+                    </video>
                   </div>
                 )}
 
@@ -62,7 +67,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                 )}
               </span>
               <span className="text-sm font-medium group-hover:opacity-70">
-                {label}
+                {label || <span className="opacity-50">(untitled file)</span>}
               </span>
             </span>
             <div className="flex items-center space-x-3">
