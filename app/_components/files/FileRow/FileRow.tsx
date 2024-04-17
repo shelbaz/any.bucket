@@ -31,7 +31,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
             <span className="flex items-center">
               <span className="flex justify-center items-center mr-3">
                 {fileType === "image" && (
-                  <div className="w-6 h-6 relative overflow-hidden rounded">
+                  <div className="w-8 h-8 bg-gray-100 relative overflow-hidden rounded">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
                       objectFit="cover"
@@ -42,7 +42,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                 )}
 
                 {fileType === "audio" && (
-                  <div className="flex justify-center items-center h-6 w-6">
+                  <div className="flex justify-center items-center bg-gray-100 h-8 w-8">
                     <audio
                       controls
                       controlsList="nofullscreen nodownload"
@@ -53,15 +53,23 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                   </div>
                 )}
                 {fileType === "video" && (
-                  <div className="flex justify-center items-center h-6 w-6">
-                    <video width="400" controls={false} preload="metadata">
+                  <div className="flex justify-center items-center h-8 w-8 bg-gray-100 overflow-hidden rounded">
+                    <video
+                      controls={false}
+                      preload="metadata"
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                        objectFit: "cover",
+                      }}
+                    >
                       <source src={`${fileUrl}#t=0.8`} type="video/mp4" />
                     </video>
                   </div>
                 )}
 
                 {noFilePreview && (
-                  <span className="text-xl h-6 w-6 text-center">
+                  <span className="text-xl h-8 w-8 text-center bg-gray-100 rounded">
                     {getEmojiFromExtension(extension)}
                   </span>
                 )}

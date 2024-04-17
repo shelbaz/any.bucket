@@ -27,10 +27,10 @@ export default function RootLayout({
             <div>
               <Sidebar />
               <main className="lg:pl-72">
-                <>
+                <div className="relative min-h-screen">
                   {children}
                   <AudioPlayer />
-                </>
+                </div>
               </main>
             </div>
           </AudioProvider>

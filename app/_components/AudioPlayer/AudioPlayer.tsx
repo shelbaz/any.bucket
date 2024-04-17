@@ -22,7 +22,7 @@ export const AudioPlayer = () => {
   const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${audioFile}`;
 
   return (
-    <div className="w-full absolute bottom-0 left-0 py-3 px-4">
+    <div className="w-full fixed lg:absolute bottom-0 left-0 py-3 px-4">
       <audio
         controls
         controlsList="nofullscreen nodownload"
