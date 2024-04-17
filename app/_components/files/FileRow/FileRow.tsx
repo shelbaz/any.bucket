@@ -29,9 +29,9 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
         <div>
           <div className="flex items-center justify-between">
             <span className="flex items-center">
-              <span className="flex items-center mr-3">
+              <span className="flex justify-center items-center mr-3">
                 {fileType === "image" && (
-                  <div className="w-6 h-6 relative">
+                  <div className="w-6 h-6 relative overflow-hidden rounded">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
                       objectFit="cover"
@@ -56,7 +56,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                 )}
 
                 {noFilePreview && (
-                  <span className="text-xl">
+                  <span className="text-xl h-6 w-6 text-center">
                     {getEmojiFromExtension(extension)}
                   </span>
                 )}

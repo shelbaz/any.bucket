@@ -14,7 +14,7 @@ export const FolderRow = ({ onClick, label }: Props) => {
       <div className="relative px-3 py-2">
         <div>
           <span className="flex items-center">
-            <span className="text-xl mr-3">📁</span>
+            <span className="text-xl h-6 w-6 text-center mr-3">📁</span>
             <span className="text-sm font-medium group-hover:opacity-70">
               {label}
             </span>
