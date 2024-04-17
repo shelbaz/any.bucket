@@ -15,7 +15,7 @@ import Image from "next/image";
 const navigation = [
   { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
   { name: "Create", href: "#", icon: SparklesIcon, current: false },
-  { name: "Files", href: "#", icon: FolderIcon, current: false },
+  { name: "Files", href: "/files", icon: FolderIcon, current: false },
   { name: "Keys", href: "#", icon: KeyIcon, current: false },
 ];
 
