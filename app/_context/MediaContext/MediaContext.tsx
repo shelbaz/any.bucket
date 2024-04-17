@@ -2,7 +2,7 @@
 import { createContext, useMemo, useRef, useState } from "react";
 
 interface MediaContextType {
-  audioRef?: React.MutableRefObject<HTMLAudioElement | null>;
+  mediaRef?: React.MutableRefObject<HTMLAudioElement | HTMLVideoElement | null>;
   mediaFile: string | null;
   isFullScreen: boolean;
   isPlaying: boolean;
@@ -29,7 +29,7 @@ const initialValue: MediaContextType = {
 export const MediaContext = createContext<MediaContextType>(initialValue);
 
 export const MediaProvider = ({ children }: { children: React.ReactNode }) => {
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const mediaRef = useRef<HTMLAudioElement | HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState<MediaContextType["isPlaying"]>(
     initialValue.isPlaying
   );
@@ -41,25 +41,25 @@ export const MediaProvider = ({ children }: { children: React.ReactNode }) => {
   >(initialValue.isFullScreen);
 
   const play = () => {
-    audioRef?.current?.play();
+    mediaRef?.current?.play();
     setIsPlaying(true);
   };
 
   const pause = () => {
-    audioRef?.current?.pause();
+    mediaRef?.current?.pause();
     setIsPlaying(false);
   };
 
   const close = () => {
     setMediaFile(null);
     setIsPlaying(false);
-    audioRef?.current?.pause();
+    mediaRef?.current?.pause();
   };
 
   return (
     <MediaContext.Provider
       value={{
-        audioRef,
+        mediaRef,
         mediaFile,
         isFullScreen,
         isPlaying,

@@ -14,10 +14,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: HomeIcon },
-  { name: "Create", href: "/create", icon: SparklesIcon },
   { name: "Files", href: "/files", icon: FolderIcon },
-  { name: "Keys", href: "/keys", icon: KeyIcon },
+  { name: "Create", href: "/create", icon: SparklesIcon },
+  // { name: "Keys", href: "/keys", icon: KeyIcon },
 ];
 
 export const Sidebar = () => {

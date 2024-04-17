@@ -40,7 +40,7 @@ export const Breadcrumbs = ({ crumbs, basePath }: Props) => {
           <div
             key={segment.title}
             className={clsx(
-              "flex items-center",
+              "flex items-center justify-center",
               isLast && "pointer-events-none"
             )}
           >
@@ -66,7 +66,7 @@ export const Breadcrumbs = ({ crumbs, basePath }: Props) => {
                 </span>
               </a>
             </Link>
-            {!isLast && <ChevronRight />}
+            {!isLast && <ChevronRightIcon className="h-5 text-gray-400" />}
           </div>
         );
       })}

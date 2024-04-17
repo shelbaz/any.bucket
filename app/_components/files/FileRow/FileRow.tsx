@@ -21,8 +21,9 @@ interface Props {
 }
 
 export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
-  const { audioRef, mediaFile, pause } = useContext(MediaContext);
+  const { mediaRef, mediaFile, pause } = useContext(MediaContext);
   const fileType = getFileTypeFromExtension(extension);
+  console.log("TYPE:", fileType);
   const noFilePreview = !["image", "audio", "video"].includes(fileType);
   const handleFileClick = useHandleFileClick(objectKey, fileType);
   const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`;
@@ -41,7 +42,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                   <div className="w-8 h-8 bg-gray-100 relative overflow-hidden rounded">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
-                      objectFit="cover"
+                      objectFit={extension === "svg" ? "contain" : "cover"}
                       alt={label ?? objectKey}
                       fill
                     />
@@ -50,7 +51,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
 
                 {fileType === "audio" && (
                   <div className="flex justify-center items-center bg-gray-100 rounded h-8 w-8">
-                    {!audioRef?.current?.paused && objectKey === mediaFile ? (
+                    {!mediaRef?.current?.paused && objectKey === mediaFile ? (
                       <PauseIcon className="h5 w-5 text-gray-500" />
                     ) : (
                       <PlayIcon className="h-5 w-5 text-gray-500" />
