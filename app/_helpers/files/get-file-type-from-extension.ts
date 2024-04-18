@@ -24,6 +24,8 @@ export const getFileTypeFromExtension = (extension: string) => {
       case "wav":
       case "flac":
         return "audio";
+      case "epub":
+        return "epub";
       default:
         return "file";
     }

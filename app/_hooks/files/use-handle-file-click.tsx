@@ -22,6 +22,7 @@ export const useHandleFileClick = (objectKey: string, type: string) => {
       };
       break;
     case "image":
+    case "epub":
       handleFileClick = () => {
         setMediaFile(objectKey);
       };

@@ -6,6 +6,7 @@ import { XCircleIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { MutableRefObject, useContext, useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { EpubReader } from "./EpubReader";
 
 const getSizeClassesFromExt = (ext: string) => {
   switch (ext) {
@@ -24,6 +25,8 @@ const getSizeClassesFromExt = (ext: string) => {
     case "jpeg":
     case "svg":
       return "";
+    case "epub":
+      return "w-full h-full lg:w-[75vw] lg:h-[90vh] z-50";
     default:
       return "";
   }
@@ -67,7 +70,7 @@ export const MediaPlayer = () => {
   return (
     <div
       className={clsx(
-        "group fixed bottom-6 mx-4 right-6 bg-black rounded overflow-hidden",
+        "group fixed bottom-0 right-0 lg:bottom-6 lg:right-6 bg-black lg:rounded overflow-hidden",
         getSizeClassesFromExt(extension)
       )}
       style={{
@@ -113,9 +116,12 @@ export const MediaPlayer = () => {
           style={{ objectFit: "contain" }}
         />
       )}
+      {extension === "epub" && (
+        <EpubReader fileUrl={fileUrl} objectKey={mediaFile} />
+      )}
 
       <div
-        className="group-hover:opacity-100 opacity-0 duration-100 absolute top-5 left-5 rounded-full h-6 w-6 bg-black cursor-pointer flex items-center justify-center"
+        className="group-hover:opacity-100 opacity-0 duration-100 absolute top-5 left-auto right-5 lg:left-5 lg:right-auto rounded-full h-6 w-6 bg-black cursor-pointer flex items-center justify-center z-10"
         onClick={() => {
           close();
         }}
