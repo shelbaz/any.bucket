@@ -23,7 +23,6 @@ interface Props {
 export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
   const { mediaRef, mediaFile, pause } = useContext(MediaContext);
   const fileType = getFileTypeFromExtension(extension);
-  console.log("TYPE:", fileType);
   const noFilePreview = !["image", "audio", "video"].includes(fileType);
   const handleFileClick = useHandleFileClick(objectKey, fileType);
   const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`;
@@ -36,7 +35,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
       <div className="relative px-3 py-2">
         <div>
           <div className="flex items-center justify-between">
-            <span className="flex items-center">
+            <span className="flex items-center line-clamp-1">
               <span className="flex justify-center items-center mr-3">
                 {fileType === "image" && (
                   <div className="w-8 h-8 bg-gray-100 relative overflow-hidden rounded">
@@ -80,7 +79,10 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                   </span>
                 )}
               </span>
-              <span className="text-sm font-medium group-hover:opacity-70">
+              <span
+                className="flex text-sm font-medium group-hover:opacity-70"
+                title={label}
+              >
                 {label || <span className="opacity-50">(untitled file)</span>}
               </span>
             </span>

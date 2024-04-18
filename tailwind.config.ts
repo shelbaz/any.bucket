@@ -15,6 +15,9 @@ const config: Config = {
       },
       fontSize: {
         tiny: ".625rem",
+      },
+      maxWidth: {
+        "1/2": "50%",
       }
     },
   },

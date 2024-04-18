@@ -21,6 +21,11 @@ export const useHandleFileClick = (objectKey: string, type: string) => {
         }
       };
       break;
+    case "image":
+      handleFileClick = () => {
+        setMediaFile(objectKey);
+      };
+      break;
     default:
       handleFileClick = () => {
         console.log("File type not supported");

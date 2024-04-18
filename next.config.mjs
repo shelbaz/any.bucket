@@ -20,7 +20,17 @@ const nextConfig = {
                 ]
             }
         ]
-    }
+    },
+    // TODO: Make the root a setup/login screen and only redirect if logged in
+    redirects: async () => {
+        return [
+            {
+                source: "/",
+                destination: "/files",
+                permanent: true,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

@@ -3,8 +3,31 @@
 import { MediaContext } from "@/app/_context/MediaContext";
 import { getFileTypeFromExtension } from "@/app/_helpers/files";
 import { XCircleIcon } from "@heroicons/react/16/solid";
+import clsx from "clsx";
 import { MutableRefObject, useContext, useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+
+const getSizeClassesFromExt = (ext: string) => {
+  switch (ext) {
+    case "mp4":
+    case "avi":
+    case "mov":
+    case "mkv":
+    case "gif":
+      return "max-w-1/2 w-full min-w-60";
+    case "mp3":
+    case "wav":
+    case "flac":
+      return "";
+    case "png":
+    case "jpg":
+    case "jpeg":
+    case "svg":
+      return "";
+    default:
+      return "";
+  }
+};
 
 export const MediaPlayer = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,49 +59,67 @@ export const MediaPlayer = () => {
     return null;
   }
 
-  const fileType = getFileTypeFromExtension(mediaFile.split(".").pop() ?? "");
+  const extension = mediaFile.split(".").pop() ?? "";
+
+  const fileType = getFileTypeFromExtension(extension);
   const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${mediaFile}`;
 
   return (
     <div
-      className="group fixed w-auto lg:w-auto bottom-6 right-1/2 transform translate-x-1/2 lg:translate-x-0 mx-4 lg:right-6 bg-black rounded overflow-hidden"
+      className={clsx(
+        "group fixed bottom-6 mx-4 right-6 bg-black rounded overflow-hidden",
+        getSizeClassesFromExt(extension)
+      )}
       style={{
         boxShadow:
           "0 0 10px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 0, 0, 0.2), 0 0 30px rgba(0, 0, 0, 0.1)",
       }}
     >
-      {fileType === "audio" && (
-        <>
-          <audio
-            id="audio-element"
-            ref={mediaRef as MutableRefObject<HTMLAudioElement>}
-            controls
-            controlsList="nofullscreen nodownload"
-            src={fileUrl}
-            className="hidden"
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
-            autoPlay
-          />
-          {mediaFile && <div className="text-white">Now Playing</div>}
-        </>
+      {fileType === "audio" && mediaFile && (
+        <div className="w-96 h-auto">
+          <div className="aspect-square flex items-center justify-center text-white">
+            {mediaFile?.split("/").pop() ?? "File"}
+          </div>
+          <div className="px-4 py-4 flex items-center bg-white/10">
+            <audio
+              id="audio-elemen t"
+              ref={mediaRef as MutableRefObject<HTMLAudioElement>}
+              controls
+              controlsList="nofullscreen nodownload"
+              src={fileUrl}
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
+              autoPlay
+              className="w-full h-8"
+            />
+          </div>
+        </div>
       )}
       {fileType === "video" && (
         <video
           ref={mediaRef as MutableRefObject<HTMLVideoElement>}
-          className="max-w-xl h-auto"
+          className="w-full h-auto"
           controls
           controlsList="nodownload"
           src={fileUrl}
           autoPlay
         />
       )}
+      {fileType === "image" && (
+        <img
+          src={fileUrl}
+          alt={mediaFile}
+          className="w-full h-auto"
+          style={{ objectFit: "contain" }}
+        />
+      )}
 
       <div
-        className="group-hover:opacity-100 opacity-0 duration-100 absolute top-3 right-3 rounded-full h-6 w-6 bg-black cursor-pointer flex items-center justify-center"
+        className="group-hover:opacity-100 opacity-0 duration-100 absolute top-5 left-5 rounded-full h-6 w-6 bg-black cursor-pointer flex items-center justify-center"
         onClick={() => {
           close();
         }}
+        title="Close"
       >
         <XCircleIcon className="h-6 w-6 text-white hover:opacity-90" />
       </div>
