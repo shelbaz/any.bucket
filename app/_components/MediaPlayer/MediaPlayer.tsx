@@ -9,7 +9,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { EpubReader } from "./EpubReader";
 
 const getSizeClassesFromExt = (ext: string) => {
-  switch (ext) {
+  switch (ext.toLocaleLowerCase()) {
     case "mp4":
     case "avi":
     case "mov":
@@ -24,7 +24,7 @@ const getSizeClassesFromExt = (ext: string) => {
     case "jpg":
     case "jpeg":
     case "svg":
-      return "";
+      return "max-w-1/2 w-[40vw] min-w-60 max-h-[80vh]";
     case "epub":
       return "w-full h-full lg:w-[75vw] lg:h-[90vh] z-50";
     default:
@@ -112,8 +112,7 @@ export const MediaPlayer = () => {
         <img
           src={fileUrl}
           alt={mediaFile}
-          className="w-full h-auto"
-          style={{ objectFit: "contain" }}
+          className="w-full h-full object-contain object-center"
         />
       )}
       {extension === "epub" && (
