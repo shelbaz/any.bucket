@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { AppContext } from "@/app/_context/AppContext";
 import { FolderRow } from "@/app/_components/files/FolderRow";
 import { FileRow } from "@/app/_components/files/FileRow";
+import { RocksLoader } from "@/app/_components/loaders/RocksLoader";
 
 const FilePage = () => {
   const { fileLayout } = useContext(AppContext);
@@ -30,13 +31,14 @@ const FilePage = () => {
   const hasObjects = !!objects?.length;
 
   return (
-    <div>
+    <div className="min-h-screen pb-24">
       <div className="flex items-center py-2 px-3 border-t border-b border-gray-200">
         <Breadcrumbs
           basePath="/files"
           crumbs={[{ segment: "/", title: "Files" }, ...crumbs]}
         />
       </div>
+
       {hasFolders || hasObjects ? (
         <div className="p-6">
           {fileLayout === "list" ? (
@@ -82,10 +84,19 @@ const FilePage = () => {
               ))}
             </ul>
           )}
-          {isLoading ? <div>Loading...</div> : null}
-          {isTruncated ? <div onClick={loadMore}>Load more</div> : null}
         </div>
       ) : null}
+      <div className="flex items-center justify-center h-24">
+        {!isLoading && !!folders && !!objects && isTruncated ? (
+          <div
+            onClick={loadMore}
+            className="border border-black rounded py-2 px-3 cursor-pointer hover:opacity-80 duration-100"
+          >
+            Load more
+          </div>
+        ) : null}
+        {(isLoading || !objects) && <RocksLoader />}
+      </div>
     </div>
   );
 };
