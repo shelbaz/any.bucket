@@ -2,7 +2,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { S3Client, _Object, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { NextRequest, NextResponse } from "next/server";
 
-const generatePresignedUrl = async ({ fileName }: { fileName: string }) => {
+const generatePresignedUrl = async ({ fileName, folder }: { fileName: string, folder: string | undefined }) => {
     const s3Url = process.env.S3_ENDPOINT;
     const bucket = process.env.S3_BUCKET_NAME;
 
@@ -18,7 +18,7 @@ const generatePresignedUrl = async ({ fileName }: { fileName: string }) => {
     
       const command = new PutObjectCommand({
         Bucket: bucket,
-        Key: fileName,
+        Key: `${folder ?? ""}${fileName}`,
       });
       return await getSignedUrl(client, command, { expiresIn: 60 });
 };
@@ -28,7 +28,8 @@ export async function POST(
   ) {
     const body = await req.json();
     const fileName = body.fileName;
-      const response = await generatePresignedUrl({ fileName });
+    const folder = body.folder;
+      const response = await generatePresignedUrl({ fileName, folder });
     
     if (!response) {
         return NextResponse.json("Failed to get presigned S3 URL", { status: 500 });
