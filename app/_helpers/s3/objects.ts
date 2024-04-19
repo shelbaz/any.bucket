@@ -58,5 +58,5 @@ export const useListObjects = ({ folder }: { folder?: string }) => {
         setIsTruncated(false);
     }, [pathname]);
 
-    return { objects, folders, loadMore, isTruncated, isLoading };
+    return { objects, folders, loadMore, isTruncated, isLoading, setObjects };
 };

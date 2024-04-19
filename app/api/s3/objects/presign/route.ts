@@ -1,5 +1,5 @@
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { S3Client, _Object, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
+import { S3Client, _Object, PutObjectCommand } from "@aws-sdk/client-s3";
 import { NextRequest, NextResponse } from "next/server";
 
 const generatePresignedUrl = async ({ fileName, folder }: { fileName: string, folder: string | undefined }) => {
@@ -18,7 +18,7 @@ const generatePresignedUrl = async ({ fileName, folder }: { fileName: string, fo
     
       const command = new PutObjectCommand({
         Bucket: bucket,
-        Key: `${folder ?? ""}${fileName}`,
+        Key: `${folder ? `${folder}/` : ""}${fileName}`,
       });
       return await getSignedUrl(client, command, { expiresIn: 60 });
 };

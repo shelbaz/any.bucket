@@ -4,14 +4,16 @@ import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   FolderIcon,
-  HomeIcon,
-  KeyIcon,
   SparklesIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
+import { FileInput } from "../../upload/FileInput";
+import toast from "react-hot-toast";
+import { useListObjects } from "@/app/_helpers/s3/objects";
+import { _Object } from "@aws-sdk/client-s3";
 
 const navigation = [
   { name: "Files", href: "/files", icon: FolderIcon },
@@ -22,6 +24,11 @@ const navigation = [
 export const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const currentRootPath = usePathname().split("/")[1];
+
+  const params = useParams();
+  const folder =
+    typeof params.folder === "object" ? params.folder.join("/") : params.folder;
+  const { objects, setObjects } = useListObjects({ folder });
 
   return (
     <>
@@ -159,6 +166,42 @@ export const Sidebar = () => {
                 </ul>
               </li>
               <li className="mt-auto">
+                <FileInput
+                  onInput={async (file) => {
+                    if (!file) return;
+                    const fileName = file.name;
+                    const response = await fetch("/api/s3/objects/presign", {
+                      method: "POST",
+                      body: JSON.stringify({
+                        fileName,
+                        folder: folder ? decodeURI(folder) : undefined,
+                      }),
+                    });
+                    const presignedUrl = await response.json();
+
+                    const uploadResponse = await fetch(presignedUrl.url, {
+                      method: "PUT",
+                      body: file,
+                      headers: { "Content-Type": file.type },
+                    });
+
+                    if (uploadResponse.ok) {
+                      toast.success("File uploaded successfully");
+                      setObjects((prev) => [
+                        ...(prev ?? []),
+                        {
+                          Key: `${
+                            folder ? `${decodeURI(folder)}/` : ""
+                          }${fileName}`,
+                          Size: file.size,
+                        } as _Object,
+                      ]);
+                      return;
+                    }
+
+                    toast.error("Failed to upload file");
+                  }}
+                />
                 <a
                   href="#"
                   className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
