@@ -21,7 +21,7 @@ const listObjects = async (options?: { prefix?: string, startAfter?: string }) =
     const client = new S3Client({
         endpoint: s3Url,
         forcePathStyle: true,
-        region: "auto",
+        region: process.env.S3_REGION ?? "auto",
         credentials: {
             accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
             secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
