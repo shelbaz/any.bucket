@@ -28,7 +28,7 @@ export const Breadcrumbs = ({ crumbs, basePath }: Props) => {
         if (segment.segment === undefined) {
           return (
             <div key={segment.title} className="flex items-center">
-              <span className="text-gray-700 text-sm font-medium tracking-tight">
+              <span className="text-zinc-700 text-sm font-medium tracking-tight">
                 {segment.title}
               </span>
               {isLast && <ChevronRight />}
@@ -58,15 +58,15 @@ export const Breadcrumbs = ({ crumbs, basePath }: Props) => {
                   className={clsx(
                     "text-sm font-semibold tracking-normal",
                     isLast
-                      ? "text-gray-600"
-                      : "text-gray-900 hover:text-gray-800"
+                      ? "text-zinc-600"
+                      : "text-zinc-900 hover:text-zinc-800"
                   )}
                 >
                   {segment.title}
                 </span>
               </a>
             </Link>
-            {!isLast && <ChevronRightIcon className="h-5 text-gray-400" />}
+            {!isLast && <ChevronRightIcon className="h-4 text-zinc-400 mx-1" />}
           </div>
         );
       })}

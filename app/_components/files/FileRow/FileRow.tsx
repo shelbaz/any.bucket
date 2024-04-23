@@ -10,6 +10,7 @@ import {
   PauseIcon,
   PlayIcon,
 } from "@heroicons/react/20/solid";
+import clsx from "clsx";
 import Image from "next/image";
 import { useContext } from "react";
 
@@ -27,9 +28,15 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
   const handleFileClick = useHandleFileClick(objectKey, fileType);
   const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`;
 
+  const isSelected = objectKey === mediaFile;
+  const isPlaying = !mediaRef?.current?.paused && isSelected;
+
   return (
     <li
-      className="group col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer"
+      className={clsx(
+        "group col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer hover:bg-zinc-50",
+        isSelected ? "bg-zinc-50" : "bg-white"
+      )}
       onClick={handleFileClick}
     >
       <div className="relative px-3 py-2">
@@ -38,7 +45,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
             <span className="flex items-center line-clamp-1">
               <span className="flex justify-center items-center mr-3">
                 {fileType === "image" && (
-                  <div className="w-8 h-8 bg-gray-100 relative overflow-hidden rounded">
+                  <div className="w-8 h-8 bg-zinc-100 relative overflow-hidden rounded">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
                       objectFit={extension === "svg" ? "contain" : "cover"}
@@ -49,16 +56,16 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                 )}
 
                 {fileType === "audio" && (
-                  <div className="flex justify-center items-center bg-gray-100 rounded h-8 w-8">
-                    {!mediaRef?.current?.paused && objectKey === mediaFile ? (
-                      <PauseIcon className="h5 w-5 text-gray-500" />
+                  <div className="flex justify-center items-center bg-zinc-100 rounded h-8 w-8">
+                    {isPlaying ? (
+                      <PauseIcon className="h5 w-5 text-zinc-500" />
                     ) : (
-                      <PlayIcon className="h-5 w-5 text-gray-500" />
+                      <PlayIcon className="h-5 w-5 text-zinc-500" />
                     )}
                   </div>
                 )}
                 {fileType === "video" && (
-                  <div className="flex justify-center items-center h-8 w-8 bg-gray-100 overflow-hidden rounded">
+                  <div className="flex justify-center items-center h-8 w-8 bg-zinc-100 overflow-hidden rounded">
                     <video
                       controls={false}
                       preload="metadata"
@@ -74,23 +81,23 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                 )}
 
                 {noFilePreview && (
-                  <span className="text-xl h-8 w-8 text-center bg-gray-100 rounded">
+                  <span className="text-xl h-8 w-8 text-center bg-zinc-100 rounded">
                     {getEmojiFromExtension(extension)}
                   </span>
                 )}
               </span>
               <span
-                className="flex text-sm font-medium group-hover:opacity-70"
+                className="text-zinc-900 flex text-sm font-medium group-hover:text-black"
                 title={label}
               >
                 {label || <span className="opacity-50">(untitled file)</span>}
               </span>
             </span>
             <div className="flex items-center space-x-3">
-              <span className="text-tiny text-gray-500">
+              <span className="text-tiny text-zinc-500">
                 {getSize(bytes ?? 0)}
               </span>
-              <div className="hover:bg-gray-100 text-gray-500 hover:text-black h-6 w-6 justify-center items-center flex rounded cursor-pointer">
+              <div className="hover:bg-zinc-100 text-zinc-500 hover:text-black h-6 w-6 justify-center items-center flex rounded cursor-pointer">
                 <EllipsisHorizontalIcon className="h-5 w-5" />
               </div>
             </div>

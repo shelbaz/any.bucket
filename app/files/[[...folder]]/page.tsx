@@ -32,7 +32,7 @@ const FilePage = () => {
 
   return (
     <div className="min-h-screen pb-24">
-      <div className="flex items-center py-2 px-3 border-t border-b border-gray-200">
+      <div className="flex items-center py-2 px-3 border-t border-b border-zinc-200">
         <Breadcrumbs
           basePath="/files"
           crumbs={[{ segment: "/", title: "Files" }, ...crumbs]}
@@ -42,7 +42,7 @@ const FilePage = () => {
       {hasFolders || hasObjects ? (
         <div className="p-6">
           {fileLayout === "list" ? (
-            <ul className="flex flex-col rounded-lg border border-gray-200 divide-y divide-gray-200">
+            <ul className="flex flex-col rounded-lg border border-zinc-200 divide-y divide-zinc-200">
               {folders?.map((folder) => (
                 <FolderRow
                   key={folder.prefix}

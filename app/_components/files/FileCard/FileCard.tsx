@@ -29,8 +29,8 @@ export const FileCard = ({
       className="group col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer"
       onClick={onClick}
     >
-      <div className="relative rounded-lg duration-100 shadow-none hover:shadow-md h-full border border-gray-200 overflow-hidden">
-        <div className="absolute top-3 right-3 hover:bg-gray-100 text-gray-500 hover:text-black h-6 w-6 justify-center items-center flex rounded cursor-pointer">
+      <div className="relative rounded-lg duration-100 shadow-none hover:shadow-md h-full border border-zinc-200 overflow-hidden">
+        <div className="absolute top-3 right-3 hover:bg-zinc-100 text-zinc-500 hover:text-black h-6 w-6 justify-center items-center flex rounded cursor-pointer">
           <EllipsisHorizontalIcon className="h-5 w-5" />
         </div>
         <div className="flex justify-center items-center aspect-square">
@@ -59,14 +59,14 @@ export const FileCard = ({
             <span className="text-7xl">{getEmojiFromExtension(extension)}</span>
           )}
         </div>
-        <div className="flex flex-shrink flex-col py-2 px-3 border-t border-gray-200 text-black">
+        <div className="flex flex-shrink flex-col py-2 px-3 border-t border-zinc-200 text-black">
           <span
             className="text-sm font-medium group-hover:opacity-75 line-clamp-1"
             title={label}
           >
             {label}
           </span>
-          <span className="text-tiny mt-1 text-gray-600">
+          <span className="text-tiny mt-1 text-zinc-600">
             {getSize(bytes ?? 0)}
           </span>
         </div>

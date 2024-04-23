@@ -55,7 +55,7 @@ export const MediaPlayer = () => {
 
     setTimeout(() => {
       setIsLoading(false);
-    }, 100);
+    }, 1);
   }, [mediaFile]);
 
   if (!mediaFile || isLoading) {
