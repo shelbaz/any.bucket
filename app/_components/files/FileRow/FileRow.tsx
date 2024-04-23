@@ -34,7 +34,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
   return (
     <li
       className={clsx(
-        "group col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer hover:bg-zinc-50",
+        "group first:rounded-t-lg last:rounded-b-lg col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer hover:bg-zinc-50",
         isSelected ? "bg-zinc-50" : "bg-white"
       )}
       onClick={handleFileClick}

@@ -8,7 +8,7 @@ interface Props {
 export const FolderRow = ({ onClick, label }: Props) => {
   return (
     <li
-      className="group rounded-lg col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer bg-white hover:bg-zinc-50"
+      className="group first:rounded-t-lg last:rounded-b-lg col-span-6 md:col-span-4 xl:col-span-3 2xl:col-span-2 cursor-pointer bg-white hover:bg-zinc-50"
       onClick={onClick}
     >
       <div className="relative px-3 py-2">
