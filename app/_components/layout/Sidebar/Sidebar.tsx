@@ -165,7 +165,7 @@ export const Sidebar = () => {
                   ))}
                 </ul>
               </li>
-              <li className="mt-auto mb-3">
+              <li className="mt-auto mb-6">
                 <FileInput
                   onInput={async (file) => {
                     if (!file) return;

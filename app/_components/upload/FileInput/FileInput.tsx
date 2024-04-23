@@ -11,7 +11,7 @@ export const FileInput = ({ onInput }: Props) => {
   return (
     <div
       {...getRootProps({ className: "dropzone" })}
-      className="bg-zinc-800 px-5 py-4 rounded-xl border border-dashed border-zinc-500 text-white cursor-pointer text-center ring-8 ring-zinc-900 h-20 flex items-center justify-center"
+      className="bg-zinc-800 px-5 py-4 rounded border border-dashed border-zinc-600 text-white cursor-pointer text-center ring-8 ring-zinc-900 h-20 flex items-center justify-center"
       style={
         isDragActive
           ? undefined
