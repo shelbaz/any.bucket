@@ -1,4 +1,5 @@
 "use client";
+
 import { Breadcrumbs } from "@/app/_components/layout/Breadcrumbs";
 import { useListObjects } from "../../_helpers/s3/objects";
 import { useRouter, useParams } from "next/navigation";
@@ -9,6 +10,9 @@ import { AppContext } from "@/app/_context/AppContext";
 import { FolderRow } from "@/app/_components/files/FolderRow";
 import { FileRow } from "@/app/_components/files/FileRow";
 import { RocksLoader } from "@/app/_components/loaders/RocksLoader";
+import { useDropzone } from "react-dropzone";
+import { useUploadFile } from "@/app/_hooks/files";
+import { ArrowUpTrayIcon } from "@heroicons/react/16/solid";
 
 const FilePage = () => {
   const { fileLayout } = useContext(AppContext);
@@ -20,6 +24,7 @@ const FilePage = () => {
     folder
       ?.split("/")
       .map((folder) => ({ title: decodeURI(folder), segment: folder })) ?? [];
+  const { uploadFile } = useUploadFile({ folder });
 
   const { objects, folders, loadMore, isTruncated, isLoading } = useListObjects(
     {
@@ -27,11 +32,29 @@ const FilePage = () => {
     }
   );
 
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop(acceptedFiles, fileRejections, event) {
+      if (acceptedFiles.length) {
+        uploadFile(acceptedFiles[0]);
+      }
+    },
+    noClick: true,
+  });
+
   const hasFolders = !!folders?.length;
   const hasObjects = !!objects?.length;
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 relative" {...getRootProps()}>
+      {isDragActive && (
+        <div className="flex flex-col items-center justify-center pointer-events-none bg-zinc-500/25 absolute w-full h-full top-0 left-0 z-50">
+          <ArrowUpTrayIcon className="text-zinc-800 size-56 mb-4" />
+          <p className="text-3xl font-semibold text-zinc-700">
+            Drop files to upload in this folder
+          </p>
+        </div>
+      )}
+      <input {...getInputProps({ className: "dropzone" })} />
       <div className="flex items-center py-2 px-3 border-t border-b border-zinc-200">
         <Breadcrumbs
           basePath="/files"

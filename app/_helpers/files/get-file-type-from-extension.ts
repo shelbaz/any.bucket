@@ -1,6 +1,7 @@
 export const getFileTypeFromExtension = (extension: string) => {
     switch (extension.toLowerCase()) {
       case "pdf":
+        return "pdf";
       case "doc":
       case "docx":
         return "document";

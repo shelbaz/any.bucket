@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { MutableRefObject, useContext, useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { EpubReader } from "./EpubReader";
+import { PdfReader } from "./PdfReader";
 
 const getSizeClassesFromExt = (ext: string) => {
   switch (ext.toLocaleLowerCase()) {
@@ -27,6 +28,8 @@ const getSizeClassesFromExt = (ext: string) => {
       return "max-w-1/2 w-[40vw] min-w-60 max-h-[80vh]";
     case "epub":
       return "w-full h-full lg:w-[75vw] lg:h-[90vh] z-50";
+    case "pdf":
+      return "w-full h-full lg:w-[611px] lg:h-[791px] z-50";
     default:
       return "";
   }
@@ -62,7 +65,7 @@ export const MediaPlayer = () => {
     return null;
   }
 
-  const extension = mediaFile.split(".").pop() ?? "";
+  const extension = mediaFile.split(".").pop()?.toLowerCase() ?? "";
 
   const fileType = getFileTypeFromExtension(extension);
   const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${mediaFile}`;
@@ -115,6 +118,7 @@ export const MediaPlayer = () => {
           className="w-full h-full object-contain object-center"
         />
       )}
+      {fileType === "pdf" && <PdfReader file={fileUrl} />}
       {extension === "epub" && (
         <EpubReader fileUrl={fileUrl} objectKey={mediaFile} />
       )}

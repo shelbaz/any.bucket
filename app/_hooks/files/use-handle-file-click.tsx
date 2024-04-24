@@ -27,6 +27,11 @@ export const useHandleFileClick = (objectKey: string, type: string) => {
         setMediaFile(objectKey);
       };
       break;
+    case "pdf":
+      handleFileClick = () => {
+        setMediaFile(objectKey);
+      };
+      break;
     default:
       handleFileClick = () => {
         console.log("File type not supported");
