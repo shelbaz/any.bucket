@@ -48,9 +48,9 @@ export const MoreButtonMenuItem = ({
         <div
           className={clsx(
             option.className,
-            active ? "bg-grey-100 text-grey-900" : "text-grey-900",
+            active ? "bg-zinc-50 text-zinc-900" : "text-zinc-900",
             "flex flex-1 cursor-pointer items-center px-3 py-2 text-xs font-medium",
-            option.footer && "border-t border-purple-100 bg-grey-100"
+            option.footer && "border-t border-zinc-100 bg-zinc-100"
           )}
           onClick={(e) => {
             e.preventDefault();
@@ -143,10 +143,10 @@ export const MoreButtonBase = ({
               <div onMouseDown={handleButtonClick}>
                 <Menu.Button
                   className={clsx(
-                    "flex cursor-pointer items-center justify-center p-2 hover:bg-zinc-100 text-zinc-500 hover:text-black rounded-md",
+                    "flex cursor-pointer items-center justify-center py-1 px-0.5 hover:bg-zinc-100 text-zinc-500 hover:text-black rounded-md",
                     className,
                     isDisabled &&
-                      "pointer-events-none bg-grey-200 border-gray-300 text-gray-400"
+                      "pointer-events-none bg-gray-200 border-gray-300 text-gray-400"
                   )}
                 >
                   <span className="sr-only" data-testid={dataTestId}>
@@ -175,7 +175,7 @@ export const MoreButtonBase = ({
                 <Menu.Items
                   static
                   className={clsx(
-                    "focus:outline-none z-50 overflow-hidden rounded-md border border-purple-100 bg-white shadow-overlay mt-2 origin-top-right",
+                    "focus:outline-none z-50 overflow-hidden rounded-md border border-zinc-100 bg-white shadow-overlay mt-2 origin-top-right",
                     portal ? "fixed" : `absolute ${positionClassName}`
                   )}
                   style={{

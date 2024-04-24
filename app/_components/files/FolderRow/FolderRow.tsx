@@ -19,9 +19,6 @@ export const FolderRow = ({ onClick, label }: Props) => {
               {label || <span className="opacity-50">(untitled folder)</span>}
             </span>
           </span>
-          <div className="absolute top-3 right-3 hover:bg-zinc-100 text-zinc-500 hover:text-black h-6 w-6 justify-center items-center flex rounded cursor-pointer">
-            <EllipsisHorizontalIcon className="h-5 w-5" />
-          </div>
         </div>
       </div>
     </li>
