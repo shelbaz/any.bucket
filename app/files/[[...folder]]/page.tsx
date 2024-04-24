@@ -12,7 +12,7 @@ import { FileRow } from "@/app/_components/files/FileRow";
 import { RocksLoader } from "@/app/_components/loaders/RocksLoader";
 import { useDropzone } from "react-dropzone";
 import { useUploadFile } from "@/app/_hooks/files";
-import { ArrowUpTrayIcon } from "@heroicons/react/16/solid";
+import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 
 const FilePage = () => {
   const { fileLayout } = useContext(AppContext);
@@ -48,10 +48,11 @@ const FilePage = () => {
     <div className="min-h-screen pb-24 relative" {...getRootProps()}>
       {isDragActive && (
         <div className="flex flex-col items-center justify-center pointer-events-none bg-zinc-500/25 absolute w-full h-full top-0 left-0 z-50">
-          <ArrowUpTrayIcon className="text-zinc-800 size-56 mb-4" />
-          <p className="text-3xl font-semibold text-zinc-700">
-            Drop files to upload in this folder
-          </p>
+          <DocumentArrowUpIcon className="text-zinc-800 size-24 mb-6" />
+          <h3 className="text-3xl font-semibold text-zinc-800 uppercase">
+            Drop files here
+          </h3>
+          <p className="mt-1 text-xl text-zinc-700">to upload to this folder</p>
         </div>
       )}
       <input {...getInputProps({ className: "dropzone" })} />
