@@ -8,12 +8,10 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import Image from "next/image";
 import { useParams, usePathname } from "next/navigation";
 import { FileInput } from "../../upload/FileInput";
-import toast from "react-hot-toast";
-import { useListObjects } from "@/app/_helpers/s3/objects";
 import { _Object } from "@aws-sdk/client-s3";
+import { useUploadFile } from "@/app/_hooks/files";
 
 const navigation = [
   { name: "Files", href: "/files", icon: FolderIcon },
@@ -28,7 +26,7 @@ export const Sidebar = () => {
   const params = useParams();
   const folder =
     typeof params.folder === "object" ? params.folder.join("/") : params.folder;
-  const { objects, setObjects } = useListObjects({ folder });
+  const { uploadFile } = useUploadFile({ folder });
 
   return (
     <>
@@ -166,42 +164,7 @@ export const Sidebar = () => {
                 </ul>
               </li>
               <li className="mt-auto mb-6">
-                <FileInput
-                  onInput={async (file) => {
-                    if (!file) return;
-                    const fileName = file.name;
-                    const response = await fetch("/api/s3/objects/presign", {
-                      method: "POST",
-                      body: JSON.stringify({
-                        fileName,
-                        folder: folder ? decodeURI(folder) : undefined,
-                      }),
-                    });
-                    const presignedUrl = await response.json();
-
-                    const uploadResponse = await fetch(presignedUrl.url, {
-                      method: "PUT",
-                      body: file,
-                      headers: { "Content-Type": file.type },
-                    });
-
-                    if (uploadResponse.ok) {
-                      toast.success("File uploaded successfully");
-                      setObjects((prev) => [
-                        ...(prev ?? []),
-                        {
-                          Key: `${
-                            folder ? `${decodeURI(folder)}/` : ""
-                          }${fileName}`,
-                          Size: file.size,
-                        } as _Object,
-                      ]);
-                      return;
-                    }
-
-                    toast.error("Failed to upload file");
-                  }}
-                />
+                <FileInput onInput={uploadFile} />
               </li>
             </ul>
           </nav>

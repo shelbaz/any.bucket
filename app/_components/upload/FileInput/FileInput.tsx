@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { useDropzone } from "react-dropzone";
 
 interface Props {
-  onInput: (file?: File) => void;
+  onInput: (file: File) => Promise<void>;
 }
 
 export const FileInput = ({ onInput }: Props) => {
