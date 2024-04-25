@@ -7,6 +7,7 @@ import { AppProvider } from "./_context/AppContext";
 import { MediaProvider } from "./_context/MediaContext";
 import { MediaPlayer } from "./_components/MediaPlayer";
 import { ConfirmModalWrapper } from "./_components/modals/ConfirmModal/ConfirmModalWrapper";
+import { EnsureBearerToken } from "./_components/EnsureBearerToken";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,6 +37,7 @@ export default function RootLayout({
               </main>
             </div>
             <ConfirmModalWrapper />
+            <EnsureBearerToken />
           </MediaProvider>
         </AppProvider>
         <Toaster position="bottom-center" reverseOrder={false} />

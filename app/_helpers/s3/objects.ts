@@ -1,6 +1,7 @@
 import { _Object } from "@aws-sdk/client-s3";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { usePathname } from "next/navigation";
+import { useFetcher } from "../../_hooks/fetcher/use-fetcher";
 
 const createQueryString = (params: Record<string, string | number | boolean | undefined | null>) => {
     return Object.keys(params)
@@ -17,13 +18,14 @@ export const useListObjects = ({ folder }: { folder?: string }) => {
     const [continuationToken, setContinuationToken] = useState<string | null>(null);
     const [isTruncated, setIsTruncated] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const fetcher = useFetcher();
 
     const hasAlreadyFetched = objects || folders;
 
     const listObjects = useCallback(async () => {
         if (!isTruncated || (!startAfter && hasAlreadyFetched) || isLoading) return;
         setIsLoading(true);
-    const response = await fetch(`/api/s3/objects/list${createQueryString({ folder: folder ? `${folder}/` : undefined, startAfter })}`);
+    const response = await fetcher(`/api/s3/objects/list${createQueryString({ folder: folder ? `${folder}/` : undefined, startAfter })}`);
 
         setIsLoading(false);
 

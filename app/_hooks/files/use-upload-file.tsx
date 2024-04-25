@@ -1,14 +1,16 @@
 import { useListObjects } from "@/app/_helpers/s3/objects";
 import { _Object } from "@aws-sdk/client-s3";
 import toast from "react-hot-toast";
+import { useFetcher } from "../fetcher/use-fetcher";
 
 export const useUploadFile = ({ folder }: { folder?: string }) => {
   const { setObjects } = useListObjects({ folder });
+  const fetcher = useFetcher();
 
   const uploadFile = async (file: File) => {
     if (!file) return;
     const fileName = file.name;
-    const response = await fetch("/api/s3/objects/presign", {
+    const response = await fetcher("/api/s3/objects/presign", {
       method: "POST",
       body: JSON.stringify({
         fileName,

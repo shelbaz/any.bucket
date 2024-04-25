@@ -5,6 +5,7 @@ interface Props {
   onClick?: () => void;
   isLoading?: boolean;
   variant?: "primary" | "secondary";
+  className?: string;
 }
 
 export const Button = ({
@@ -12,6 +13,7 @@ export const Button = ({
   onClick,
   isLoading,
   variant = "primary",
+  className,
 }: Props) => (
   <button
     type="button"
@@ -21,7 +23,8 @@ export const Button = ({
       variant === "primary"
         ? "bg-black hover:bg-zinc-800 text-white"
         : "bg-transparent text-black border border-black hover:bg-zinc-100 hover:border-zinc-800",
-      isLoading && "pointer-events-none opacity-50"
+      isLoading && "pointer-events-none opacity-50",
+      className
     )}
   >
     {label}
