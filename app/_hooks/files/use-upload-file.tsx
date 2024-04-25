@@ -4,20 +4,19 @@ import toast from "react-hot-toast";
 import { useFetcher } from "../fetcher/use-fetcher";
 
 export const useUploadFile = ({ folder }: { folder?: string }) => {
-  const { setObjects } = useListObjects({ folder });
+  const objects = useListObjects({ folder });
   const fetcher = useFetcher();
 
   const uploadFile = async (file: File) => {
     if (!file) return;
     const fileName = file.name;
-    const response = await fetcher("/api/s3/objects/presign", {
+    const presignedUrl = await fetcher("/api/s3/objects/presign", {
       method: "POST",
       body: JSON.stringify({
         fileName,
         folder: folder ? decodeURI(folder) : undefined,
       }),
     });
-    const presignedUrl = await response.json();
 
     const uploadResponse = await fetch(presignedUrl.url, {
       method: "PUT",
@@ -25,15 +24,20 @@ export const useUploadFile = ({ folder }: { folder?: string }) => {
       headers: { "Content-Type": file.type },
     });
 
-    if (uploadResponse.ok) {
+    if (uploadResponse) {
       toast.success("File uploaded successfully");
-      setObjects((prev) => [
-        ...(prev ?? []),
-        {
-          Key: `${folder ? `${decodeURI(folder)}/` : ""}${fileName}`,
-          Size: file.size,
-        } as _Object,
-      ]);
+      const uploadedObject: _Object = {
+        Key: fileName,
+        Size: file.size,
+        LastModified: new Date(),
+      };
+      const newObjectsData = objects.data?.objects
+        ? [...objects.data.objects, uploadedObject]
+        : [uploadedObject];
+      objects.mutate(
+        { ...objects.data, objects: newObjectsData },
+        { revalidate: false }
+      );
       return;
     }
 

@@ -15,9 +15,11 @@ export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
         }),
       });
 
-      if (response.ok) {
+      if (response) {
         toast.success("File renamed successfully");
         return;
+      } else {
+        toast.error("Failed to rename file");
       }
     } catch (error) {
       toast.error("Failed to rename file");

@@ -5,7 +5,7 @@ import { useListObjects } from "../../_helpers/s3/objects";
 import { useRouter, useParams } from "next/navigation";
 import { FolderCard } from "@/app/_components/files/FolderCard";
 import { FileCard } from "@/app/_components/files/FileCard";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "@/app/_context/AppContext";
 import { FolderRow } from "@/app/_components/files/FolderRow";
 import { FileRow } from "@/app/_components/files/FileRow";
@@ -16,12 +16,18 @@ import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 import { RenameModal } from "@/app/_components/modals/RenameModal";
 import { useRenameFile } from "@/app/_hooks/files/use-rename-file";
 import { Button } from "@/app/_components/buttons/Button";
+import { _Object } from "@aws-sdk/client-s3";
+
+type Folder = { prefix: string; label: string };
 
 const FilePage = () => {
   const { fileLayout, renameFileModal, setRenameFileModal } =
     useContext(AppContext);
   const router = useRouter();
   const params = useParams();
+  const [continuationToken, setContinuationToken] = useState<
+    string | undefined
+  >();
   const folder =
     typeof params.folder === "object" ? params.folder.join("/") : params.folder;
   const crumbs =
@@ -33,11 +39,10 @@ const FilePage = () => {
     objectKey: renameFileModal.objectKey,
   });
 
-  const { objects, folders, loadMore, isTruncated, isLoading } = useListObjects(
-    {
-      folder,
-    }
-  );
+  const objects = useListObjects({
+    folder,
+    continuationToken,
+  });
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop(acceptedFiles, fileRejections, event) {
@@ -48,8 +53,15 @@ const FilePage = () => {
     noClick: true,
   });
 
-  const hasFolders = !!folders?.length;
-  const hasObjects = !!objects?.length;
+  if (!objects.data) {
+    return null;
+  }
+
+  const hasFolders = !!objects.data.folders?.length;
+  const hasObjects = !!objects.data.objects?.length;
+
+  const foldersData = objects.data.folders;
+  const objectsData = objects.data.objects;
 
   return (
     <>
@@ -77,14 +89,14 @@ const FilePage = () => {
           <div className="p-6">
             {fileLayout === "list" ? (
               <ul className="flex flex-col rounded-lg border border-zinc-200 divide-y divide-zinc-200">
-                {folders?.map((folder) => (
+                {foldersData?.map((folder: Folder) => (
                   <FolderRow
                     key={folder.prefix}
                     label={folder.label}
                     onClick={() => router.push(`/files/${folder.prefix}`)}
                   />
                 ))}
-                {objects?.map((object) => (
+                {objectsData?.map((object: _Object) => (
                   <FileRow
                     key={object.Key}
                     objectKey={object.Key ?? ""}
@@ -98,14 +110,14 @@ const FilePage = () => {
               </ul>
             ) : (
               <ul className="grid grid-cols-12 gap-4">
-                {folders?.map((folder) => (
+                {foldersData?.map((folder: Folder) => (
                   <FolderCard
                     key={folder.prefix}
                     label={folder.label}
                     onClick={() => router.push(`/files/${folder.prefix}`)}
                   />
                 ))}
-                {objects?.map((object) => (
+                {objectsData?.map((object: _Object) => (
                   <FileCard
                     key={object.Key}
                     objectKey={object.Key ?? ""}
@@ -120,11 +132,33 @@ const FilePage = () => {
             )}
           </div>
         ) : null}
-        <div className="flex items-center justify-center h-24">
-          {!isLoading && !!folders && !!objects && isTruncated ? (
-            <Button variant="secondary" onClick={loadMore} label="Load more" />
+        <div className="flex space-x-2 items-center justify-center h-24">
+          {!objects.isLoading &&
+            !!foldersData &&
+            !!objectsData &&
+            continuationToken && (
+              <Button
+                label="Back to start"
+                variant="secondary"
+                onClick={() => {
+                  setContinuationToken(undefined);
+                }}
+              />
+            )}
+          {!objects.isLoading &&
+          !!foldersData &&
+          !!objectsData &&
+          objects.data.isTruncated &&
+          objects.data.continuationToken ? (
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setContinuationToken(objects.data.continuationToken);
+              }}
+              label="Next page"
+            />
           ) : null}
-          {(isLoading || !objects) && <RocksLoader />}
+          {objects.isLoading && <RocksLoader />}
         </div>
       </div>
       <RenameModal

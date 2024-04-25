@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { useLocalStorage } from "react-use";
 
 export const useFetcher = () => {
@@ -13,8 +12,12 @@ export const useFetcher = () => {
             "Content-Type": "application/json",
             },
         });
+
+        if (!res.ok) {
+            return null;
+        }
         
-        return res;
+        return await res.json();
     };
     
     return fetcher;
