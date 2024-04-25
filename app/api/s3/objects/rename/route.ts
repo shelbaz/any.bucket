@@ -1,4 +1,4 @@
-import { S3Client, _Object, CopyObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, _Object, CopyObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { NextRequest, NextResponse } from "next/server";
 
 const renameOrMoveObject = async ({ oldKey, newKey }: { oldKey: string, newKey: string }) => {
@@ -15,12 +15,29 @@ const renameOrMoveObject = async ({ oldKey, newKey }: { oldKey: string, newKey: 
         },
     });
 
-    const command = new CopyObjectCommand({
+    const copyCommand = new CopyObjectCommand({
         Bucket: bucket,
         CopySource: `${bucket}/${oldKey}`,
         Key: newKey,
     });
-    return await client.send(command);
+    const deleteCommand = new DeleteObjectCommand({
+        Bucket: bucket,
+        Key: oldKey,
+    });
+
+    try {
+        const copyResponse = await client.send(copyCommand);
+
+        if (copyResponse.$metadata.httpStatusCode === 200) {
+            const deleteResponse = await client.send(deleteCommand);
+            return deleteResponse;
+        } else {
+            return "Failed to rename or move object";
+        }
+    } catch (error) {
+        console.error(error);
+        return "Failed to rename or move object";
+    }
 };
 
 export async function PUT(
@@ -29,6 +46,8 @@ export async function PUT(
     const body = await req.json();
     const oldKey = body.oldKey;
     const newKey = body.newKey;
+    console.log("OLD:", oldKey);
+    console.log("NEW:", newKey);
     const response = await renameOrMoveObject({ oldKey, newKey });
     
     return NextResponse.json(response, { status: 200 });

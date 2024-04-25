@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ChevronRight = () => (
-  <ChevronRightIcon className="h-2.5 w-auto text-grey-300 mx-2.5" />
+  <ChevronRightIcon className="h-2.5 w-auto text-zinc-300 mx-2.5" />
 );
 
 export const Breadcrumbs = ({ crumbs, basePath }: Props) => {

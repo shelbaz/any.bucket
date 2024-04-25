@@ -18,6 +18,8 @@ import { useContext } from "react";
 import { MoreButton } from "../../buttons/MoreButton";
 import { MoreButtonOption } from "../../buttons/MoreButton/MoreButton";
 import toast from "react-hot-toast";
+import { useRenameFile } from "@/app/_hooks/files/use-rename-file";
+import { AppContext } from "@/app/_context/AppContext";
 
 interface Props {
   objectKey: string;
@@ -27,6 +29,7 @@ interface Props {
 }
 
 export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
+  const { setRenameFileModal, renameFileModal } = useContext(AppContext);
   const { mediaRef, mediaFile } = useContext(MediaContext);
   const fileType = getFileTypeFromExtension(extension);
   const noFilePreview = !["image", "audio", "video"].includes(fileType);
@@ -36,14 +39,24 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
 
   const options: MoreButtonOption[] = [
     {
-      label: "Delete",
-      action: deleteFile,
-    },
-    {
       label: "Download",
       action: () => {
         downloadFile(`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`);
       },
+    },
+    {
+      label: "Rename",
+      action: () => {
+        setRenameFileModal({
+          ...renameFileModal,
+          isOpen: true,
+          objectKey,
+        });
+      },
+    },
+    {
+      label: "Delete",
+      action: deleteFile,
     },
   ];
 
