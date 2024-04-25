@@ -53,15 +53,11 @@ const FilePage = () => {
     noClick: true,
   });
 
-  if (!objects.data) {
-    return null;
-  }
+  const hasFolders = !!objects.data?.folders?.length;
+  const hasObjects = !!objects.data?.objects?.length;
 
-  const hasFolders = !!objects.data.folders?.length;
-  const hasObjects = !!objects.data.objects?.length;
-
-  const foldersData = objects.data.folders;
-  const objectsData = objects.data.objects;
+  const foldersData = objects.data?.folders ?? [];
+  const objectsData = objects.data?.objects ?? [];
 
   return (
     <>
