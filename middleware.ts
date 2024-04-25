@@ -16,6 +16,10 @@ export const getBearerToken = (request: NextRequest) => {
 
 export const checkBearerTokenIsValid = (request: NextRequest) => {
     const token = getBearerToken(request);
+    if (!process.env.AUTH_SECRET || !process.env.APP_PASSWORD) {
+        return true;
+    }
+
     if (!token) {
         return false;
     }
