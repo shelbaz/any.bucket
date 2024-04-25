@@ -13,7 +13,6 @@ export async function POST(
   ) {
     const body = await req.json();
     const password = body.password;
-    console.log("PASSWORD:", password);
     const response = await submitPassword({ password });
     return NextResponse.json(response, { status: 200 });
 };

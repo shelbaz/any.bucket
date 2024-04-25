@@ -143,7 +143,7 @@ export const MoreButtonBase = ({
               <div onMouseDown={handleButtonClick}>
                 <Menu.Button
                   className={clsx(
-                    "flex cursor-pointer items-center justify-center py-1 px-0.5 hover:bg-zinc-100 text-zinc-500 hover:text-black rounded-md",
+                    "flex cursor-pointer items-center justify-center p-1 hover:bg-zinc-100 text-zinc-500 hover:text-black rounded-md",
                     className,
                     isDisabled &&
                       "pointer-events-none bg-gray-200 border-gray-300 text-gray-400"

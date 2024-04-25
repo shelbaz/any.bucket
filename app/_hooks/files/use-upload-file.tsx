@@ -2,6 +2,7 @@ import { useListObjects } from "@/app/_helpers/s3/objects";
 import { _Object } from "@aws-sdk/client-s3";
 import toast from "react-hot-toast";
 import { useFetcher } from "../fetcher/use-fetcher";
+import { dataUrlToFile } from "@/app/_helpers/files/download-file";
 
 export const useUploadFile = ({ folder }: { folder?: string }) => {
   const objects = useListObjects({ folder });
@@ -44,7 +45,17 @@ export const useUploadFile = ({ folder }: { folder?: string }) => {
     toast.error("Failed to upload file");
   };
 
+  const uploadB64Image = async (dataUrl: string, fileName: string) => {
+    const file = dataUrlToFile(dataUrl, fileName);
+    if (!file) {
+      toast.error("Failed to convert data URL to file");
+      return;
+    }
+    uploadFile(file);
+  };
+
   return {
     uploadFile,
+    uploadB64Image,
   };
 };

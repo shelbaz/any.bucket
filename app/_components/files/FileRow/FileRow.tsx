@@ -7,18 +7,12 @@ import {
 } from "@/app/_helpers/files";
 import { useHandleFileClick } from "@/app/_hooks/files";
 import { useDeleteFile } from "@/app/_hooks/files/use-delete-file";
-import {
-  EllipsisHorizontalIcon,
-  PauseIcon,
-  PlayIcon,
-} from "@heroicons/react/20/solid";
+import { PauseIcon, PlayIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import Image from "next/image";
 import { useContext } from "react";
 import { MoreButton } from "../../buttons/MoreButton";
 import { MoreButtonOption } from "../../buttons/MoreButton/MoreButton";
-import toast from "react-hot-toast";
-import { useRenameFile } from "@/app/_hooks/files/use-rename-file";
 import { AppContext } from "@/app/_context/AppContext";
 import { confirm } from "../../modals/ConfirmModal/ConfirmModal";
 
