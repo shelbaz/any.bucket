@@ -20,6 +20,7 @@ import { MoreButtonOption } from "../../buttons/MoreButton/MoreButton";
 import toast from "react-hot-toast";
 import { useRenameFile } from "@/app/_hooks/files/use-rename-file";
 import { AppContext } from "@/app/_context/AppContext";
+import { confirm } from "../../modals/ConfirmModal/ConfirmModal";
 
 interface Props {
   objectKey: string;
@@ -56,7 +57,19 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
     },
     {
       label: "Delete",
-      action: deleteFile,
+      action: async () => {
+        const shouldDelete = await confirm(
+          "Are you sure you want to delete this file?",
+          {
+            confirmText: "Delete",
+            cancelText: "Cancel",
+          }
+        );
+
+        if (shouldDelete) {
+          deleteFile();
+        }
+      },
     },
   ];
 

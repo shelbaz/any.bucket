@@ -46,8 +46,6 @@ export async function PUT(
     const body = await req.json();
     const oldKey = body.oldKey;
     const newKey = body.newKey;
-    console.log("OLD:", oldKey);
-    console.log("NEW:", newKey);
     const response = await renameOrMoveObject({ oldKey, newKey });
     
     return NextResponse.json(response, { status: 200 });

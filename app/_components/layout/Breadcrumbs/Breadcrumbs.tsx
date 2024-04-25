@@ -59,7 +59,7 @@ export const Breadcrumbs = ({ crumbs, basePath }: Props) => {
                     "text-sm font-semibold tracking-normal",
                     isLast
                       ? "text-zinc-600"
-                      : "text-zinc-900 hover:text-zinc-800"
+                      : "text-zinc-900 hover:text-zinc-500"
                   )}
                 >
                   {segment.title}

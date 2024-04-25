@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import { AppProvider } from "./_context/AppContext";
 import { MediaProvider } from "./_context/MediaContext";
 import { MediaPlayer } from "./_components/MediaPlayer";
+import { ConfirmModalWrapper } from "./_components/modals/ConfirmModal/ConfirmModalWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
                 </div>
               </main>
             </div>
+            <ConfirmModalWrapper />
           </MediaProvider>
         </AppProvider>
         <Toaster position="bottom-center" reverseOrder={false} />

@@ -15,6 +15,7 @@ import { useUploadFile } from "@/app/_hooks/files";
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 import { RenameModal } from "@/app/_components/modals/RenameModal";
 import { useRenameFile } from "@/app/_hooks/files/use-rename-file";
+import { Button } from "@/app/_components/buttons/Button";
 
 const FilePage = () => {
   const { fileLayout, renameFileModal, setRenameFileModal } =
@@ -121,12 +122,7 @@ const FilePage = () => {
         ) : null}
         <div className="flex items-center justify-center h-24">
           {!isLoading && !!folders && !!objects && isTruncated ? (
-            <div
-              onClick={loadMore}
-              className="border border-black rounded py-2 px-3 cursor-pointer hover:opacity-80 duration-100"
-            >
-              Load more
-            </div>
+            <Button variant="secondary" onClick={loadMore} label="Load more" />
           ) : null}
           {(isLoading || !objects) && <RocksLoader />}
         </div>

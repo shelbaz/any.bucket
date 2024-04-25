@@ -18,6 +18,7 @@ specifiers:
   postcss: ^8
   react: ^18
   react-audio-spectrum: ^0.1.0
+  react-confirm: 0.3.0-7
   react-dom: ^18
   react-dropzone: ^14.2.3
   react-hot-toast: ^2.4.1
@@ -40,6 +41,7 @@ dependencies:
   next: 14.2.1_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-audio-spectrum: 0.1.0
+  react-confirm: 0.3.0-7_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
   react-dropzone: 14.2.3_react@18.2.0
   react-hot-toast: 2.4.1_biqbaboplfbrettd7655fr4n2y
@@ -3926,6 +3928,16 @@ packages:
       prop-types: 15.8.1
       react: 16.14.0
       react-dom: 16.14.0_react@16.14.0
+    dev: false
+
+  /react-confirm/0.3.0-7_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-DxEoq9uKG2Ku4qs1HHcbygbIJervr73L3uULihwQsl7dr2Ca2ltBRoM0vh7G1FPV5YJAJSPmaIbEiGpmTubBKg==}
+    peerDependencies:
+      react: 18.x
+      react-dom: 18.x
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react-dom/16.14.0_react@16.14.0:
