@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useVerifyPassword } from "../_hooks/password";
 import { Button } from "../_components/buttons/Button";
 import { useRouter } from "next/navigation";
+import { Input } from "../_components/form/Input";
 
 const PasswordPage = () => {
   const router = useRouter();
@@ -34,13 +35,12 @@ const PasswordPage = () => {
             handleSubmitPassword(password);
           }}
         >
-          <input
+          <Input
             id="rename-file"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="********"
             autoFocus
-            className="py-2 px-3 border border-zinc-900 rounded w-full focus:outline-none focus:shadow"
             type="password"
           />
           <Button type="submit" label="Submit" className="mt-2 w-full" />

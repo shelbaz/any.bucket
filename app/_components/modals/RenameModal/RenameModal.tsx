@@ -1,6 +1,7 @@
 import { Modal } from "../Modal";
 import { useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { Input } from "../../form/Input";
 
 interface Props {
   isOpen: boolean;
@@ -36,13 +37,12 @@ export const RenameModal = ({
           >
             File name
           </label>
-          <input
+          <Input
             id="rename-file"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="your_file.zip"
             autoFocus
-            className="py-2 px-3 border border-zinc-900 rounded w-full focus:outline-none focus:shadow"
           />
         </div>
       }
