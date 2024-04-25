@@ -24,13 +24,11 @@ const CreatePage = () => {
         {createTypes.map((card) => {
           return (
             <Link
+              key={card.title}
               href={card.path}
               className="col-span-12 sm:col-span-6 xl:col-span-4"
             >
-              <div
-                key={card.title}
-                className="bg-white p-6 border border-zinc-200 rounded-xl duration-100 hover:bg-zinc-50 hover:border-zinc-300 cursor-pointer"
-              >
+              <div className="bg-white p-6 border border-zinc-200 rounded-xl duration-100 hover:bg-zinc-50 hover:border-zinc-300 cursor-pointer">
                 <h3 className="text-2xl font-semibold text-zinc-800">
                   {card.title}
                 </h3>

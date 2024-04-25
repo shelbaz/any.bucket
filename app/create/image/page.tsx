@@ -22,8 +22,11 @@ const ImagePage = () => {
       {/* <Button label="Generate Image" onClick={() => generateImage(imageDescription)} /> */}
       <div className="grid grid-cols-12 gap-4">
         {images.map((image, index) => (
-          <div className="cols-span-12 sm:col-span-6 xl:col-span-4 rounded-lg">
-            <Image src={image} alt={`${imageDescription} - ${index}`} />
+          <div
+            key={image}
+            className="relative cols-span-12 sm:col-span-6 xl:col-span-4 rounded-lg aspect-square"
+          >
+            <Image src={image} alt={`${imageDescription} - ${index}`} fill />
           </div>
         ))}
       </div>
