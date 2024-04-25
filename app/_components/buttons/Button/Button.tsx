@@ -2,6 +2,7 @@ import clsx from "clsx";
 
 interface Props {
   label: string;
+  type?: "button" | "submit";
   onClick?: () => void;
   isLoading?: boolean;
   variant?: "primary" | "secondary";
@@ -10,13 +11,14 @@ interface Props {
 
 export const Button = ({
   label,
+  type = "button",
   onClick,
   isLoading,
   variant = "primary",
   className,
 }: Props) => (
   <button
-    type="button"
+    type={type}
     onClick={onClick}
     className={clsx(
       "rounded-md px-3 py-2 text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
