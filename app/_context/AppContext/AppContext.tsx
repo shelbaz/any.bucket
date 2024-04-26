@@ -1,7 +1,9 @@
 "use client";
-import { createContext, useState } from "react";
+import { useParams } from "next/navigation";
+import { createContext, useMemo, useState } from "react";
 
 interface AppContextType {
+  folder: string;
   fileLayout?: "list" | "grid";
   setFileLayout?: (layout: "list" | "grid") => void;
   renameFileModal: {
@@ -17,6 +19,7 @@ interface AppContextType {
 }
 
 const initialValue: AppContextType = {
+  folder: "",
   fileLayout: "list",
   setFileLayout: () => {},
   renameFileModal: {
@@ -30,6 +33,7 @@ const initialValue: AppContextType = {
 export const AppContext = createContext<AppContextType>(initialValue);
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
+  const params = useParams();
   const [fileLayout, setFileLayout] = useState<AppContextType["fileLayout"]>(
     initialValue.fileLayout
   );
@@ -37,9 +41,16 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     AppContextType["renameFileModal"]
   >(initialValue.renameFileModal);
 
+  const folder = useMemo(() => {
+    return typeof params.folder === "object"
+      ? params.folder.join("/")
+      : params.folder;
+  }, [params]);
+
   return (
     <AppContext.Provider
       value={{
+        folder,
         fileLayout,
         setFileLayout,
         renameFileModal,

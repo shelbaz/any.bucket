@@ -27,12 +27,10 @@ const FilePage = () => {
   const { fileLayout, renameFileModal, setRenameFileModal } =
     useContext(AppContext);
   const router = useRouter();
-  const params = useParams();
   const [continuationToken, setContinuationToken] = useState<
     string | undefined
   >();
-  const folder =
-    typeof params.folder === "object" ? params.folder.join("/") : params.folder;
+  const { folder } = useContext(AppContext);
   const crumbs =
     folder
       ?.split("/")

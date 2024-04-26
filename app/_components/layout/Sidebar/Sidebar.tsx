@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -12,6 +12,7 @@ import { useParams, usePathname } from "next/navigation";
 import { FileInput } from "../../upload/FileInput";
 import { _Object } from "@aws-sdk/client-s3";
 import { useUploadFile } from "@/app/_hooks/files";
+import { AppContext } from "@/app/_context/AppContext";
 
 const navigation = [
   { name: "Files", href: "/files", icon: FolderIcon },
@@ -22,10 +23,7 @@ const navigation = [
 export const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const currentRootPath = usePathname().split("/")[1];
-
-  const params = useParams();
-  const folder =
-    typeof params.folder === "object" ? params.folder.join("/") : params.folder;
+  const { folder } = useContext(AppContext);
   const { uploadFile } = useUploadFile({ folder });
 
   return (

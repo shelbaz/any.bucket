@@ -8,6 +8,8 @@ import { MutableRefObject, useContext, useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { EpubReader } from "./EpubReader";
 import { PdfReader } from "./PdfReader";
+import { useListObjects } from "@/app/_helpers/s3/objects";
+import { AppContext } from "@/app/_context/AppContext";
 
 const getSizeClassesFromExt = (ext: string) => {
   switch (ext.toLocaleLowerCase()) {
@@ -46,6 +48,8 @@ export const MediaPlayer = () => {
     mediaRef,
     close,
   } = useContext(MediaContext);
+  const { folder } = useContext(AppContext);
+  const objects = useListObjects({ folder });
 
   useHotkeys("ESC", () => {
     if (mediaFile) {
