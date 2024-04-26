@@ -9,7 +9,7 @@ const createTypes = [
   {
     title: "Generate Images",
     description: "DALL-E 2, DALL-E 3, and more coming soon",
-    icon: "🖼️",
+    icon: "🌄",
     path: "/create/image",
   },
 ];
@@ -32,7 +32,7 @@ const CreatePage = () => {
               className="col-span-12 sm:col-span-6 xl:col-span-4"
             >
               <div className="flex bg-white p-6 border border-zinc-200 rounded-xl duration-100 hover:bg-zinc-50 hover:border-zinc-300 cursor-pointer items-center">
-                <div className="mr-2 text-3xl">{card.icon}</div>
+                <div className="mr-6 text-7xl">{card.icon}</div>
                 <div className="flex flex-col">
                   <h3 className="text-2xl font-semibold text-zinc-800">
                     {card.title}
