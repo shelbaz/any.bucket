@@ -4,12 +4,13 @@ import { ImageGenerateParams } from "openai/resources/images.mjs";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const generateImages = async ({ description, count, size = "1024x1024" }: { description: string; count: number; size?: ImageGenerateParams["size"] }) => {
+const generateImages = async ({ model = "dall-e-3", description, count, quality, size = "1024x1024" }: { model: ImageGenerateParams["model"];description: string; count: number; size?: ImageGenerateParams["size"]; quality?: ImageGenerateParams["quality"] }) => {
     const imageResponse = await openai.images.generate({
-        model: "dall-e-3",
+        model,
         prompt: description,
         n: count,
         size,
+        quality,
         response_format: "b64_json",
     });
 
@@ -23,6 +24,8 @@ export async function POST(
     const description = body.description;
     const count = body.count;
     const size = body.size;
-    const images = await generateImages({ description, count, size });
+    const model = body.model;
+    const quality = body.quality;
+    const images = await generateImages({ model, description, count, size, quality });
     return NextResponse.json(images, { status: 200 });
 };

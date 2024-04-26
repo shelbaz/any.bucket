@@ -1,11 +1,14 @@
 "use client";
 import Link from "next/link";
-import { Breadcrumbs } from "../_components/layout/Breadcrumbs";
+import {
+  Breadcrumbs,
+  BreadcrumbsTopbar,
+} from "../_components/layout/Breadcrumbs";
 
 const createTypes = [
   {
-    title: "Text to Image",
-    description: "Generate images from text",
+    title: "Generate Images",
+    description: "DALL-E 2, DALL-E 3, and more coming soon",
     icon: "🖼️",
     path: "/create/image",
   },
@@ -14,12 +17,12 @@ const createTypes = [
 const CreatePage = () => {
   return (
     <>
-      <div className="flex items-center py-2 px-3 border-t border-b border-zinc-200">
+      <BreadcrumbsTopbar>
         <Breadcrumbs
           basePath="/create"
           crumbs={[{ title: "Create", segment: "/" }]}
         />
-      </div>
+      </BreadcrumbsTopbar>
       <div className="grid grid-cols-12 gap-4 p-4 lg:p-12">
         {createTypes.map((card) => {
           return (
@@ -28,11 +31,16 @@ const CreatePage = () => {
               href={card.path}
               className="col-span-12 sm:col-span-6 xl:col-span-4"
             >
-              <div className="bg-white p-6 border border-zinc-200 rounded-xl duration-100 hover:bg-zinc-50 hover:border-zinc-300 cursor-pointer">
-                <h3 className="text-2xl font-semibold text-zinc-800">
-                  {card.title}
-                </h3>
-                <p className="mt-1 text-xl text-zinc-700">{card.description}</p>
+              <div className="flex bg-white p-6 border border-zinc-200 rounded-xl duration-100 hover:bg-zinc-50 hover:border-zinc-300 cursor-pointer items-center">
+                <div className="mr-2 text-3xl">{card.icon}</div>
+                <div className="flex flex-col">
+                  <h3 className="text-2xl font-semibold text-zinc-800">
+                    {card.title}
+                  </h3>
+                  <p className="mt-1 text-xl text-zinc-700">
+                    {card.description}
+                  </p>
+                </div>
               </div>
             </Link>
           );

@@ -1,6 +1,9 @@
 "use client";
 
-import { Breadcrumbs } from "@/app/_components/layout/Breadcrumbs";
+import {
+  Breadcrumbs,
+  BreadcrumbsTopbar,
+} from "@/app/_components/layout/Breadcrumbs";
 import { useListObjects } from "../../_helpers/s3/objects";
 import { useRouter, useParams } from "next/navigation";
 import { FolderCard } from "@/app/_components/files/FolderCard";
@@ -74,12 +77,12 @@ const FilePage = () => {
           </div>
         )}
         <input {...getInputProps({ className: "dropzone" })} />
-        <div className="flex items-center py-2 px-3 border-t border-b border-zinc-200">
+        <BreadcrumbsTopbar>
           <Breadcrumbs
             basePath="/files"
             crumbs={[{ segment: "/", title: "Files" }, ...crumbs]}
           />
-        </div>
+        </BreadcrumbsTopbar>
 
         {hasFolders || hasObjects ? (
           <div className="p-6">

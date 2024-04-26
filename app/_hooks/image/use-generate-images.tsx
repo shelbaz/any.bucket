@@ -7,9 +7,11 @@ export const useGenerateImages = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const generateImages = async (data: {
-    description: string;
-    count: number;
+    description: ImageGenerateParams["prompt"];
+    count: ImageGenerateParams["n"];
     size: ImageGenerateParams["size"];
+    model: ImageGenerateParams["model"];
+    quality?: ImageGenerateParams["quality"];
   }) => {
     setIsLoading(true);
     const response = await fetcher("/api/images", {
