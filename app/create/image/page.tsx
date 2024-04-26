@@ -173,7 +173,7 @@ const ImagePage = () => {
             return (
               <div
                 key={imageName}
-                className="group relative cols-span-12 sm:col-span-6 xl:col-span-4 rounded-lg aspect-square overflow-hidden"
+                className="group relative col-span-12 sm:col-span-6 xl:col-span-4 rounded-lg aspect-square overflow-hidden"
               >
                 <Image
                   src={imageBase64}

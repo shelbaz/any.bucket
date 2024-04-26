@@ -6,7 +6,20 @@ export const maxDuration = 300;
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const generateImages = async ({ model = "dall-e-3", description, count, quality, size = "1024x1024" }: { model: ImageGenerateParams["model"];description: string; count: number; size?: ImageGenerateParams["size"]; quality?: ImageGenerateParams["quality"] }) => {
+const generateImages = async ({
+    model = "dall-e-3",
+    description,
+    count,
+    quality,
+    size = "1024x1024",
+ }:
+{
+    model: ImageGenerateParams["model"];
+    description: ImageGenerateParams["prompt"];
+    count: ImageGenerateParams["n"];
+    size?: ImageGenerateParams["size"];
+    quality?: ImageGenerateParams["quality"];
+ }) => {
     const imageResponse = await openai.images.generate({
         model,
         prompt: description,
