@@ -124,7 +124,7 @@ export const MediaPlayer = () => {
       )}
 
       <div
-        className="group-hover:opacity-100 opacity-0 duration-100 absolute top-5 left-auto right-5 lg:left-5 lg:right-auto rounded-full h-6 w-6 bg-black cursor-pointer flex items-center justify-center z-10"
+        className="group-hover:opacity-100 opacity-100 sm:opacity-0 duration-100 absolute top-5 left-auto right-5 lg:left-5 lg:right-auto rounded-full h-6 w-6 bg-black cursor-pointer flex items-center justify-center z-10"
         onClick={() => {
           close();
         }}
