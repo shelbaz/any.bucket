@@ -2,7 +2,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { S3Client, _Object, PutObjectCommand } from "@aws-sdk/client-s3";
 import { NextRequest, NextResponse } from "next/server";
 
-export const generatePresignedUrl = async ({ fileName, folder }: { fileName: string, folder: string | undefined }) => {
+const generatePresignedUrl = async ({ fileName, folder }: { fileName: string, folder: string | undefined }) => {
     const s3Url = process.env.S3_ENDPOINT;
     const bucket = process.env.S3_BUCKET_NAME;
 
