@@ -4,12 +4,19 @@ import { MediaContext } from "@/app/_context/MediaContext";
 import { getFileTypeFromExtension } from "@/app/_helpers/files";
 import { XCircleIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
-import { MutableRefObject, useContext, useEffect, useState } from "react";
+import {
+  MutableRefObject,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { EpubReader } from "./EpubReader";
 import { PdfReader } from "./PdfReader";
 import { useListObjects } from "@/app/_helpers/s3/objects";
 import { AppContext } from "@/app/_context/AppContext";
+import { _Object } from "@aws-sdk/client-s3";
 
 const getSizeClassesFromExt = (ext: string) => {
   switch (ext.toLocaleLowerCase()) {
@@ -41,6 +48,7 @@ export const MediaPlayer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const {
     mediaFile,
+    setMediaFile,
     setIsPlaying,
     isPlaying,
     isFullScreen,
@@ -50,11 +58,23 @@ export const MediaPlayer = () => {
   } = useContext(MediaContext);
   const { folder } = useContext(AppContext);
   const objects = useListObjects({ folder });
+  const objectsData: _Object[] = useMemo(
+    () => objects.data?.objects ?? [],
+    [objects]
+  );
 
   useHotkeys("ESC", () => {
     if (mediaFile) {
       close();
     }
+  });
+
+  useHotkeys("up", () => {
+    loadPreviousFile();
+  });
+
+  useHotkeys("down", () => {
+    loadNextFile();
   });
 
   useEffect(() => {
@@ -68,6 +88,42 @@ export const MediaPlayer = () => {
   if (!mediaFile || isLoading) {
     return null;
   }
+
+  const loadPreviousFile = (type?: string) => {
+    const filteredObjects = objectsData.filter((obj) => {
+      if (!type) return true;
+      const ext = obj.Key?.split(".").pop()?.toLowerCase();
+      const fileType = getFileTypeFromExtension(ext ?? "");
+      return fileType === type;
+    });
+    const currentIndex = filteredObjects.findIndex(
+      (obj) => obj.Key === mediaFile
+    );
+    const previousIndex = currentIndex - 1;
+    const previousFile = filteredObjects[previousIndex]?.Key;
+
+    if (previousFile) {
+      setMediaFile(previousFile);
+    }
+  };
+
+  const loadNextFile = (type?: string) => {
+    const filteredObjects = objectsData.filter((obj) => {
+      if (!type) return true;
+      const ext = obj.Key?.split(".").pop()?.toLowerCase();
+      const fileType = getFileTypeFromExtension(ext ?? "");
+      return fileType === type;
+    });
+    const currentIndex = filteredObjects.findIndex(
+      (obj) => obj.Key === mediaFile
+    );
+    const nextIndex = currentIndex + 1;
+    const nextFile = filteredObjects[nextIndex]?.Key;
+
+    if (nextFile) {
+      setMediaFile(nextFile);
+    }
+  };
 
   const extension = mediaFile.split(".").pop()?.toLowerCase() ?? "";
 
@@ -99,6 +155,7 @@ export const MediaPlayer = () => {
               src={fileUrl}
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
+              onEnded={() => loadNextFile("audio")}
               autoPlay
               className="w-full h-8"
             />
