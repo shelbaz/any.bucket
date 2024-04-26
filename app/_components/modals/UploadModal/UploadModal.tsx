@@ -12,7 +12,9 @@ export const UploadModal = () => {
     typeof params.folder === "object" ? params.folder.join("/") : params.folder;
   const {
     fileQueue,
+    setFiles,
     addFilesToQueue,
+    clearFileQueue,
     updateFileProgress,
     files,
     uploadModalIsOpen,
@@ -22,6 +24,8 @@ export const UploadModal = () => {
 
   const handleClose = () => {
     setUploadModalIsOpen(false);
+    setFiles([]);
+    clearFileQueue();
   };
 
   const handleUpdateProgress = (progress: number, fileName: string) => {
@@ -36,17 +40,25 @@ export const UploadModal = () => {
           progress,
         },
       ]);
+      return;
     }
     updateFileProgress(fileIndex, progress);
+
+    if (progress === 100 && fileQueue.length < files.length) {
+      console.log(fileQueue.length, files.length, fileName);
+      uploadFiles(fileQueue.length);
+    }
   };
 
   //   TODO: Figure out file queuing
-  const startUploading = () => {
+  const uploadFiles = (startIndex: number, endIndex?: number) => {
     // Upload files, but with these rules
     // 1. Only 5 files can be uploaded at a time
     // 2. Once 1 file is finished, another should be added to the queue (if there are more left)
-    const filesToUpload = files.slice(0, 5);
-    const remainingFiles = files.slice(5);
+    const filesToUpload = files.slice(
+      startIndex,
+      (endIndex ?? startIndex + 1) + 1
+    );
 
     filesToUpload.forEach((file) => {
       uploadFile(file, (progress) => handleUpdateProgress(progress, file.name));
@@ -61,7 +73,7 @@ export const UploadModal = () => {
       confirmButton={{
         label: "Start uploading",
         onClick: () => {
-          startUploading();
+          uploadFiles(0, 4);
         },
       }}
       cancelButton={{
@@ -70,15 +82,29 @@ export const UploadModal = () => {
       }}
     >
       <div className="py-2">
-        <ul>
+        <ul className="flex flex-col space-y-1">
           {files.map((file) => {
+            const queuedFile = fileQueue.find(
+              (queued) =>
+                queued.objectKey ===
+                (folder ? `${folder}/${file.name}` : file.name)
+            );
             return (
-              <li key={file.name}>
-                {file.name} -{" "}
-                {
-                  fileQueue.find((queued) => queued.objectKey === file.name)
-                    ?.progress
-                }
+              <li
+                key={file.name}
+                className="rounded py-1 px-3 relative flex items-center justify-between overflow-hidden"
+              >
+                <div
+                  className="absolute bottom-0 left-0 bg-blue-200 h-full -z-10 duration-300"
+                  style={{
+                    width: `${queuedFile?.progress}%`,
+                  }}
+                ></div>
+                <span className="line-clamp-1">{file.name}</span>
+                <span>
+                  {queuedFile?.progress}
+                  {queuedFile ? "%" : ""}
+                </span>
               </li>
             );
           })}

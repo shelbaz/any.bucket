@@ -54,30 +54,33 @@ export const useUploadFile = ({ folder }: { folder?: string }) => {
       }),
     });
 
-    const uploadResponse = await uploadS3(
-      presignedUrl.url,
-      file,
-      onProgressUpdate
-    );
-
-    if (uploadResponse) {
-      toast.success("File uploaded successfully");
-      const uploadedObject: _Object = {
-        Key: fileName,
-        Size: file.size,
-        LastModified: new Date(),
-      };
-      const newObjectsData = objects.data?.objects
-        ? [...objects.data.objects, uploadedObject]
-        : [uploadedObject];
-      objects.mutate(
-        { ...objects.data, objects: newObjectsData },
-        { revalidate: false }
+    try {
+      const uploadResponse = await uploadS3(
+        presignedUrl.url,
+        file,
+        onProgressUpdate
       );
-      return;
-    }
+      if (uploadResponse) {
+        const uploadedObject: _Object = {
+          Key: fileName,
+          Size: file.size,
+          LastModified: new Date(),
+        };
+        const newObjectsData = objects.data?.objects
+          ? [...objects.data.objects, uploadedObject]
+          : [uploadedObject];
+        objects.mutate(
+          { ...objects.data, objects: newObjectsData },
+          { revalidate: false }
+        );
+        onProgressUpdate?.(100);
+        return;
+      }
 
-    toast.error("Failed to upload file");
+      toast.error("Failed to upload file");
+    } catch (e) {
+      toast.error("Failed to upload file");
+    }
   };
 
   const uploadB64Image = async (

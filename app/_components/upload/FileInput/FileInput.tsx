@@ -3,14 +3,14 @@ import clsx from "clsx";
 import { useDropzone } from "react-dropzone";
 
 interface Props {
-  onInput: (file: File) => Promise<void>;
+  onInput: (files: File[]) => void;
 }
 
 export const FileInput = ({ onInput }: Props) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop(acceptedFiles, fileRejections, event) {
       if (acceptedFiles.length) {
-        onInput(acceptedFiles[0]);
+        onInput(acceptedFiles);
       }
     },
   });

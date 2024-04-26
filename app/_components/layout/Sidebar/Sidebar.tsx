@@ -8,11 +8,10 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FileInput } from "../../upload/FileInput";
 import { _Object } from "@aws-sdk/client-s3";
-import { useUploadFile } from "@/app/_hooks/files";
-import { AppContext } from "@/app/_context/AppContext";
+import { UploadContext } from "@/app/_context/UploadContext";
 
 const navigation = [
   { name: "Files", href: "/files", icon: FolderIcon },
@@ -23,8 +22,12 @@ const navigation = [
 export const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const currentRootPath = usePathname().split("/")[1];
-  const { folder } = useContext(AppContext);
-  const { uploadFile } = useUploadFile({ folder });
+  const { setFiles, setUploadModalIsOpen } = useContext(UploadContext);
+
+  const uploadFiles = (files: File[]) => {
+    setFiles(files);
+    setUploadModalIsOpen(true);
+  };
 
   return (
     <>
@@ -162,7 +165,7 @@ export const Sidebar = () => {
                 </ul>
               </li>
               <li className="mt-auto mb-6">
-                <FileInput onInput={uploadFile} />
+                <FileInput onInput={uploadFiles} />
               </li>
             </ul>
           </nav>

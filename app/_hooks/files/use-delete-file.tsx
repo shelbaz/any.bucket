@@ -18,7 +18,7 @@ export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
       });
 
       if (response) {
-        toast.success("File deleted successfully");
+        toast.success("File deleted");
         const newObjectsData = [...(objects.data?.objects ?? [])].filter(
           (object: _Object) => {
             return object.Key !== objectKey;

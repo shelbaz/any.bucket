@@ -41,6 +41,7 @@ export default function RootLayout({
               </div>
               <ConfirmModalWrapper />
               <EnsureBearerToken />
+              <UploadModal />
             </MediaProvider>
           </UploadProvider>
         </AppProvider>
