@@ -8,17 +8,16 @@ interface UploadContextType {
   setFiles: (files: File[]) => void;
   fileQueue: Array<{
     objectKey: string;
-    presignedUrl: string;
     progress: number;
   }>;
   addFilesToQueue: (
     file: {
       objectKey: string;
-      presignedUrl: string;
       progress: number;
     }[]
   ) => void;
   removeFileFromQueue: (objectKey: string) => void;
+  updateFileProgress: (index: number, progress: number) => void;
 }
 
 const initialValue: UploadContextType = {
@@ -29,6 +28,7 @@ const initialValue: UploadContextType = {
   fileQueue: [],
   addFilesToQueue: () => {},
   removeFileFromQueue: () => {},
+  updateFileProgress: () => {},
 };
 
 export const UploadContext = createContext<UploadContextType>(initialValue);
@@ -43,7 +43,6 @@ export const UploadProvider = ({ children }: { children: React.ReactNode }) => {
   const addFilesToQueue = (
     files: {
       objectKey: string;
-      presignedUrl: string;
       progress: number;
     }[]
   ) => {
@@ -52,6 +51,14 @@ export const UploadProvider = ({ children }: { children: React.ReactNode }) => {
 
   const removeFileFromQueue = (objectKey: string) => {
     setFileQueue((prev) => prev.filter((file) => file.objectKey !== objectKey));
+  };
+
+  const updateFileProgress = (index: number, progress: number) => {
+    setFileQueue((prev) => {
+      const newQueue = [...prev];
+      newQueue[index].progress = progress;
+      return newQueue;
+    });
   };
 
   return (
@@ -64,6 +71,7 @@ export const UploadProvider = ({ children }: { children: React.ReactNode }) => {
         fileQueue,
         addFilesToQueue,
         removeFileFromQueue,
+        updateFileProgress,
       }}
     >
       {children}

@@ -13,6 +13,7 @@ export const UploadModal = () => {
   const {
     fileQueue,
     addFilesToQueue,
+    updateFileProgress,
     files,
     uploadModalIsOpen,
     setUploadModalIsOpen,
@@ -21,6 +22,22 @@ export const UploadModal = () => {
 
   const handleClose = () => {
     setUploadModalIsOpen(false);
+  };
+
+  const handleUpdateProgress = (progress: number, fileName: string) => {
+    const objectKey = folder ? `${folder}/${fileName}` : fileName;
+    const fileIndex = fileQueue.findIndex(
+      (file) => file.objectKey === objectKey
+    );
+    if (fileIndex < 0) {
+      addFilesToQueue([
+        {
+          objectKey,
+          progress,
+        },
+      ]);
+    }
+    updateFileProgress(fileIndex, progress);
   };
 
   //   TODO: Figure out file queuing
@@ -32,7 +49,7 @@ export const UploadModal = () => {
     const remainingFiles = files.slice(5);
 
     filesToUpload.forEach((file) => {
-      uploadFile(file);
+      uploadFile(file, (progress) => handleUpdateProgress(progress, file.name));
     });
   };
 
@@ -44,7 +61,7 @@ export const UploadModal = () => {
       confirmButton={{
         label: "Start uploading",
         onClick: () => {
-          handleClose();
+          startUploading();
         },
       }}
       cancelButton={{
@@ -55,7 +72,15 @@ export const UploadModal = () => {
       <div className="py-2">
         <ul>
           {files.map((file) => {
-            return <li key={file.name}>{file.name}</li>;
+            return (
+              <li key={file.name}>
+                {file.name} -{" "}
+                {
+                  fileQueue.find((queued) => queued.objectKey === file.name)
+                    ?.progress
+                }
+              </li>
+            );
           })}
         </ul>
       </div>
