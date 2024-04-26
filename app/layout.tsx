@@ -8,6 +8,8 @@ import { MediaProvider } from "./_context/MediaContext";
 import { MediaPlayer } from "./_components/MediaPlayer";
 import { ConfirmModalWrapper } from "./_components/modals/ConfirmModal/ConfirmModalWrapper";
 import { EnsureBearerToken } from "./_components/EnsureBearerToken";
+import { UploadModal } from "./_components/modals/UploadModal/UploadModal";
+import { UploadProvider } from "./_context/UploadContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,19 +28,21 @@ export default function RootLayout({
     <html className="h-full bg-white">
       <body className="h-full">
         <AppProvider>
-          <MediaProvider>
-            <div>
-              <Sidebar />
-              <main className="lg:pl-72">
-                <div className="relative min-h-screen">
-                  {children}
-                  <MediaPlayer />
-                </div>
-              </main>
-            </div>
-            <ConfirmModalWrapper />
-            <EnsureBearerToken />
-          </MediaProvider>
+          <UploadProvider>
+            <MediaProvider>
+              <div>
+                <Sidebar />
+                <main className="lg:pl-72">
+                  <div className="relative min-h-screen">
+                    {children}
+                    <MediaPlayer />
+                  </div>
+                </main>
+              </div>
+              <ConfirmModalWrapper />
+              <EnsureBearerToken />
+            </MediaProvider>
+          </UploadProvider>
         </AppProvider>
         <Toaster position="bottom-center" reverseOrder={false} />
       </body>
