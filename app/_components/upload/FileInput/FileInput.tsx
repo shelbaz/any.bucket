@@ -8,7 +8,7 @@ interface Props {
 
 export const FileInput = ({ onInput }: Props) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop(acceptedFiles, fileRejections, event) {
+    onDrop(acceptedFiles) {
       if (acceptedFiles.length) {
         onInput(acceptedFiles);
       }

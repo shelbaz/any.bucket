@@ -4,12 +4,10 @@ import { useContext } from "react";
 import { Modal } from "../Modal";
 import { UploadContext } from "@/app/_context/UploadContext";
 import { useUploadFile } from "@/app/_hooks/files";
-import { useParams } from "next/navigation";
+import { AppContext } from "@/app/_context/AppContext";
 
 export const UploadModal = () => {
-  const params = useParams();
-  const folder =
-    typeof params.folder === "object" ? params.folder.join("/") : params.folder;
+  const { folder } = useContext(AppContext);
   const {
     fileQueue,
     setFiles,
@@ -20,7 +18,7 @@ export const UploadModal = () => {
     uploadModalIsOpen,
     setUploadModalIsOpen,
   } = useContext(UploadContext);
-  const { uploadFile } = useUploadFile({ folder });
+  const { uploadFile } = useUploadFile();
 
   const handleClose = () => {
     setUploadModalIsOpen(false);
@@ -42,7 +40,11 @@ export const UploadModal = () => {
       ]);
       return;
     }
-    updateFileProgress(fileIndex, progress);
+    updateFileProgress(objectKey, progress);
+
+    console.log("IN PROGRESS:", progress);
+    console.log("IN QUEUE:", fileQueue);
+    console.log("IN FILES:", files);
 
     if (progress === 100 && fileQueue.length < files.length) {
       console.log(fileQueue.length, files.length, fileName);

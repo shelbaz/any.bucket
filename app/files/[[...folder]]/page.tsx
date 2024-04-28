@@ -35,7 +35,7 @@ const FilePage = () => {
     folder
       ?.split("/")
       .map((folder) => ({ title: decodeURI(folder), segment: folder })) ?? [];
-  const { uploadFile } = useUploadFile({ folder });
+  const { uploadFile } = useUploadFile();
   const { renameFile } = useRenameFile({
     objectKey: renameFileModal.objectKey,
   });

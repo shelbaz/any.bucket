@@ -3,8 +3,11 @@ import { _Object } from "@aws-sdk/client-s3";
 import toast from "react-hot-toast";
 import { useFetcher } from "../fetcher/use-fetcher";
 import { dataUrlToFile } from "@/app/_helpers/files/download-file";
+import { useContext } from "react";
+import { AppContext } from "@/app/_context/AppContext";
 
-export const useUploadFile = ({ folder }: { folder?: string }) => {
+export const useUploadFile = () => {
+  const { folder } = useContext(AppContext);
   const objects = useListObjects({ folder });
   const fetcher = useFetcher();
 
@@ -28,6 +31,7 @@ export const useUploadFile = ({ folder }: { folder?: string }) => {
 
       if (onProgressUpdate) {
         xhr.upload.onprogress = (e) => {
+          console.log("PROGRESS:", e);
           if (e.lengthComputable) {
             var percentComplete = (e.loaded / file.size) * 100;
             onProgressUpdate(percentComplete);

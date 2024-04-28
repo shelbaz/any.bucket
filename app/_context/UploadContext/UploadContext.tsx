@@ -17,7 +17,7 @@ interface UploadContextType {
     }[]
   ) => void;
   removeFileFromQueue: (objectKey: string) => void;
-  updateFileProgress: (index: number, progress: number) => void;
+  updateFileProgress: (objectKey: string, progress: number) => void;
   clearFileQueue: () => void;
 }
 
@@ -55,8 +55,9 @@ export const UploadProvider = ({ children }: { children: React.ReactNode }) => {
     setFileQueue((prev) => prev.filter((file) => file.objectKey !== objectKey));
   };
 
-  const updateFileProgress = (index: number, progress: number) => {
-    console.log(index, progress);
+  const updateFileProgress = (objectKey: string, progress: number) => {
+    const index = fileQueue.findIndex((file) => file.objectKey === objectKey);
+    if (index < 0 || fileQueue[index].progress > progress) return;
     setFileQueue((prev) => {
       const newQueue = [...prev];
       newQueue[index].progress = progress;

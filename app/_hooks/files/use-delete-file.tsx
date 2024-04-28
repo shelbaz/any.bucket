@@ -2,9 +2,11 @@ import { _Object } from "@aws-sdk/client-s3";
 import toast from "react-hot-toast";
 import { useFetcher } from "../fetcher/use-fetcher";
 import { useListObjects } from "@/app/_helpers/s3/objects";
+import { useContext } from "react";
+import { AppContext } from "@/app/_context/AppContext";
 
 export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
-  const folder = objectKey.split("/").slice(0, -1).join("/");
+  const { folder } = useContext(AppContext);
   const fetcher = useFetcher();
   const objects = useListObjects({ folder });
 
@@ -24,6 +26,7 @@ export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
             return object.Key !== objectKey;
           }
         );
+        console.log("NEW:", newObjectsData);
         objects.mutate(
           { ...objects.data, objects: newObjectsData },
           { revalidate: false }

@@ -2,10 +2,12 @@ import { _Object } from "@aws-sdk/client-s3";
 import toast from "react-hot-toast";
 import { useFetcher } from "../fetcher/use-fetcher";
 import { useListObjects } from "@/app/_helpers/s3/objects";
+import { useContext } from "react";
+import { AppContext } from "@/app/_context/AppContext";
 
 export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
   const fetcher = useFetcher();
-  const folder = objectKey.split("/").slice(0, -1).join("/");
+  const { folder } = useContext(AppContext);
   const objects = useListObjects({ folder });
 
   const renameFile = async (newName: string) => {
