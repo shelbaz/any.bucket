@@ -64,7 +64,7 @@ const ImagePage = () => {
     countOptions[0]
   );
   const { generateImages, isLoading } = useGenerateImages();
-  const { uploadB64Image } = useUploadFile({ folder: "Creations/Images" });
+  const { uploadB64Image } = useUploadFile();
 
   const handleGenerateImages = async (description: string) => {
     if (!description) {
