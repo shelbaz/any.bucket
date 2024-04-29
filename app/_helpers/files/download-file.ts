@@ -7,7 +7,6 @@ export function dataUrlToFile(dataUrl: string, filename: string): File | undefin
   if (!mimeArr || mimeArr.length < 2) { return undefined; }
   const mime = mimeArr[1];
   const buff = Buffer.from(arr[1], 'base64');
-  console.log("BUFF:", buff);
   return new File([buff], `${filename}.png`, {type:mime});
 }
 

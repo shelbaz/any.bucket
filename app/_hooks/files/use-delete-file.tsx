@@ -26,7 +26,6 @@ export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
             return object.Key !== objectKey;
           }
         );
-        console.log("NEW:", newObjectsData);
         objects.mutate(
           { ...objects.data, objects: newObjectsData },
           { revalidate: false }

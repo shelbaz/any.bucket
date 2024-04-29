@@ -88,9 +88,12 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                   <div className="w-8 h-8 bg-zinc-100 relative overflow-hidden rounded">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
-                      objectFit={extension === "svg" ? "contain" : "cover"}
                       alt={label ?? objectKey}
                       fill
+                      className={
+                        extension === "svg" ? "object-contain" : "object-cover"
+                      }
+                      sizes="(max-width: 64px), 64px"
                     />
                   </div>
                 )}

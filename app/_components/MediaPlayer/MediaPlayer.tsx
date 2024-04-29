@@ -69,13 +69,25 @@ export const MediaPlayer = () => {
     }
   });
 
-  useHotkeys("up", () => {
-    loadPreviousFile();
-  });
+  useHotkeys(
+    "up",
+    (e) => {
+      if (!mediaFile) return;
+      e.preventDefault();
+      loadPreviousFile();
+    },
+    [mediaFile]
+  );
 
-  useHotkeys("down", () => {
-    loadNextFile();
-  });
+  useHotkeys(
+    "down",
+    (e) => {
+      if (!mediaFile) return;
+      e.preventDefault();
+      loadNextFile();
+    },
+    [mediaFile]
+  );
 
   useEffect(() => {
     setIsLoading(true);

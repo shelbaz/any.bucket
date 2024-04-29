@@ -20,6 +20,7 @@ import { RenameModal } from "@/app/_components/modals/RenameModal";
 import { useRenameFile } from "@/app/_hooks/files/use-rename-file";
 import { Button } from "@/app/_components/buttons/Button";
 import { _Object } from "@aws-sdk/client-s3";
+import { UploadContext } from "@/app/_context/UploadContext";
 
 type Folder = { prefix: string; label: string };
 
@@ -30,6 +31,7 @@ const FilePage = () => {
   const [continuationToken, setContinuationToken] = useState<
     string | undefined
   >();
+  const { setFiles, setUploadModalIsOpen } = useContext(UploadContext);
   const { folder } = useContext(AppContext);
   const crumbs =
     folder
@@ -45,10 +47,15 @@ const FilePage = () => {
     continuationToken,
   });
 
+  const uploadFiles = (files: File[]) => {
+    setFiles(files);
+    setUploadModalIsOpen(true);
+  };
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop(acceptedFiles, fileRejections, event) {
+    onDrop(acceptedFiles) {
       if (acceptedFiles.length) {
-        uploadFile(acceptedFiles[0]);
+        uploadFiles(acceptedFiles);
       }
     },
     noClick: true,

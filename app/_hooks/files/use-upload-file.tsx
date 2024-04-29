@@ -31,7 +31,6 @@ export const useUploadFile = () => {
 
       if (onProgressUpdate) {
         xhr.upload.onprogress = (e) => {
-          console.log("PROGRESS:", e);
           if (e.lengthComputable) {
             var percentComplete = (e.loaded / file.size) * 100;
             onProgressUpdate(percentComplete);

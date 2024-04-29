@@ -6,18 +6,10 @@ interface UploadContextType {
   setUploadModalIsOpen: (isOpen: boolean) => void;
   files: File[];
   setFiles: (files: File[]) => void;
-  fileQueue: Array<{
-    objectKey: string;
-    progress: number;
-  }>;
-  addFilesToQueue: (
-    file: {
-      objectKey: string;
-      progress: number;
-    }[]
-  ) => void;
+  fileQueue: Record<string, number>;
+  addFilesToQueue: (files: string[]) => void;
   removeFileFromQueue: (objectKey: string) => void;
-  updateFileProgress: (objectKey: string, progress: number) => void;
+  updateFileProgress: (progress: number, objectKey: string) => void;
   clearFileQueue: () => void;
 }
 
@@ -26,7 +18,7 @@ const initialValue: UploadContextType = {
   setUploadModalIsOpen: () => {},
   files: [],
   setFiles: () => {},
-  fileQueue: [],
+  fileQueue: {},
   addFilesToQueue: () => {},
   removeFileFromQueue: () => {},
   updateFileProgress: () => {},
@@ -39,34 +31,39 @@ export const UploadProvider = ({ children }: { children: React.ReactNode }) => {
   const [uploadModalIsOpen, setUploadModalIsOpen] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
   const [fileQueue, setFileQueue] = useState<UploadContextType["fileQueue"]>(
-    []
+    {}
   );
 
-  const addFilesToQueue = (
-    files: {
-      objectKey: string;
-      progress: number;
-    }[]
-  ) => {
-    setFileQueue((prev) => [...prev, ...files]);
+  const addFilesToQueue = (files: string[]) => {
+    console.log("QUEUE BEFORE ADDING:", fileQueue);
+    const newQueue = files.reduce((acc, file) => {
+      return {
+        ...acc,
+        [file]: 0,
+      };
+    }, fileQueue);
+
+    setFileQueue(newQueue);
   };
 
   const removeFileFromQueue = (objectKey: string) => {
-    setFileQueue((prev) => prev.filter((file) => file.objectKey !== objectKey));
-  };
-
-  const updateFileProgress = (objectKey: string, progress: number) => {
-    const index = fileQueue.findIndex((file) => file.objectKey === objectKey);
-    if (index < 0 || fileQueue[index].progress > progress) return;
     setFileQueue((prev) => {
-      const newQueue = [...prev];
-      newQueue[index].progress = progress;
+      const newQueue = { ...prev };
+      delete newQueue[objectKey];
       return newQueue;
     });
   };
 
+  const updateFileProgress = (progress: number, objectKey: string) => {
+    setFileQueue((prev) => ({
+      ...prev,
+      // Progress should be rounded to one decimal place
+      [objectKey]: Math.round(progress * 10) / 10,
+    }));
+  };
+
   const clearFileQueue = () => {
-    setFileQueue([]);
+    setFileQueue({});
   };
 
   return (
