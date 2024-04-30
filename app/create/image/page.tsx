@@ -190,7 +190,11 @@ const ImagePage = () => {
                       },
                       {
                         label: "Save",
-                        action: () => uploadB64Image(imageBase64, imageName),
+                        action: () =>
+                          uploadB64Image(
+                            imageBase64,
+                            `Creations/Images/${imageName}`
+                          ),
                       },
                     ]}
                     className="bg-white shadow-sm border border-zinc-300"
