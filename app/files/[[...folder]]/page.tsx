@@ -12,7 +12,7 @@ import { useContext, useState } from "react";
 import { AppContext } from "@/app/_context/AppContext";
 import { FolderRow } from "@/app/_components/files/FolderRow";
 import { FileRow } from "@/app/_components/files/FileRow";
-import { RocksLoader } from "@/app/_components/loaders/RocksLoader";
+import { Loader } from "@/app/_components/loaders/Loader";
 import { useDropzone } from "react-dropzone";
 import { useUploadFile } from "@/app/_hooks/files";
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
@@ -136,7 +136,7 @@ const FilePage = () => {
             )}
           </div>
         ) : null}
-        <div className="flex space-x-2 items-center justify-center h-24">
+        <div className="flex space-x-2 items-center justify-center h-48">
           {!objects.isLoading &&
             !!foldersData &&
             !!objectsData &&
@@ -162,7 +162,7 @@ const FilePage = () => {
               label="Next page"
             />
           ) : null}
-          {objects.isLoading && <RocksLoader />}
+          {objects.isLoading && <Loader size={24} />}
         </div>
       </div>
       <RenameModal

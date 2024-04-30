@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import clsx from "clsx";
 
 export type Option<T = string> = { value: T; label: string };
 
@@ -9,14 +10,26 @@ interface Props<T = string> {
   value: Option<T>;
   onChange: (option: Option<T>) => void;
   options: Option<T>[];
+  disabled?: boolean;
 }
 
-export function Select<T>({ value, onChange, options, label }: Props<T>) {
+export function Select<T>({
+  value,
+  onChange,
+  options,
+  label,
+  disabled,
+}: Props<T>) {
   return (
     <div>
       <label className="text-sm">{label}</label>
       <Listbox value={value} onChange={onChange}>
-        <div className="relative mt-1">
+        <div
+          className={clsx(
+            "relative mt-1",
+            disabled && "opacity-40 pointer-events-none"
+          )}
+        >
           <Listbox.Button className="relative w-full cursor-default border border-zinc-900 rounded-lg bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-300 sm:text-sm">
             <span className="block truncate">{value.label}</span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">

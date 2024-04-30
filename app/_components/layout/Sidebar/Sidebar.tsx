@@ -181,9 +181,6 @@ export const Sidebar = () => {
           <span className="sr-only">Open sidebar</span>
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
-        <div className="flex-1 text-sm font-semibold leading-6 text-zinc-900">
-          Dashboard
-        </div>
       </div>
     </>
   );

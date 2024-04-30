@@ -7,6 +7,7 @@ import {
   Breadcrumbs,
   BreadcrumbsTopbar,
 } from "@/app/_components/layout/Breadcrumbs";
+import { Loader } from "@/app/_components/loaders/Loader";
 import { downloadBase64File } from "@/app/_helpers/files/download-file";
 import { autoGrow } from "@/app/_helpers/ui";
 import { useUploadFile } from "@/app/_hooks/files";
@@ -14,7 +15,7 @@ import { useGenerateImages } from "@/app/_hooks/image/use-generate-images";
 import Image from "next/image";
 import { ImageGenerateParams } from "openai/resources/index.mjs";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import toast, { LoaderIcon } from "react-hot-toast";
 
 type Model = "dall-e-2" | "dall-e-3";
 
@@ -49,6 +50,9 @@ const countOptions: Option<ImageGenerateParams["n"]>[] = [
 ];
 
 const ImagePage = () => {
+  const [loading, setLoading] = useState<{
+    count: number;
+  } | null>(null);
   const [images, setImages] = useState<
     { b64_json: string; revised_prompt: string }[]
   >([]);
@@ -72,6 +76,7 @@ const ImagePage = () => {
     }
 
     try {
+      setLoading({ count: count.value ?? 1 });
       const imageResponse = await generateImages({
         description,
         count: count.value,
@@ -88,6 +93,8 @@ const ImagePage = () => {
       console.error("Failed to generate images", e);
       toast.error("Failed to generate images");
     }
+
+    setLoading(null);
   };
 
   const changeModel = (model: Option<Model>) => {
@@ -134,12 +141,14 @@ const ImagePage = () => {
               value={model}
               onChange={changeModel}
               options={modelOptions}
+              disabled={!!loading}
             />
             <Select
               label="Size"
               value={size}
               onChange={setSize}
               options={sizeOptions[model.value]}
+              disabled={!!loading}
             />
             {model.value === "dall-e-3" && (
               <Select
@@ -147,6 +156,7 @@ const ImagePage = () => {
                 value={quality}
                 onChange={setQuality}
                 options={qualityOptions}
+                disabled={!!loading}
               />
             )}
             {model.value === "dall-e-2" && (
@@ -155,6 +165,7 @@ const ImagePage = () => {
                 value={count}
                 onChange={setCount}
                 options={countOptions}
+                disabled={!!loading}
               />
             )}
           </div>
@@ -166,6 +177,17 @@ const ImagePage = () => {
           />
         </div>
         <div className="grid grid-cols-12 gap-4 mt-12">
+          {loading &&
+            Array.from({ length: loading.count }).map((_, index) => (
+              <div
+                key={index}
+                className="col-span-12 sm:col-span-6 xl:col-span-4 rounded-lg aspect-square bg-zinc-200 animate-pulse"
+              >
+                <div className="flex items-center justify-center h-full">
+                  <Loader size={48} />
+                </div>
+              </div>
+            ))}
           {images.map((image, index) => {
             const imageName =
               image.revised_prompt?.slice(0, 24) ?? `image - ${index}`;
