@@ -15,8 +15,9 @@ export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
       const newObjectsData = [...(objects.data?.objects ?? [])].map(
         (object: _Object) => {
           if (object.Key === objectKey) {
-            object.Key =
-              objectKey.split("/").slice(0, -1).join("/") + "/" + newName;
+            const oldFolder = objectKey.split("/").slice(0, -1).join("/");
+
+            object.Key = oldFolder ? `${oldFolder}/${newName}` : newName;
           }
           return object;
         }
@@ -27,11 +28,13 @@ export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
         { revalidate: false }
       );
 
+      const oldFolder = objectKey.split("/").slice(0, -1).join("/");
+
       const response = await fetcher("/api/s3/objects/rename", {
         method: "PUT",
         body: JSON.stringify({
           oldKey: objectKey,
-          newKey: objectKey.split("/").slice(0, -1).join("/") + "/" + newName,
+          newKey: oldFolder ? `${oldFolder}/${newName}` : newName,
         }),
       });
 

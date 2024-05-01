@@ -22,7 +22,12 @@ export const RenameModal = ({
     setName(currentName ?? "");
   }, [currentName]);
 
-  useHotkeys("enter", () => handleSave(name), { enableOnFormTags: true });
+  const saveName = (name: string) => {
+    handleSave(name);
+    handleClose();
+  };
+
+  useHotkeys("enter", () => saveName(name), { enableOnFormTags: true }, [name]);
 
   return (
     <Modal
@@ -48,10 +53,7 @@ export const RenameModal = ({
       }
       confirmButton={{
         label: "Save",
-        onClick: () => {
-          handleSave(name);
-          handleClose();
-        },
+        onClick: () => saveName(name),
       }}
       cancelButton={{
         label: "Cancel",
