@@ -58,7 +58,7 @@ export const DocumentsEmptyState = ({
   title: string;
   description?: string;
 }) => (
-  <div className="h-full min-h-96 flex flex-col items-center justify-center">
+  <div className="h-full min-h-96 lg:min-h-[760px] flex flex-col items-center justify-center">
     <div className="flex flex-col items-center">
       <DocumentGraphic />
       <h2 className="text-2xl font-semibold mt-6">{title}</h2>
