@@ -68,6 +68,8 @@ const FilePage = () => {
   const foldersData = objects.data?.folders ?? [];
   const objectsData = objects.data?.objects ?? [];
 
+  const isTruncated = objects.data?.isTruncated ?? false;
+
   return (
     <>
       <div className="min-h-screen pb-24 relative" {...getRootProps()}>
@@ -159,12 +161,12 @@ const FilePage = () => {
           {!objects.isLoading &&
           !!foldersData &&
           !!objectsData &&
-          objects.data.isTruncated &&
-          objects.data.continuationToken ? (
+          isTruncated &&
+          objects.data?.continuationToken ? (
             <Button
               variant="secondary"
               onClick={() => {
-                setContinuationToken(objects.data.continuationToken);
+                setContinuationToken(objects.data?.continuationToken);
               }}
               label="Next page"
             />
