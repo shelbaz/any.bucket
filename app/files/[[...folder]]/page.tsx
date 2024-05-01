@@ -136,7 +136,8 @@ const FilePage = () => {
               </ul>
             )}
           </div>
-        ) : (
+        ) : null}
+        {!objects.isLoading && !hasFolders && !hasObjects && (
           <DocumentsEmptyState
             title="No files yet"
             description="Drag and drop to get started"
