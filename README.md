@@ -5,13 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -34,3 +28,33 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## Cloudflare
+
+1. Set up a Cloudflare account
+2. Create an R2 bucket
+3. Add a custom domain to the R2 bucket
+4. Add a CORS policy like this to be able to update files from the UI:
+
+```bash
+[
+  {
+    "AllowedOrigins": [
+      "*" #Change this to the domain you're hosting file.rocks on to only allow that origin
+    ],
+    "AllowedMethods": [
+      "GET",
+      "POST",
+      "DELETE",
+      "PUT",
+      "HEAD"
+    ],
+    "AllowedHeaders": [
+      "Content-Type"
+    ]
+  }
+]
+```
+
+5. Create a new file in the root of the project called `.env.local` and copy/paste `.env.example` into it
+6. Add values for all your own keys, etc there.
