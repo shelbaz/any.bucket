@@ -21,6 +21,7 @@ import { useRenameFile } from "@/app/_hooks/files/use-rename-file";
 import { Button } from "@/app/_components/buttons/Button";
 import { _Object } from "@aws-sdk/client-s3";
 import { UploadContext } from "@/app/_context/UploadContext";
+import { DocumentsEmptyState } from "@/app/_components/empty-states/DocumentsEmptyState";
 
 type Folder = { prefix: string; label: string };
 
@@ -135,7 +136,12 @@ const FilePage = () => {
               </ul>
             )}
           </div>
-        ) : null}
+        ) : (
+          <DocumentsEmptyState
+            title="No files yet"
+            description="Drag and drop to get started"
+          />
+        )}
         <div className="flex space-x-2 items-center justify-center h-48">
           {!objects.isLoading &&
             !!foldersData &&
