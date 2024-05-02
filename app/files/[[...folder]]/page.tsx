@@ -137,12 +137,13 @@ const FilePage = () => {
                 ))}
               </ul>
             )}
-            <PaginationButtons
-              page={Number(page)}
-              pageTotal={files.data.totalPages}
-              setPage={setPage}
-              withLabels
-            />
+            <div className="mt-6 flex justify-center">
+              <PaginationButtons
+                page={Number(page)}
+                pageTotal={files.data.totalPages}
+                setPage={setPage}
+              />
+            </div>
           </div>
         ) : null}
         {!isDragActive && !files.isLoading && !hasFolders && !hasObjects && (

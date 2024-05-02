@@ -3,6 +3,7 @@ import { Loader } from "../../loaders/Loader";
 
 interface Props {
   label?: string;
+  Icon?: React.ReactNode;
   type?: "button" | "submit";
   onClick?: () => void;
   isLoading?: boolean;
@@ -13,6 +14,7 @@ interface Props {
 
 export const Button = ({
   label,
+  Icon,
   type = "button",
   onClick,
   isLoading,
@@ -36,10 +38,11 @@ export const Button = ({
     <div
       className={clsx(
         "duration-200 transition-all",
-        isLoading ? "w-4 opacity-100 mr-2" : "w-0 opacity-0 mr-0"
+        isLoading || Icon ? "w-4 opacity-100" : "w-0 opacity-0 mr-0",
+        label && "mr-2"
       )}
     >
-      <Loader size={14} />
+      {!isLoading ? Icon : <Loader size={14} />}
     </div>
     {label && <span>{label}</span>}
   </button>
