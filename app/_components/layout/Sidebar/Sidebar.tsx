@@ -12,7 +12,6 @@ import { usePathname } from "next/navigation";
 import { FileInput } from "../../upload/FileInput";
 import { _Object } from "@aws-sdk/client-s3";
 import { UploadContext } from "@/app/_context/UploadContext";
-import Link from "next/link";
 import { Logo } from "../../Logo";
 
 const navigation = [

@@ -12,28 +12,24 @@ export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
 
   const deleteFile = async () => {
     try {
-      const response = await fetcher("/api/s3/objects/delete", {
+      await fetcher("/api/s3/objects/delete", {
         method: "DELETE",
         body: JSON.stringify({
           key: objectKey,
         }),
       });
 
-      if (response) {
-        toast.success("File deleted");
-        const newObjectsData = [...(objects.data?.objects ?? [])].filter(
-          (object: _Object) => {
-            return object.Key !== objectKey;
-          }
-        );
-        objects.mutate(
-          { ...objects.data, objects: newObjectsData },
-          { revalidate: false }
-        );
-        return;
-      } else {
-        toast.error("Failed to delete file");
-      }
+      toast.success("File deleted");
+      const newObjectsData = [...(objects.data?.objects ?? [])].filter(
+        (object: _Object) => {
+          return object.Key !== objectKey;
+        }
+      );
+      objects.mutate(
+        { ...objects.data, objects: newObjectsData },
+        { revalidate: false }
+      );
+      return;
     } catch (error) {
       toast.error("Failed to delete file");
     }

@@ -49,38 +49,43 @@ export const useUploadFile = () => {
   ) => {
     if (!file) return;
     const fileName = file.name;
-    const presignedUrl = await fetcher("/api/s3/objects/presign", {
-      method: "POST",
-      body: JSON.stringify({
-        fileName,
-        folder: folder ? decodeURI(folder) : undefined,
-      }),
-    });
 
     try {
-      const uploadResponse = await uploadS3(
-        presignedUrl.url,
-        file,
-        onProgressUpdate
-      );
-      if (uploadResponse) {
-        const uploadedObject: _Object = {
-          Key: fileName,
-          Size: file.size,
-          LastModified: new Date(),
-        };
-        const newObjectsData = objects.data?.objects
-          ? [...objects.data.objects, uploadedObject]
-          : [uploadedObject];
-        objects.mutate(
-          { ...objects.data, objects: newObjectsData },
-          { revalidate: false }
-        );
-        onProgressUpdate?.(100);
-        return;
-      }
+      const presignedUrl = await fetcher("/api/s3/objects/presign", {
+        method: "POST",
+        body: JSON.stringify({
+          fileName,
+          folder: folder ? decodeURI(folder) : undefined,
+        }),
+      });
 
-      toast.error("Failed to upload file");
+      try {
+        const uploadResponse = await uploadS3(
+          presignedUrl.url,
+          file,
+          onProgressUpdate
+        );
+        if (uploadResponse) {
+          const uploadedObject: _Object = {
+            Key: fileName,
+            Size: file.size,
+            LastModified: new Date(),
+          };
+          const newObjectsData = objects.data?.objects
+            ? [...objects.data.objects, uploadedObject]
+            : [uploadedObject];
+          objects.mutate(
+            { ...objects.data, objects: newObjectsData },
+            { revalidate: false }
+          );
+          onProgressUpdate?.(100);
+          return;
+        }
+
+        toast.error("Failed to upload file");
+      } catch (e) {
+        toast.error("Failed to upload file");
+      }
     } catch (e) {
       toast.error("Failed to upload file");
     }

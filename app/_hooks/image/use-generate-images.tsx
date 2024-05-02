@@ -1,6 +1,7 @@
 import { ImageGenerateParams } from "openai/resources/images.mjs";
 import { useFetcher } from "../fetcher/use-fetcher";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export const useGenerateImages = () => {
   const fetcher = useFetcher();
@@ -14,13 +15,19 @@ export const useGenerateImages = () => {
     quality?: ImageGenerateParams["quality"];
   }) => {
     setIsLoading(true);
-    const response = await fetcher("/api/images", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
+
+    try {
+      const response = await fetcher("/api/images", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      return response;
+    } catch (e) {
+      toast.error("Failed to generate images");
+    }
 
     setIsLoading(false);
-    return response;
   };
 
   return {

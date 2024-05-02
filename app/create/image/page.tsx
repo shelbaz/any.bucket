@@ -85,8 +85,9 @@ const ImagePage = () => {
         quality: quality.value,
       });
 
-      if (imageResponse) {
-        setImages([...imageResponse, ...images]);
+      if (imageResponse.ok) {
+        const imageBody = await imageResponse.json();
+        setImages([...imageBody, ...images]);
         toast.success("Images generated successfully!");
       }
     } catch (e) {

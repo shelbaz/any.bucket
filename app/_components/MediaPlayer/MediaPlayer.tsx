@@ -25,7 +25,7 @@ const getSizeClassesFromExt = (ext: string) => {
     case "mov":
     case "mkv":
     case "gif":
-      return "max-w-1/2 w-full min-w-60";
+      return "max-w-1/2 min-w-60 max-h-[80vh]";
     case "mp3":
     case "wav":
     case "flac":

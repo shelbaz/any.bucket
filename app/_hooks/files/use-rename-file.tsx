@@ -30,21 +30,19 @@ export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
 
       const oldFolder = objectKey.split("/").slice(0, -1).join("/");
 
-      const response = await fetcher("/api/s3/objects/rename", {
-        method: "PUT",
-        body: JSON.stringify({
-          oldKey: objectKey,
-          newKey: oldFolder ? `${oldFolder}/${newName}` : newName,
-        }),
-      });
-
-      if (response) {
+      try {
+        const response = await fetcher("/api/s3/objects/rename", {
+          method: "PUT",
+          body: JSON.stringify({
+            oldKey: objectKey,
+            newKey: oldFolder ? `${oldFolder}/${newName}` : newName,
+          }),
+        });
         toast.success("File renamed successfully");
-        return;
-      } else {
+      } catch (e) {
         toast.error("Failed to rename file");
       }
-    } catch (error) {
+    } catch (e) {
       toast.error("Failed to rename file");
     }
   };

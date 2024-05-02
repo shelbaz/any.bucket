@@ -32,14 +32,35 @@ export const checkBearerTokenIsValid = (request: NextRequest) => {
 };
 
 export function middleware(request: NextRequest) {
-    if (!checkBearerTokenIsValid(request)) {
-        return NextResponse.json("Unauthorized", { status: 401 });
-    } else {
+    const url = request.url;
+    const readonly = process.env.NEXT_PUBLIC_READONLY;
+
+    if (url.includes("api/s3/objects/list")) {
+        if (!checkBearerTokenIsValid(request)) {
+            return NextResponse.json("Unauthorized", { status: 401 });
+        }
+
         return NextResponse.next();
     }
+
+    if (url.includes("api/s3") && !checkBearerTokenIsValid(request) || readonly) {
+        return NextResponse.json("Unauthorized", { status: 401 });
+    }
+
+    if (url.includes("api/images")) {
+        if (!checkBearerTokenIsValid(request)) {
+            return NextResponse.json("Unauthorized", { status: 401 });
+        }
+
+        if (process.env.NEXT_PUBLIC_READONLY) {
+            return NextResponse.json("Unauthorized", { status: 401 });
+        }
+    }
+
+    return NextResponse.next();
   }
    
   // See "Matching Paths" below to learn more
   export const config = {
-    matcher: ["/api/s3/:path*"],
+    matcher: ["/api/:path*"],
   }
