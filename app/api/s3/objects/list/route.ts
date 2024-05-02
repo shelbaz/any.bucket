@@ -51,20 +51,26 @@ export async function GET(
       const page = Number(searchParams.get("page") ?? 1);
 
       const response = await listObjects({ prefix: folder });
-
-      const pageContents = response?.Contents?.slice(
-            size * (page - 1),
-            size * page
-        ) ?? [];
     
     if (!response) {
         return NextResponse.json("Failed to list objects", { status: 500 });
     }
 
+    const pageContents = response.Contents?.slice(
+        size * (page - 1),
+        size * page
+    ) ?? [];
+
+    const totalPages = Math.ceil((response.Contents?.length ?? 0) / size);
+    
+    const moreBeforeContinue = (response.Contents?.length ?? 0) > size * page;
+
     return NextResponse.json({
         objects: pageContents,
         folders: formatFolders(response.CommonPrefixes),
         isTruncated: response.IsTruncated,
-        continuationToken: response.NextContinuationToken
+        continuationToken: response.NextContinuationToken,
+        moreBeforeContinue,
+        totalPages,
     }, { status: 200 });
 };

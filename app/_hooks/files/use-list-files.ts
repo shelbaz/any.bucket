@@ -1,5 +1,7 @@
+import { useContext } from "react";
 import { useFetcher } from "../fetcher/use-fetcher";
 import useSWR from "swr";
+import { AppContext } from "@/app/_context/AppContext";
 
 const createQueryString = (params: Record<string, string | number | boolean | undefined | null>) => {
     return Object.keys(params)
@@ -8,7 +10,8 @@ const createQueryString = (params: Record<string, string | number | boolean | un
         .join("&");
 };
 
-export const useListFiles = ({ folder, page, pageSize }: { folder?: string; page?: number, pageSize?: number }) => {
+export const useListFiles = ({ folder }: { folder?: string; }) => {
+    const { page, pageSize } = useContext(AppContext);
     const fetcher = useFetcher();
     const response = useSWR(`/api/s3/objects/list${createQueryString({ folder: folder ? `${folder}/` : undefined, page, pageSize })}`, fetcher);
 

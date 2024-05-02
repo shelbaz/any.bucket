@@ -2,10 +2,11 @@ import clsx from "clsx";
 import { Loader } from "../../loaders/Loader";
 
 interface Props {
-  label: string;
+  label?: string;
   type?: "button" | "submit";
   onClick?: () => void;
   isLoading?: boolean;
+  isDisabled?: boolean;
   variant?: "primary" | "secondary";
   className?: string;
 }
@@ -15,6 +16,7 @@ export const Button = ({
   type = "button",
   onClick,
   isLoading,
+  isDisabled,
   variant = "primary",
   className,
 }: Props) => (
@@ -27,6 +29,7 @@ export const Button = ({
         ? "bg-black hover:bg-zinc-800 text-white"
         : "bg-transparent text-black border border-black hover:bg-zinc-100 hover:border-zinc-800",
       isLoading && "pointer-events-none opacity-75",
+      isDisabled && "pointer-events-none opacity-50",
       className
     )}
   >
@@ -38,6 +41,6 @@ export const Button = ({
     >
       <Loader size={14} />
     </div>
-    <span>{label}</span>
+    {label && <span>{label}</span>}
   </button>
 );

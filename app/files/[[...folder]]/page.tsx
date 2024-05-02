@@ -22,11 +22,12 @@ import { Button } from "@/app/_components/buttons/Button";
 import { _Object } from "@aws-sdk/client-s3";
 import { UploadContext } from "@/app/_context/UploadContext";
 import { DocumentsEmptyState } from "@/app/_components/empty-states/DocumentsEmptyState";
+import { PaginationButtons } from "@/app/_components/pagination/PaginationButtons";
 
 type Folder = { prefix: string; label: string };
 
 const FilePage = () => {
-  const { fileLayout, renameFileModal, setRenameFileModal } =
+  const { fileLayout, renameFileModal, setRenameFileModal, setPage, page } =
     useContext(AppContext);
   const router = useRouter();
   const [continuationToken, setContinuationToken] = useState<
@@ -43,9 +44,8 @@ const FilePage = () => {
     objectKey: renameFileModal.objectKey,
   });
 
-  const objects = useListFiles({
+  const files = useListFiles({
     folder,
-    continuationToken,
   });
 
   const uploadFiles = (files: File[]) => {
@@ -62,13 +62,13 @@ const FilePage = () => {
     noClick: true,
   });
 
-  const hasFolders = !!objects.data?.folders?.length;
-  const hasObjects = !!objects.data?.objects?.length;
+  const hasFolders = !!files.data?.folders?.length;
+  const hasObjects = !!files.data?.objects?.length;
 
-  const foldersData = objects.data?.folders ?? [];
-  const objectsData = objects.data?.objects ?? [];
+  const foldersData = files.data?.folders ?? [];
+  const objectsData = files.data?.objects ?? [];
 
-  const isTruncated = objects.data?.isTruncated ?? false;
+  const isTruncated = files.data?.isTruncated ?? false;
 
   return (
     <>
@@ -137,16 +137,22 @@ const FilePage = () => {
                 ))}
               </ul>
             )}
+            <PaginationButtons
+              page={Number(page)}
+              pageTotal={files.data.totalPages}
+              setPage={setPage}
+              withLabels
+            />
           </div>
         ) : null}
-        {!isDragActive && !objects.isLoading && !hasFolders && !hasObjects && (
+        {!isDragActive && !files.isLoading && !hasFolders && !hasObjects && (
           <DocumentsEmptyState
             title="No files yet"
             description="Drag and drop to get started"
           />
         )}
         <div className="flex space-x-2 items-center justify-center h-48">
-          {!objects.isLoading &&
+          {!files.isLoading &&
             !!foldersData &&
             !!objectsData &&
             continuationToken && (
@@ -158,20 +164,20 @@ const FilePage = () => {
                 }}
               />
             )}
-          {!objects.isLoading &&
+          {!files.isLoading &&
           !!foldersData &&
           !!objectsData &&
           isTruncated &&
-          objects.data?.continuationToken ? (
+          files.data?.continuationToken ? (
             <Button
               variant="secondary"
               onClick={() => {
-                setContinuationToken(objects.data?.continuationToken);
+                setContinuationToken(files.data?.continuationToken);
               }}
               label="Next page"
             />
           ) : null}
-          {objects.isLoading && <Loader size={24} />}
+          {files.isLoading && <Loader size={24} />}
         </div>
       </div>
       <RenameModal
