@@ -1,14 +1,14 @@
 import { _Object } from "@aws-sdk/client-s3";
 import toast from "react-hot-toast";
 import { useFetcher } from "../fetcher/use-fetcher";
-import { useListObjects } from "@/app/_helpers/s3/objects";
+import { useListFiles } from "@/app/_hooks/files/use-list-files";
 import { useContext } from "react";
 import { AppContext } from "@/app/_context/AppContext";
 
 export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
-  const { folder } = useContext(AppContext);
+  const { folder, page, pageSize } = useContext(AppContext);
   const fetcher = useFetcher();
-  const objects = useListObjects({ folder });
+  const objects = useListFiles({ folder });
 
   const deleteFile = async () => {
     try {

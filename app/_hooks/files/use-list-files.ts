@@ -1,4 +1,4 @@
-import { useFetcher } from "../../_hooks/fetcher/use-fetcher";
+import { useFetcher } from "../fetcher/use-fetcher";
 import useSWR from "swr";
 
 const createQueryString = (params: Record<string, string | number | boolean | undefined | null>) => {
@@ -8,9 +8,9 @@ const createQueryString = (params: Record<string, string | number | boolean | un
         .join("&");
 };
 
-export const useListObjects = ({ folder, continuationToken }: { folder?: string; continuationToken?: string }) => {
+export const useListFiles = ({ folder, page, pageSize }: { folder?: string; page?: number, pageSize?: number }) => {
     const fetcher = useFetcher();
-    const response = useSWR(`/api/s3/objects/list${createQueryString({ folder: folder ? `${folder}/` : undefined, startAfter: continuationToken })}`, fetcher);
+    const response = useSWR(`/api/s3/objects/list${createQueryString({ folder: folder ? `${folder}/` : undefined, page, pageSize })}`, fetcher);
 
     return response;
 };

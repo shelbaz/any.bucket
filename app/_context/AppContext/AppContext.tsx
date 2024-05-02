@@ -1,6 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import { createContext, useMemo, useState } from "react";
+import { useQueryState } from "nuqs";
 
 interface AppContextType {
   folder: string;
@@ -16,6 +17,10 @@ interface AppContextType {
     name: string;
     objectKey: string;
   }) => void;
+  page: string;
+  setPage: (page: string) => void;
+  pageSize: string;
+  setPageSize: (size: string) => void;
 }
 
 const initialValue: AppContextType = {
@@ -28,12 +33,18 @@ const initialValue: AppContextType = {
     objectKey: "",
   },
   setRenameFileModal: () => {},
+  page: "1",
+  setPage: () => {},
+  pageSize: "24",
+  setPageSize: () => {},
 };
 
 export const AppContext = createContext<AppContextType>(initialValue);
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const params = useParams();
+  const [pageSize, setPageSize] = useQueryState("size", { defaultValue: "24" });
+  const [page, setPage] = useQueryState("page", { defaultValue: "1" });
   const [fileLayout, setFileLayout] = useState<AppContextType["fileLayout"]>(
     initialValue.fileLayout
   );
@@ -55,6 +66,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setFileLayout,
         renameFileModal,
         setRenameFileModal,
+        page,
+        setPage,
+        pageSize,
+        setPageSize,
       }}
     >
       {children}

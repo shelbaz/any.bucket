@@ -14,7 +14,7 @@ import {
 import { useHotkeys } from "react-hotkeys-hook";
 import { EpubReader } from "./EpubReader";
 import { PdfReader } from "./PdfReader";
-import { useListObjects } from "@/app/_helpers/s3/objects";
+import { useListFiles } from "@/app/_hooks/files/use-list-files";
 import { AppContext } from "@/app/_context/AppContext";
 import { _Object } from "@aws-sdk/client-s3";
 
@@ -57,7 +57,7 @@ export const MediaPlayer = () => {
     close,
   } = useContext(MediaContext);
   const { folder } = useContext(AppContext);
-  const objects = useListObjects({ folder });
+  const objects = useListFiles({ folder });
   const objectsData: _Object[] = useMemo(
     () => objects.data?.objects ?? [],
     [objects]

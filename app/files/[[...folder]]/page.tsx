@@ -4,7 +4,7 @@ import {
   Breadcrumbs,
   BreadcrumbsTopbar,
 } from "@/app/_components/layout/Breadcrumbs";
-import { useListObjects } from "../../_helpers/s3/objects";
+import { useListFiles } from "../../_hooks/files/use-list-files";
 import { useRouter, useParams } from "next/navigation";
 import { FolderCard } from "@/app/_components/files/FolderCard";
 import { FileCard } from "@/app/_components/files/FileCard";
@@ -43,7 +43,7 @@ const FilePage = () => {
     objectKey: renameFileModal.objectKey,
   });
 
-  const objects = useListObjects({
+  const objects = useListFiles({
     folder,
     continuationToken,
   });
