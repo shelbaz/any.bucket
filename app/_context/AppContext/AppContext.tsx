@@ -59,20 +59,22 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }, [params]);
 
   return (
-    <AppContext.Provider
-      value={{
-        folder,
-        fileLayout,
-        setFileLayout,
-        renameFileModal,
-        setRenameFileModal,
-        page,
-        setPage,
-        pageSize,
-        setPageSize,
-      }}
-    >
-      <Suspense>{children}</Suspense>
-    </AppContext.Provider>
+    <Suspense>
+      <AppContext.Provider
+        value={{
+          folder,
+          fileLayout,
+          setFileLayout,
+          renameFileModal,
+          setRenameFileModal,
+          page,
+          setPage,
+          pageSize,
+          setPageSize,
+        }}
+      >
+        {children}
+      </AppContext.Provider>
+    </Suspense>
   );
 };
