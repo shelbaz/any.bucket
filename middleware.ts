@@ -34,7 +34,6 @@ export const checkBearerTokenIsValid = (request: NextRequest) => {
 export function middleware(request: NextRequest) {
     const url = request.url;
     const readonly = process.env.NEXT_PUBLIC_READONLY === "true";
-    console.log("READONLY:", readonly);
 
     if (url.includes("api/s3/objects/list")) {
         if (!checkBearerTokenIsValid(request)) {

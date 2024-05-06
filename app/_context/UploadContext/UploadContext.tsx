@@ -35,7 +35,6 @@ export const UploadProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   const addFilesToQueue = (files: string[]) => {
-    console.log("QUEUE BEFORE ADDING:", fileQueue);
     const newQueue = files.reduce((acc, file) => {
       return {
         ...acc,
