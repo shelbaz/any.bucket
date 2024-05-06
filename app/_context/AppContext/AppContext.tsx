@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import { createContext, useMemo, useState } from "react";
+import { Suspense, createContext, useMemo, useState } from "react";
 import { useQueryState } from "nuqs";
 
 interface AppContextType {
@@ -72,7 +72,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setPageSize,
       }}
     >
-      {children}
+      <Suspense>{children}</Suspense>
     </AppContext.Provider>
   );
 };
