@@ -18,7 +18,6 @@ import { useUploadFile } from "@/app/_hooks/files";
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 import { RenameModal } from "@/app/_components/modals/RenameModal";
 import { useRenameFile } from "@/app/_hooks/files/use-rename-file";
-import { Button } from "@/app/_components/buttons/Button";
 import { _Object } from "@aws-sdk/client-s3";
 import { UploadContext } from "@/app/_context/UploadContext";
 import { DocumentsEmptyState } from "@/app/_components/empty-states/DocumentsEmptyState";
@@ -137,13 +136,15 @@ const FilePage = () => {
                 ))}
               </ul>
             )}
-            <div className="mt-6 flex justify-center">
-              <PaginationButtons
-                page={Number(page)}
-                pageTotal={files.data.totalPages}
-                setPage={setPage}
-              />
-            </div>
+            {files.data.totalPages >= 2 && (
+              <div className="mt-6 flex justify-center">
+                <PaginationButtons
+                  page={Number(page)}
+                  pageTotal={files.data.totalPages}
+                  setPage={setPage}
+                />
+              </div>
+            )}
           </div>
         ) : null}
         {!isDragActive && !files.isLoading && !hasFolders && !hasObjects && (
@@ -152,34 +153,6 @@ const FilePage = () => {
             description="Drag and drop to get started"
           />
         )}
-        <div className="flex space-x-2 items-center justify-center h-48">
-          {!files.isLoading &&
-            !!foldersData &&
-            !!objectsData &&
-            continuationToken && (
-              <Button
-                label="Back to start"
-                variant="secondary"
-                onClick={() => {
-                  setContinuationToken(undefined);
-                }}
-              />
-            )}
-          {!files.isLoading &&
-          !!foldersData &&
-          !!objectsData &&
-          isTruncated &&
-          files.data?.continuationToken ? (
-            <Button
-              variant="secondary"
-              onClick={() => {
-                setContinuationToken(files.data?.continuationToken);
-              }}
-              label="Next page"
-            />
-          ) : null}
-          {files.isLoading && <Loader size={24} />}
-        </div>
       </div>
       <RenameModal
         handleClose={() => {

@@ -31,6 +31,7 @@ export const PaginationButtons = ({
           buttonContainerClasses,
           page === 1 && "opacity-60"
         )}
+        title="First page"
       >
         <Button
           onClick={() => setPage(String(1))}
@@ -45,6 +46,7 @@ export const PaginationButtons = ({
           buttonContainerClasses,
           page === 1 && "opacity-60"
         )}
+        title="Previous page"
       >
         <Button
           onClick={() => setPage(String(page - 1))}
@@ -57,8 +59,10 @@ export const PaginationButtons = ({
       <div
         className={clsx(
           "border-t border-b !border-r-0",
-          buttonContainerClasses
+          buttonContainerClasses,
+          page >= pageTotal && "opacity-60"
         )}
+        title="Next page"
       >
         <Button
           onClick={() => setPage(String(page + 1))}
@@ -68,7 +72,14 @@ export const PaginationButtons = ({
           Icon={<ChevronRightIcon className="h-4 w-4" />}
         />
       </div>
-      <div className={clsx("rounded-r-lg", buttonContainerClasses)}>
+      <div
+        className={clsx(
+          "rounded-r-lg",
+          buttonContainerClasses,
+          page >= pageTotal && "opacity-60"
+        )}
+        title="Last page"
+      >
         <Button
           onClick={() => setPage(String(pageTotal))}
           isDisabled={page >= pageTotal}
