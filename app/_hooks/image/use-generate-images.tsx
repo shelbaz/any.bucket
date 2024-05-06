@@ -19,15 +19,15 @@ export const useGenerateImages = () => {
     try {
       const response = await fetcher("/api/images", {
         method: "POST",
-        body: JSON.stringify(data),
+        data,
       });
 
+      setIsLoading(false);
       return response;
     } catch (e) {
       toast.error("Failed to generate images");
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return {

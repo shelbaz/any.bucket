@@ -14,9 +14,9 @@ export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
     try {
       await fetcher("/api/s3/objects/delete", {
         method: "DELETE",
-        body: JSON.stringify({
+        data: {
           key: objectKey,
-        }),
+        },
       });
 
       toast.success("File deleted");

@@ -33,7 +33,8 @@ export const checkBearerTokenIsValid = (request: NextRequest) => {
 
 export function middleware(request: NextRequest) {
     const url = request.url;
-    const readonly = process.env.NEXT_PUBLIC_READONLY;
+    const readonly = process.env.NEXT_PUBLIC_READONLY === "true";
+    console.log("READONLY:", readonly);
 
     if (url.includes("api/s3/objects/list")) {
         if (!checkBearerTokenIsValid(request)) {
@@ -43,7 +44,7 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    if (url.includes("api/s3") && !checkBearerTokenIsValid(request) || readonly) {
+    if (url.includes("api/s3") && (!checkBearerTokenIsValid(request) || readonly)) {
         return NextResponse.json("Unauthorized", { status: 401 });
     }
 
@@ -52,7 +53,7 @@ export function middleware(request: NextRequest) {
             return NextResponse.json("Unauthorized", { status: 401 });
         }
 
-        if (process.env.NEXT_PUBLIC_READONLY) {
+        if (readonly) {
             return NextResponse.json("Unauthorized", { status: 401 });
         }
     }

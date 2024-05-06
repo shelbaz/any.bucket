@@ -85,11 +85,8 @@ const ImagePage = () => {
         quality: quality.value,
       });
 
-      if (imageResponse.ok) {
-        const imageBody = await imageResponse.json();
-        setImages([...imageBody, ...images]);
-        toast.success("Images generated successfully!");
-      }
+      setImages([...imageResponse, ...images]);
+      toast.success("Images generated successfully!");
     } catch (e) {
       console.error("Failed to generate images", e);
       toast.error("Failed to generate images");

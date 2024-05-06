@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useLocalStorage } from "react-use";
 
 export const EnsureBearerToken = () => {
-  const passwordEnabled = Boolean(process.env.NEXT_PUBLIC_PASSWORD_ENABLED);
+  const passwordEnabled = process.env.NEXT_PUBLIC_PASSWORD_ENABLED === "true";
   const router = useRouter();
   const pathname = usePathname();
   const [bearerToken] = useLocalStorage("fr-bearer-token");

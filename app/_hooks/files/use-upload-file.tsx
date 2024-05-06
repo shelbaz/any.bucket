@@ -53,10 +53,10 @@ export const useUploadFile = () => {
     try {
       const presignedUrl = await fetcher("/api/s3/objects/presign", {
         method: "POST",
-        body: JSON.stringify({
+        data: {
           fileName,
           folder: folder ? decodeURI(folder) : undefined,
-        }),
+        },
       });
 
       try {
