@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import { Suspense, createContext, useMemo, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { useQueryState } from "nuqs";
 
 interface AppContextType {
@@ -59,7 +59,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }, [params]);
 
   return (
-    <Suspense>
       <AppContext.Provider
         value={{
           folder,
@@ -75,6 +74,5 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
       >
         {children}
       </AppContext.Provider>
-    </Suspense>
   );
 };

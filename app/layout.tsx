@@ -10,6 +10,7 @@ import { ConfirmModalWrapper } from "./_components/modals/ConfirmModal/ConfirmMo
 import { EnsureBearerToken } from "./_components/EnsureBearerToken";
 import { UploadModal } from "./_components/modals/UploadModal/UploadModal";
 import { UploadProvider } from "./_context/UploadContext";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,24 +28,26 @@ export default function RootLayout({
   return (
     <html className="h-full bg-white">
       <body className="h-full">
-        <AppProvider>
-          <UploadProvider>
-            <MediaProvider>
-              <div>
-                <Sidebar />
-                <main className="lg:pl-72">
-                  <div className="relative min-h-screen">
-                    {children}
-                    <MediaPlayer />
-                  </div>
-                </main>
-              </div>
-              <ConfirmModalWrapper />
-              <EnsureBearerToken />
-              <UploadModal />
-            </MediaProvider>
-          </UploadProvider>
-        </AppProvider>
+        <Suspense>
+          <AppProvider>
+            <UploadProvider>
+              <MediaProvider>
+                <div>
+                  <Sidebar />
+                  <main className="lg:pl-72">
+                    <div className="relative min-h-screen">
+                      {children}
+                      <MediaPlayer />
+                    </div>
+                  </main>
+                </div>
+                <ConfirmModalWrapper />
+                <EnsureBearerToken />
+                <UploadModal />
+              </MediaProvider>
+            </UploadProvider>
+          </AppProvider>
+        </Suspense>
         <Toaster position="bottom-center" reverseOrder={false} />
       </body>
     </html>
