@@ -35,7 +35,7 @@ export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
           method: "PUT",
           data: {
             oldKey: objectKey,
-            newKey: oldFolder ? `${oldFolder}/${newName}` : newName,
+            newKey: oldFolder ? `${oldFolder}/${newName}` : `/${newName}`,
           },
         });
         toast.success("File renamed successfully");

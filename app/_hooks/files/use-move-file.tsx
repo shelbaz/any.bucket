@@ -29,7 +29,7 @@ export const useMoveFile = ({ objectKey }: { objectKey: string }) => {
           method: "PUT",
           data: {
             oldKey: objectKey,
-            newKey: newFolder ? `${newFolder}/${objectName}` : objectName,
+            newKey: newFolder ? `${newFolder}/${objectName}` : `/${objectName}`,
           },
         });
         toast.success(`Moved to ${newFolder}`);
