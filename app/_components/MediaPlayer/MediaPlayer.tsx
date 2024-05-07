@@ -57,10 +57,10 @@ export const MediaPlayer = () => {
     close,
   } = useContext(MediaContext);
   const { folder } = useContext(AppContext);
-  const objects = useListFiles({ folder });
+  const files = useListFiles({ folder });
   const objectsData: _Object[] = useMemo(
-    () => objects.data?.objects ?? [],
-    [objects]
+    () => files.data?.objects ?? [],
+    [files]
   );
 
   useHotkeys("ESC", () => {

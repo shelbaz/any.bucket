@@ -82,7 +82,7 @@ interface MoreButtonProps {
   className?: string;
   iconClassName?: string;
   Icon?: IconType;
-  position?: "top" | "bottom";
+  position?: "top" | "bottom" | "left" | "right";
   children?: ReactElement;
   buttonComponent?: ReactElement;
   menuWidth?: "wide" | "narrow";
@@ -94,6 +94,13 @@ interface MoreButtonProps {
   onClose?: () => void;
   dataTestId?: string;
 }
+
+const positionClassNamesMap = {
+  top: "right-2 bottom-2",
+  bottom: "right-2 top-5",
+  left: "right-8 -top-2",
+  right: "left-8 -top-2",
+};
 
 export const MoreButtonBase = ({
   options,
@@ -110,8 +117,7 @@ export const MoreButtonBase = ({
   onClose = () => undefined,
   dataTestId = "more-button",
 }: MoreButtonProps) => {
-  const positionClassName =
-    position === "top" ? "right-2 bottom-2" : "right-2 top-5";
+  const positionClassName = positionClassNamesMap[position];
   const [showChildren, setShowChildren] = useState(false);
   const [xPos, setXPos] = useState(0);
   const [yPos, setYPos] = useState(0);

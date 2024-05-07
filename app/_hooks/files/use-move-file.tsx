@@ -5,40 +5,34 @@ import { useListFiles } from "@/app/_hooks/files/use-list-files";
 import { useContext } from "react";
 import { AppContext } from "@/app/_context/AppContext";
 
-export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
+export const useMoveFile = ({ objectKey }: { objectKey: string }) => {
   const fetcher = useFetcher();
   const { folder } = useContext(AppContext);
   const files = useListFiles({ folder });
+  const objectName = objectKey.split("/").pop();
 
-  const renameFile = async (newName: string) => {
+  const moveFile = async (newFolder: string) => {
     try {
-      const newObjectsData = [...(files.data?.objects ?? [])].map(
-        (object: _Object) => {
-          if (object.Key === objectKey) {
-            const oldFolder = objectKey.split("/").slice(0, -1).join("/");
-
-            object.Key = oldFolder ? `${oldFolder}/${newName}` : newName;
-          }
-          return object;
+      const newObjectsData = [...(files.data?.objects ?? [])].filter(
+        (object) => {
+          return object.Key !== objectKey;
         }
       );
 
       files.mutate(
         { ...files.data, objects: newObjectsData },
-        { revalidate: true }
+        { revalidate: false }
       );
-
-      const oldFolder = objectKey.split("/").slice(0, -1).join("/");
 
       try {
         await fetcher("/api/s3/objects/rename", {
           method: "PUT",
           data: {
             oldKey: objectKey,
-            newKey: oldFolder ? `${oldFolder}/${newName}` : newName,
+            newKey: newFolder ? `${newFolder}/${objectName}` : objectName,
           },
         });
-        toast.success("File renamed successfully");
+        toast.success(`Moved to ${newFolder}`);
       } catch (e) {
         console.log("ERROR:", e);
         toast.error("Failed to rename file");
@@ -50,6 +44,6 @@ export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
   };
 
   return {
-    renameFile,
+    moveFile,
   };
 };

@@ -17,6 +17,11 @@ interface AppContextType {
     name: string;
     objectKey: string;
   }) => void;
+  moveFileModal: {
+    isOpen: boolean;
+    objectKey: string;
+  };
+  setMoveFileModal: (modal: { isOpen: boolean; objectKey: string }) => void;
   page: string;
   setPage: (page: string) => void;
   pageSize: string;
@@ -33,6 +38,11 @@ const initialValue: AppContextType = {
     objectKey: "",
   },
   setRenameFileModal: () => {},
+  moveFileModal: {
+    isOpen: false,
+    objectKey: "",
+  },
+  setMoveFileModal: () => {},
   page: "1",
   setPage: () => {},
   pageSize: "24",
@@ -51,6 +61,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [renameFileModal, setRenameFileModal] = useState<
     AppContextType["renameFileModal"]
   >(initialValue.renameFileModal);
+  const [moveFileModal, setMoveFileModal] = useState<
+    AppContextType["moveFileModal"]
+  >(initialValue.moveFileModal);
 
   const folder = useMemo(() => {
     return typeof params.folder === "object"
@@ -59,20 +72,22 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   }, [params]);
 
   return (
-      <AppContext.Provider
-        value={{
-          folder,
-          fileLayout,
-          setFileLayout,
-          renameFileModal,
-          setRenameFileModal,
-          page,
-          setPage,
-          pageSize,
-          setPageSize,
-        }}
-      >
-        {children}
-      </AppContext.Provider>
+    <AppContext.Provider
+      value={{
+        folder,
+        fileLayout,
+        setFileLayout,
+        renameFileModal,
+        setRenameFileModal,
+        moveFileModal,
+        setMoveFileModal,
+        page,
+        setPage,
+        pageSize,
+        setPageSize,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
   );
 };

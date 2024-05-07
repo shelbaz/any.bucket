@@ -15,6 +15,7 @@ import { MoreButton } from "../../buttons/MoreButton";
 import { MoreButtonOption } from "../../buttons/MoreButton/MoreButton";
 import { AppContext } from "@/app/_context/AppContext";
 import { confirm } from "../../modals/ConfirmModal/ConfirmModal";
+import toast from "react-hot-toast";
 
 interface Props {
   objectKey: string;
@@ -24,7 +25,8 @@ interface Props {
 }
 
 export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
-  const { setRenameFileModal, renameFileModal } = useContext(AppContext);
+  const { setRenameFileModal, renameFileModal, setMoveFileModal } =
+    useContext(AppContext);
   const { mediaRef, mediaFile } = useContext(MediaContext);
   const fileType = getFileTypeFromExtension(extension);
   const noFilePreview = !["image", "audio", "video"].includes(fileType);
@@ -33,6 +35,17 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
   const { deleteFile } = useDeleteFile({ objectKey });
 
   const options: MoreButtonOption[] = [
+    {
+      label: "Copy link",
+      action: async () => {
+        const toastId = toast.loading("Copying");
+        await navigator.clipboard.writeText(
+          `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`
+        );
+
+        toast.success("Link copied to clipboard", { id: toastId });
+      },
+    },
     {
       label: "Download",
       action: () => {
@@ -44,6 +57,15 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
       action: () => {
         setRenameFileModal({
           ...renameFileModal,
+          isOpen: true,
+          objectKey,
+        });
+      },
+    },
+    {
+      label: "Move to folder",
+      action: () => {
+        setMoveFileModal({
           isOpen: true,
           objectKey,
         });
@@ -149,7 +171,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                   e.stopPropagation();
                 }}
               >
-                <MoreButton options={options} />
+                <MoreButton options={options} position="left" />
               </div>
             </div>
           </div>

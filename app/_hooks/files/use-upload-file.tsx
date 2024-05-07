@@ -8,7 +8,7 @@ import { AppContext } from "@/app/_context/AppContext";
 
 export const useUploadFile = () => {
   const { folder } = useContext(AppContext);
-  const objects = useListFiles({ folder });
+  const files = useListFiles({ folder });
   const fetcher = useFetcher();
 
   function uploadS3(
@@ -71,11 +71,11 @@ export const useUploadFile = () => {
             Size: file.size,
             LastModified: new Date(),
           };
-          const newObjectsData = objects.data?.objects
-            ? [...objects.data.objects, uploadedObject]
+          const newObjectsData = files.data?.objects
+            ? [...files.data.objects, uploadedObject]
             : [uploadedObject];
-          objects.mutate(
-            { ...objects.data, objects: newObjectsData },
+          files.mutate(
+            { ...files.data, objects: newObjectsData },
             { revalidate: false }
           );
           onProgressUpdate?.(100);

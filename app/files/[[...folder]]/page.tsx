@@ -14,7 +14,6 @@ import { FolderRow } from "@/app/_components/files/FolderRow";
 import { FileRow } from "@/app/_components/files/FileRow";
 import { Loader } from "@/app/_components/loaders/Loader";
 import { useDropzone } from "react-dropzone";
-import { useUploadFile } from "@/app/_hooks/files";
 import { DocumentArrowUpIcon } from "@heroicons/react/24/outline";
 import { RenameModal } from "@/app/_components/modals/RenameModal";
 import { useRenameFile } from "@/app/_hooks/files/use-rename-file";
@@ -22,25 +21,32 @@ import { _Object } from "@aws-sdk/client-s3";
 import { UploadContext } from "@/app/_context/UploadContext";
 import { DocumentsEmptyState } from "@/app/_components/empty-states/DocumentsEmptyState";
 import { PaginationButtons } from "@/app/_components/pagination/PaginationButtons";
-
-type Folder = { prefix: string; label: string };
+import { MoveModal } from "@/app/_components/modals/MoveModal";
+import { Folder } from "@/app/_types";
+import { useMoveFile } from "@/app/_hooks/files/use-move-file";
 
 const FilePage = () => {
-  const { fileLayout, renameFileModal, setRenameFileModal, setPage, page } =
-    useContext(AppContext);
+  const {
+    fileLayout,
+    renameFileModal,
+    setRenameFileModal,
+    moveFileModal,
+    setMoveFileModal,
+    setPage,
+    page,
+  } = useContext(AppContext);
   const router = useRouter();
-  const [continuationToken, setContinuationToken] = useState<
-    string | undefined
-  >();
   const { setFiles, setUploadModalIsOpen } = useContext(UploadContext);
   const { folder } = useContext(AppContext);
   const crumbs =
     folder
       ?.split("/")
       .map((folder) => ({ title: decodeURI(folder), segment: folder })) ?? [];
-  const { uploadFile } = useUploadFile();
   const { renameFile } = useRenameFile({
     objectKey: renameFileModal.objectKey,
+  });
+  const { moveFile } = useMoveFile({
+    objectKey: moveFileModal.objectKey,
   });
 
   const files = useListFiles({
@@ -172,6 +178,19 @@ const FilePage = () => {
           renameFile(name);
         }}
         isOpen={renameFileModal.isOpen}
+      />
+      <MoveModal
+        handleClose={() => {
+          setMoveFileModal({
+            isOpen: false,
+            objectKey: "",
+          });
+        }}
+        currentObjectKey={moveFileModal.objectKey}
+        handleSave={(folderName) => {
+          moveFile(folderName);
+        }}
+        isOpen={moveFileModal.isOpen}
       />
     </>
   );

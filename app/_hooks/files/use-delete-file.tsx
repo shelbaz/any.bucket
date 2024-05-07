@@ -8,7 +8,7 @@ import { AppContext } from "@/app/_context/AppContext";
 export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
   const { folder, page, pageSize } = useContext(AppContext);
   const fetcher = useFetcher();
-  const objects = useListFiles({ folder });
+  const files = useListFiles({ folder });
 
   const deleteFile = async () => {
     try {
@@ -20,13 +20,13 @@ export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
       });
 
       toast.success("File deleted");
-      const newObjectsData = [...(objects.data?.objects ?? [])].filter(
+      const newObjectsData = [...(files.data?.objects ?? [])].filter(
         (object: _Object) => {
           return object.Key !== objectKey;
         }
       );
-      objects.mutate(
-        { ...objects.data, objects: newObjectsData },
+      files.mutate(
+        { ...files.data, objects: newObjectsData },
         { revalidate: false }
       );
       return;
