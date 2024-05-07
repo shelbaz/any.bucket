@@ -25,7 +25,7 @@ export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
 
       files.mutate(
         { ...files.data, objects: newObjectsData },
-        { revalidate: true }
+        { revalidate: false }
       );
 
       const oldFolder = objectKey.split("/").slice(0, -1).join("/");
@@ -35,7 +35,7 @@ export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
           method: "PUT",
           data: {
             oldKey: objectKey,
-            newKey: oldFolder ? `${oldFolder}/${newName}` : `/${newName}`,
+            newKey: oldFolder ? `${oldFolder}/${newName}` : newName,
           },
         });
         toast.success("File renamed successfully");

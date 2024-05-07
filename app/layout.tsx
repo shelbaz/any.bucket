@@ -15,9 +15,8 @@ import { Suspense } from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Open-Source S3 File Management - file.rocks",
-  description:
-    "Open-source S3 file management system built with Next.js and Tailwind CSS.",
+  title: "S3 File Management - file.rocks",
+  description: "S3 file management system built with Next.js and Tailwind CSS.",
 };
 
 export default function RootLayout({
