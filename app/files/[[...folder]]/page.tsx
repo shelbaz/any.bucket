@@ -147,6 +147,11 @@ const FilePage = () => {
             )}
           </div>
         ) : null}
+        {files.isLoading && (
+          <div className="flex items-center justify-center h-48">
+            <Loader size={24} />
+          </div>
+        )}
         {!isDragActive && !files.isLoading && !hasFolders && !hasObjects && (
           <DocumentsEmptyState
             title="No files yet"
