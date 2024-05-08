@@ -17,11 +17,7 @@ export const useMoveFile = ({ objectKey }: { objectKey: string }) => {
       return object.Key !== objectKey;
     });
 
-    files.mutate(
-      { ...files.data, objects: newObjectsData },
-      { revalidate: false }
-    );
-
+    const toastId = toast.loading("Moving file...");
     try {
       await fetcher("/api/s3/objects/rename", {
         method: "PUT",
@@ -30,11 +26,16 @@ export const useMoveFile = ({ objectKey }: { objectKey: string }) => {
           newKey: newFolder ? `${newFolder}/${objectName}` : objectName,
         },
       });
-      toast.success(`Moved to ${newFolder || "/"}`);
+
+      files.mutate(
+        { ...files.data, objects: newObjectsData },
+        { revalidate: false }
+      );
+      toast.success(`Moved to ${newFolder || "/"}`, { id: toastId });
     } catch (e) {
       console.log("ERROR:", e);
       files.mutate(oldFileData, { revalidate: true });
-      toast.error("Failed to rename file");
+      toast.error("Failed to rename file", { id: toastId });
     }
   };
 
