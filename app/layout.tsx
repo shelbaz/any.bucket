@@ -13,6 +13,9 @@ import { UploadProvider } from "./_context/UploadContext";
 import { Suspense } from "react";
 import { LogoutWrapper } from "./_components/form/LogoutWrapper";
 import { Main } from "./_components/layout/Main";
+import { Button } from "./_components/buttons/Button";
+import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/16/solid";
+import { SessionData } from "./_lib";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,7 +38,31 @@ export default function RootLayout({
               <MediaProvider>
                 <div>
                   <Sidebar>
-                    <LogoutWrapper>Logout</LogoutWrapper>
+                    <LogoutWrapper>
+                      {(session: SessionData) => (
+                        <div className="flex items-center justify-between">
+                          <div>
+                            {session.isLoggedIn ? (
+                              <>
+                                <p className="text-xs text-zinc-500">
+                                  Logged in as
+                                </p>
+                                <h3 className="line-clamp-1 font-medium text-sm text-zinc-900">
+                                  {session.email || "Anonymous"}
+                                </h3>
+                              </>
+                            ) : null}
+                          </div>
+                          <Button
+                            type="submit"
+                            variant="secondary"
+                            Icon={<ArrowRightStartOnRectangleIcon />}
+                            className="border-transparent hover:!border-transparent hover:bg-zinc-100 text-zinc-600 !px-2"
+                            title="Log out"
+                          />
+                        </div>
+                      )}
+                    </LogoutWrapper>
                   </Sidebar>
                   <Main>
                     <div className="relative min-h-screen">

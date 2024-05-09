@@ -14,10 +14,18 @@ export async function logout() {
   redirect("/login")
 }
 
-const findUser = async (username: string, password: string) => {
+const doesUserExist = async (email: string) => {
+  const db = await connectToDatabase();
+  const user = await db.collection("users").findOne({ email
+  });
+
+  return !!user;
+}
+
+const findUser = async (email: string, password: string) => {
   const db = await connectToDatabase();
 
-  const user = await db.collection("users").findOne({ username });
+  const user = await db.collection("users").findOne({ email });
 
   if (!user) return null;
 
@@ -25,6 +33,18 @@ const findUser = async (username: string, password: string) => {
   if (!match) return null;
   return user;
 };
+
+const createUser = async (email: string, password: string) => {
+  const db = await connectToDatabase();
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const user = await db.collection("users").insertOne({
+    email,
+    password: hashedPassword,
+  });
+
+  return user;
+}
 
 export async function getSession() {
     const session = await getIronSession<SessionData>(cookies(), sessionOptions);
@@ -49,8 +69,8 @@ export async function login(
 
   const user = await findUser(formEmail, formPassword);
 
-  if(!user){
-    return { error: "Wrong Credentials!" }
+  if (!user) {
+    return { error: "Wrong Credentials!" };
   }
 
   session.isLoggedIn = true;
@@ -58,5 +78,34 @@ export async function login(
   session.email = user.email;
 
   await session.save();
-  redirect("/")
-}
+  redirect("/files")
+};
+
+export async function signup(
+  prevState: { error: undefined | string },
+  formData: FormData
+) {
+  const formEmail = formData.get("email") as string;
+  const formPassword = formData.get("password") as string;
+
+  const userCheck = await doesUserExist(formEmail);
+
+  if (userCheck) {
+    return { error: "A user already exists with that email." };
+  }
+
+  const user = await createUser(formEmail, formPassword);
+
+  if (!user) {
+    return { error: "Something went wrong!" };
+  }
+
+  const session = await getSession();
+  session.isLoggedIn = true;
+  session.userId = user.insertedId.toString();
+  session.email = formEmail;
+  session.plan = "free";
+
+  session.save();
+  redirect("/files");
+};

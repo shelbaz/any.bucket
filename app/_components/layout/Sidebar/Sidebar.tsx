@@ -89,15 +89,15 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
                     </button>
                   </div>
                 </Transition.Child>
-                {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pt-4 pb-2">
-                  <div className="flex h-16 shrink-0 items-center">
+                {/* MOBILE Sidebar component, swap this element with another sidebar if you like */}
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white pt-4 pb-2">
+                  <div className="flex h-16 shrink-0 items-center px-4">
                     <span className="text-5xl">🪨</span>
                   </div>
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
-                        <ul role="list" className="-mx-2 space-y-1">
+                        <ul role="list" className="-mx-2 space-y-1 px-4">
                           {navigation.map((item) => (
                             <li key={item.name}>
                               <a
@@ -124,6 +124,9 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
                           ))}
                         </ul>
                       </li>
+                      <li className="pt-4 mt-auto border-t border-zinc-200 px-4">
+                        {children}
+                      </li>
                     </ul>
                   </nav>
                 </div>
@@ -135,14 +138,14 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
 
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 bg-white px-6 pt-4">
-          <div className="flex shrink-0 items-center">
+        <div className="flex grow flex-col gap-y-5 border-r border-zinc-200 bg-white pt-4">
+          <div className="flex shrink-0 items-center px-6">
             <Logo />
           </div>
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
-                <ul role="list" className="-mx-2 space-y-1">
+                <ul role="list" className="-mx-2 space-y-1 px-6">
                   {navigation.map((item) => (
                     <li key={item.name}>
                       <a
@@ -169,8 +172,11 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
                   ))}
                 </ul>
               </li>
-              {children}
-              <li className="mt-auto mb-6">
+              <li className="pt-4 mt-auto border-t border-zinc-200 px-6">
+                {children}
+              </li>
+
+              <li className="mb-8 px-6">
                 <FileInput onInput={uploadFiles} />
               </li>
             </ul>

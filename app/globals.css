@@ -21,3 +21,22 @@
     text-wrap: balance;
   }
 }
+
+.bg-grid {
+  background: radial-gradient(circle, rgba(255,255,255, .8) 0%, rgba(255,255,255, 0) 100%);
+}
+
+.bg-grid:before {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fefefe;
+  opacity: 0.8;
+  background-image:  linear-gradient(#efefef 2px, transparent 2px), linear-gradient(90deg, #efefef 2px, transparent 2px), linear-gradient(#efefef 1px, transparent 1px), linear-gradient(90deg, #efefef 1px, #fefefe 1px);
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  background-position: -2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}

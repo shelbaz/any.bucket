@@ -18,7 +18,7 @@ const config: Config = {
       },
       maxWidth: {
         "1/2": "50%",
-      }
+      },
     },
   },
   plugins: [],
