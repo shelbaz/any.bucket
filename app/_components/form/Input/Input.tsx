@@ -1,13 +1,14 @@
 import clsx from "clsx";
 
 interface Props {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   id: string;
   placeholder: string;
   autoFocus?: boolean;
   className?: string;
   type?: string;
+  name?: string;
 }
 
 export const Input = ({
@@ -18,6 +19,7 @@ export const Input = ({
   autoFocus,
   className,
   type,
+  name,
 }: Props) => (
   <input
     id={id}
@@ -30,5 +32,6 @@ export const Input = ({
       className
     )}
     type={type ?? "text"}
+    name={name}
   />
 );

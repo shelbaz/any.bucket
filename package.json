@@ -16,8 +16,11 @@
     "@tippyjs/react": "^4.2.6",
     "ai": "^3.0.32",
     "axios": "^1.6.8",
+    "bcrypt": "^5.1.1",
     "clsx": "^2.1.0",
+    "iron-session": "^8.0.1",
     "lodash": "^4.17.21",
+    "mongodb": "^6.6.1",
     "next": "14.2.1",
     "nuqs": "^1.17.1",
     "openai": "^4.38.5",
@@ -35,6 +38,7 @@
     "swr": "^2.2.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/lodash": "^4.17.0",
     "@types/node": "^20",
     "@types/react": "^18",

@@ -11,6 +11,8 @@ import { EnsureBearerToken } from "./_components/EnsureBearerToken";
 import { UploadModal } from "./_components/modals/UploadModal/UploadModal";
 import { UploadProvider } from "./_context/UploadContext";
 import { Suspense } from "react";
+import { LogoutWrapper } from "./_components/form/LogoutWrapper";
+import { Main } from "./_components/layout/Main";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,13 +34,15 @@ export default function RootLayout({
             <UploadProvider>
               <MediaProvider>
                 <div>
-                  <Sidebar />
-                  <main className="lg:pl-72">
+                  <Sidebar>
+                    <LogoutWrapper>Logout</LogoutWrapper>
+                  </Sidebar>
+                  <Main>
                     <div className="relative min-h-screen">
                       {children}
                       <MediaPlayer />
                     </div>
-                  </main>
+                  </Main>
                 </div>
                 <ConfirmModalWrapper />
                 <EnsureBearerToken />

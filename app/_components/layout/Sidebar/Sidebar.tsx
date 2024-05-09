@@ -20,15 +20,20 @@ const navigation = [
   // { name: "Keys", href: "/keys", icon: KeyIcon },
 ];
 
-export const Sidebar = () => {
+export const Sidebar = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const currentRootPath = usePathname().split("/")[1];
+  const pathname = usePathname();
+  const currentRootPath = pathname.split("/")[1];
   const { setFiles, setUploadModalIsOpen } = useContext(UploadContext);
 
   const uploadFiles = (files: File[]) => {
     setFiles(files);
     setUploadModalIsOpen(true);
   };
+
+  if (pathname === "/login" || pathname === "/signup") {
+    return null;
+  }
 
   return (
     <>
@@ -164,6 +169,7 @@ export const Sidebar = () => {
                   ))}
                 </ul>
               </li>
+              {children}
               <li className="mt-auto mb-6">
                 <FileInput onInput={uploadFiles} />
               </li>
