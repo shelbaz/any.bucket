@@ -28,6 +28,7 @@ export const Button = ({
   title,
 }: Props) => {
   const formStatus = useFormStatus();
+  const loading = isLoading || formStatus.pending;
   return (
     <button
       type={type}
@@ -37,12 +38,12 @@ export const Button = ({
         variant === "primary"
           ? "bg-black hover:bg-zinc-800 text-white"
           : "bg-transparent text-black border border-black hover:bg-zinc-100 hover:border-zinc-800",
-        (isLoading || formStatus.pending) && "pointer-events-none opacity-75",
+        loading && "pointer-events-none opacity-75",
         isDisabled && "pointer-events-none opacity-50",
         className
       )}
       title={title}
-      disabled={isDisabled || isLoading || formStatus.pending}
+      disabled={isDisabled || loading}
     >
       <div
         className={clsx(
@@ -50,10 +51,10 @@ export const Button = ({
           isLoading || Icon || formStatus.pending
             ? "w-4 opacity-100"
             : "w-0 opacity-0 mr-0",
-          label && (!!Icon || isLoading || formStatus.pending) && "mr-2"
+          label && (!!Icon || loading) && "mr-2"
         )}
       >
-        {!(isLoading || formStatus.pending) ? Icon : <Loader size={14} />}
+        {!loading ? Icon : <Loader size={14} />}
       </div>
       {label && <span>{label}</span>}
     </button>
