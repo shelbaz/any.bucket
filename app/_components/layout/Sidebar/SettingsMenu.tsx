@@ -86,7 +86,7 @@ export const SettingsMenu = async () => {
           <SettingsMenuItem
             label="Add a Bucket"
             Icon={PlusIcon}
-            href="/settings/buckets/new"
+            href="/settings/buckets?new=true"
           />
           <SettingsMenuItem
             label="API Keys"
