@@ -1,6 +1,6 @@
 "use client";
 import { login } from "@/app/_lib/session";
-import { useFormState } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import { Input } from "../Input";
 import { Button } from "../../buttons/Button";
 import Link from "next/link";
@@ -11,7 +11,11 @@ export function LoginForm() {
 
   return (
     <>
-      <form action={formAction}>
+      <form
+        action={(data) => {
+          formAction(data);
+        }}
+      >
         <section className="py-12 px-4 bg-white h-screen flex md:items-center md:justify-center bg-grid">
           <div className="md:max-w-sm mx-auto w-full">
             <h1 className="text-3xl text-center font-bold text-zinc-900 mb-4">
@@ -96,14 +100,12 @@ export function LoginForm() {
                   />
                 </div>
               </div>
-              <div>
-                <Button label="Log in" type="submit" className="w-full" />
-                {state?.error && (
-                  <div className="mt-4 text-sm text-center text-red-600">
-                    {state.error}
-                  </div>
-                )}
-              </div>
+              <Button label="Log in" type="submit" className="w-full" />
+              {state?.error && (
+                <div className="mt-4 text-sm text-center text-red-600">
+                  {state.error}
+                </div>
+              )}
             </div>
 
             <div className="mt-6">
