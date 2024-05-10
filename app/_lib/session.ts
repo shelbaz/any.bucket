@@ -6,6 +6,7 @@ import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createUser, doesUserExist, findUser } from "../_db/user";
+import { NextRequest } from "next/server";
 
 export async function logout() {
   const session = await getSession();
@@ -112,3 +113,10 @@ export async function signup(
   await session.save();
   redirect("/files");
 }
+
+export const getUserSession = async (
+  request: NextRequest
+): Promise<SessionData | null> => {
+  const session = request.cookies.get("session")?.value;
+  return session ? JSON.parse(session) : null;
+};

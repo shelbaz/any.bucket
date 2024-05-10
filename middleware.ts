@@ -5,20 +5,22 @@ import { SessionData, sessionOptions } from "./app/_lib";
 
 const validateSession = async () => {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
-  return session && session.isLoggedIn;
+  return [session && session.isLoggedIn, session] as const;
 };
 
 export async function middleware(request: NextRequest) {
   const url = request.url;
   const readonly = process.env.NEXT_PUBLIC_READONLY === "true";
-  const hasValidSession = await validateSession();
+  const [hasValidSession, session] = await validateSession();
+
+  if (session) {
+    request.cookies.set("session", JSON.stringify(session));
+  }
 
   if (url.includes("api/s3/objects/list")) {
     if (!hasValidSession) {
       return NextResponse.json("Unauthorized", { status: 401 });
     }
-
-    return NextResponse.next();
   }
 
   if (url.includes("api/s3") && (!hasValidSession || readonly)) {
@@ -35,14 +37,6 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (url.includes("login") || url.includes("signup")) {
-    return NextResponse.next();
-  }
-
-  if (url === "/") {
-    return NextResponse.next();
-  }
-
   if (
     url.includes("/files") ||
     url.includes("/settings") ||
@@ -56,7 +50,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return NextResponse.next();
+  return NextResponse.next({
+    request,
+  });
 }
 
 // See "Matching Paths" below to learn more
