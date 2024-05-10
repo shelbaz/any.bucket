@@ -47,7 +47,11 @@ export default function RootLayout({
                                 <p className="text-xs text-zinc-500">
                                   Logged in as
                                 </p>
-                                <h3 className="line-clamp-1 font-medium text-sm text-zinc-900">
+                                <h3
+                                  className="line-clamp-1 font-medium text-sm text-zinc-900"
+                                  style={{ overflowWrap: "anywhere" }}
+                                  title={session.email || "Anonymous"}
+                                >
                                   {session.email || "Anonymous"}
                                 </h3>
                               </>

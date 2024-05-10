@@ -31,7 +31,8 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
     setUploadModalIsOpen(true);
   };
 
-  if (pathname === "/login" || pathname === "/signup") {
+  // Don't show the sidebar on auth or landing page
+  if (pathname === "/" || pathname === "/login" || pathname === "/signup") {
     return null;
   }
 

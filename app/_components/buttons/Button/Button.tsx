@@ -42,7 +42,7 @@ export const Button = ({
       className={clsx(
         "duration-200 transition-all",
         isLoading || Icon ? "w-4 opacity-100" : "w-0 opacity-0 mr-0",
-        label && !!Icon && "mr-2"
+        label && (!!Icon || isLoading) && "mr-2"
       )}
     >
       {!isLoading ? Icon : <Loader size={14} />}
