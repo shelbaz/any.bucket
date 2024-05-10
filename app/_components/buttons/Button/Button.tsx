@@ -34,7 +34,7 @@ export const Button = ({
       type={type}
       onClick={onClick}
       className={clsx(
-        "rounded px-3 py-2 flex items-center justify-center text-base font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+        "rounded-md px-3 py-2 flex items-center justify-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
         variant === "primary"
           ? "bg-black hover:bg-zinc-800 text-white"
           : "bg-transparent text-black border border-black hover:bg-zinc-100 hover:border-zinc-800",

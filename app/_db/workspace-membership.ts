@@ -9,7 +9,7 @@ export interface WorkspaceMembership extends BaseEntity {
   role: "owner" | "member";
 }
 
-export const getWorkspacesByUserId = async (userId: string) => {
+export const getWorkspacesByUserId = async (userId: ObjectId) => {
   const db = await connectToDatabase();
   const workspaceMemberships = await db
     .collection("workspace-memberships")

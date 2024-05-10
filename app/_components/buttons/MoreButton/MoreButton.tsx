@@ -1,4 +1,10 @@
-import { Menu, Transition } from "@headlessui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Transition,
+} from "@headlessui/react";
 import React, {
   FunctionComponent,
   MouseEvent,
@@ -39,7 +45,7 @@ export const MoreButtonMenuItem = ({
   setShowChildren?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
-    <Menu.Item
+    <MenuItem
       key={option.label}
       disabled={!!option.disabled}
       data-testid={option.dataTestId}
@@ -53,8 +59,6 @@ export const MoreButtonMenuItem = ({
             option.footer && "border-t border-zinc-100 bg-zinc-100"
           )}
           onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
             setShowChildren?.(true);
             setTimeout(() => setShowChildren?.(false), 800);
             option.action?.(e);
@@ -73,7 +77,7 @@ export const MoreButtonMenuItem = ({
           {option.itemComponent && option.itemComponent}
         </div>
       )}
-    </Menu.Item>
+    </MenuItem>
   );
 };
 
@@ -147,7 +151,7 @@ export const MoreButtonBase = ({
           <>
             {!buttonComponent ? (
               <div onMouseDown={handleButtonClick}>
-                <Menu.Button
+                <MenuButton
                   className={clsx(
                     "flex cursor-pointer items-center justify-center p-1 hover:bg-zinc-100 text-zinc-500 hover:text-black rounded-md",
                     className,
@@ -159,11 +163,11 @@ export const MoreButtonBase = ({
                     Open options
                   </span>
                   <Icon className={iconClassName} />
-                </Menu.Button>
+                </MenuButton>
               </div>
             ) : (
               <div onMouseDown={handleButtonClick}>
-                <Menu.Button>{buttonComponent}</Menu.Button>
+                <MenuButton>{buttonComponent}</MenuButton>
               </div>
             )}
 
@@ -177,8 +181,9 @@ export const MoreButtonBase = ({
                 leave="transition ease-in delay-0 duration-300"
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
+                className="z-50"
               >
-                <Menu.Items
+                <MenuItems
                   static
                   className={clsx(
                     "focus:outline-none z-50 overflow-hidden rounded-md border border-zinc-100 bg-white shadow-overlay mt-2 origin-top-right",
@@ -205,7 +210,7 @@ export const MoreButtonBase = ({
                         );
                       })}
                   </div>
-                </Menu.Items>
+                </MenuItems>
                 {showChildren && children ? children : <></>}
               </Transition>,
               document.body

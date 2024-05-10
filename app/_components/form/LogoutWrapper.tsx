@@ -6,8 +6,7 @@ import { getSession, logout } from "@/app/_lib/session";
 export const LogoutWrapper = async ({
   children,
 }: {
-  children: React.FC<SessionData>;
+  children: React.ReactNode;
 }) => {
-  const session = await getSession();
-  return <form action={logout}>{children(session)}</form>;
+  return <form action={logout}>{children}</form>;
 };

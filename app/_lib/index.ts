@@ -6,6 +6,8 @@ export interface SessionData {
   img: string;
   isLoggedIn: boolean;
   plan: string;
+  workspaceId: string;
+  bucketId: string;
 }
 
 export const defaultSession: SessionData = {
@@ -14,6 +16,8 @@ export const defaultSession: SessionData = {
   email: "",
   img: "",
   plan: "",
+  workspaceId: "",
+  bucketId: "",
 };
 
 export const sessionOptions: SessionOptions = {

@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createUser, doesUserExist, findUser } from "../_db/user";
 import { NextRequest } from "next/server";
+import { getWorkspacesByUserId } from "../_db/workspace-membership";
 
 export async function logout() {
   const session = await getSession();
@@ -70,9 +71,13 @@ export async function login(
     return { error: "This email and password combo don't match. Try again!" };
   }
 
+  const workspace = await getWorkspacesByUserId(user._id);
+
   session.isLoggedIn = true;
   session.userId = user._id.toString();
   session.email = user.email;
+  session.workspaceId = workspace[0]._id.toString();
+  session.plan = workspace[0].plan;
 
   await session.save();
   redirect("/files");
@@ -98,7 +103,7 @@ export async function signup(
     return { error: "A user already exists with that email." };
   }
 
-  const user = await createUser(formEmail, formPassword);
+  const { user, workspace } = await createUser(formEmail, formPassword);
 
   if (!user) {
     return { error: "Something went wrong!" };
@@ -109,6 +114,7 @@ export async function signup(
   session.userId = user.insertedId.toString();
   session.email = formEmail;
   session.plan = "free";
+  session.workspaceId = workspace.toString();
 
   await session.save();
   redirect("/files");
@@ -116,7 +122,7 @@ export async function signup(
 
 export const getUserSession = async (
   request: NextRequest
-): Promise<SessionData | null> => {
+): Promise<SessionData> => {
   const session = request.cookies.get("session")?.value;
-  return session ? JSON.parse(session) : null;
+  return session ? JSON.parse(session) : defaultSession;
 };

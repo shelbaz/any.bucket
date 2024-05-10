@@ -13,6 +13,7 @@ import { FileInput } from "../../upload/FileInput";
 import { _Object } from "@aws-sdk/client-s3";
 import { UploadContext } from "@/app/_context/UploadContext";
 import { Logo } from "../../Logo";
+import { SettingsMenu } from "./SettingsMenu";
 
 const navigation = [
   { name: "Files", href: "/files", icon: FolderIcon },
@@ -20,7 +21,7 @@ const navigation = [
   // { name: "Keys", href: "/keys", icon: KeyIcon },
 ];
 
-export const Sidebar = ({ children }: { children: React.ReactNode }) => {
+export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const currentRootPath = pathname.split("/")[1];
@@ -126,7 +127,8 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
                         </ul>
                       </li>
                       <li className="pt-4 mt-auto border-t border-zinc-200 px-4">
-                        {children}
+                        <div>{children}</div>
+                        <SettingsMenu />
                       </li>
                     </ul>
                   </nav>
@@ -174,7 +176,8 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
                 </ul>
               </li>
               <li className="pt-4 mt-auto border-t border-zinc-200 pl-6 pr-4">
-                {children}
+                <div>{children}</div>
+                <SettingsMenu />
               </li>
 
               <li className="mb-8 px-6">

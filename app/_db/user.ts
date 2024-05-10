@@ -49,5 +49,5 @@ export const createUser = async (email: string, password: string) => {
     role: "owner",
   });
 
-  return user;
+  return { user, workspace: workspace.insertedId };
 };

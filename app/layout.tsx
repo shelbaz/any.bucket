@@ -11,11 +11,12 @@ import { EnsureBearerToken } from "./_components/EnsureBearerToken";
 import { UploadModal } from "./_components/modals/UploadModal/UploadModal";
 import { UploadProvider } from "./_context/UploadContext";
 import { Suspense } from "react";
-import { LogoutWrapper } from "./_components/form/LogoutWrapper";
 import { Main } from "./_components/layout/Main";
-import { Button } from "./_components/buttons/Button";
-import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/16/solid";
-import { SessionData } from "./_lib";
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
+import { SessionData, defaultSession, sessionOptions } from "./_lib";
+import { createContext } from "react";
+import { SessionProvider } from "./_context/SessionContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,63 +25,36 @@ export const metadata: Metadata = {
   description: "S3 file management system built with Next.js and Tailwind CSS.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   return (
     <html className="h-full bg-white">
       <body className="h-full">
         <Suspense>
-          <AppProvider>
-            <UploadProvider>
-              <MediaProvider>
-                <div>
-                  <Sidebar>
-                    <LogoutWrapper>
-                      {(session: SessionData) => (
-                        <div className="flex items-center justify-between">
-                          <div>
-                            {session.isLoggedIn ? (
-                              <>
-                                <p className="text-xs text-zinc-500">
-                                  Logged in as
-                                </p>
-                                <h3
-                                  className="line-clamp-1 font-medium text-sm text-zinc-900"
-                                  style={{ overflowWrap: "anywhere" }}
-                                  title={session.email || "Anonymous"}
-                                >
-                                  {session.email || "Anonymous"}
-                                </h3>
-                              </>
-                            ) : null}
-                          </div>
-                          <Button
-                            type="submit"
-                            variant="secondary"
-                            Icon={<ArrowRightStartOnRectangleIcon />}
-                            className="border-transparent hover:!border-transparent hover:bg-zinc-100 text-zinc-600 !px-2"
-                            title="Log out"
-                          />
-                        </div>
-                      )}
-                    </LogoutWrapper>
-                  </Sidebar>
-                  <Main>
-                    <div className="relative min-h-screen">
-                      {children}
-                      <MediaPlayer />
-                    </div>
-                  </Main>
-                </div>
-                <ConfirmModalWrapper />
-                <EnsureBearerToken />
-                <UploadModal />
-              </MediaProvider>
-            </UploadProvider>
-          </AppProvider>
+          <SessionProvider session={JSON.parse(JSON.stringify(session))}>
+            <AppProvider>
+              <UploadProvider>
+                <MediaProvider>
+                  <div>
+                    <Sidebar />
+                    <Main>
+                      <div className="relative min-h-screen">
+                        {children}
+                        <MediaPlayer />
+                      </div>
+                    </Main>
+                  </div>
+                  <ConfirmModalWrapper />
+                  <EnsureBearerToken />
+                  <UploadModal />
+                </MediaProvider>
+              </UploadProvider>
+            </AppProvider>
+          </SessionProvider>
         </Suspense>
         <Toaster position="bottom-center" reverseOrder={false} />
       </body>

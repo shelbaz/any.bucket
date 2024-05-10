@@ -6,6 +6,7 @@ import { WorkspaceMembership } from "./workspace-membership";
 export interface Workspace extends BaseEntity {
   name: string;
   ownerId: ObjectId;
+  plan: "free" | "paid";
 }
 
 export const findOrCreateWorkspace = async (userId: string) => {
