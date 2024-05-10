@@ -23,7 +23,7 @@
 }
 
 .bg-grid {
-  background: radial-gradient(circle, rgba(255,255,255, .8) 0%, rgba(255,255,255, 0) 100%);
+  background: radial-gradient(circle, rgba(255,255,255, .9) 0%, rgba(255,255,255, .1) 100%);
 }
 
 .bg-grid:before {

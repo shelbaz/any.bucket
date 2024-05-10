@@ -14,6 +14,28 @@ export async function logout() {
   redirect("/login")
 }
 
+const validateEmail = (email: string) => {
+  if (!email) {
+    return "Please enter an email.";
+  }
+  if (!email.includes("@") || !email.includes(".")) {
+    return "Please enter a valid email.";
+  }
+
+  return null;
+};
+
+const validatePassword = (password: string) => {
+  if (!password) {
+    return "Please enter a password.";
+  }
+  if (password.length < 8) {
+    return "Password must be at least 8 characters.";
+  }
+
+  return null;
+}
+
 const doesUserExist = async (email: string) => {
   const db = await connectToDatabase();
   const user = await db.collection("users").findOne({ email
@@ -67,10 +89,17 @@ export async function login(
   const formEmail = formData.get("email") as string;
   const formPassword = formData.get("password") as string;
 
+  const emailError = validateEmail(formEmail);
+  const passwordError = validatePassword(formPassword);
+
+  if (emailError || passwordError) {
+    return { error: emailError || passwordError };
+  }
+
   const user = await findUser(formEmail, formPassword);
 
   if (!user) {
-    return { error: "Wrong Credentials!" };
+    return { error: "This email and password combo don't match. Try again!" };
   }
 
   session.isLoggedIn = true;
@@ -87,6 +116,13 @@ export async function signup(
 ) {
   const formEmail = formData.get("email") as string;
   const formPassword = formData.get("password") as string;
+
+  const emailError = validateEmail(formEmail);
+  const passwordError = validatePassword(formPassword);
+
+  if (emailError || passwordError) {
+    return { error: emailError || passwordError };
+  }
 
   const userCheck = await doesUserExist(formEmail);
 

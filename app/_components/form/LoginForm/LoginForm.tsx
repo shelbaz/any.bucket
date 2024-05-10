@@ -98,6 +98,11 @@ export function LoginForm() {
               </div>
               <div>
                 <Button label="Log in" type="submit" className="w-full" />
+                {state?.error && (
+                  <div className="mt-4 text-sm text-center text-red-600">
+                    {state.error}
+                  </div>
+                )}
               </div>
             </div>
 

@@ -172,7 +172,7 @@ export const Sidebar = ({ children }: { children: React.ReactNode }) => {
                   ))}
                 </ul>
               </li>
-              <li className="pt-4 mt-auto border-t border-zinc-200 px-6">
+              <li className="pt-4 mt-auto border-t border-zinc-200 pl-6 pr-4">
                 {children}
               </li>
 
