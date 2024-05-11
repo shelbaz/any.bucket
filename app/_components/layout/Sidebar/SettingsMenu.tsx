@@ -94,14 +94,14 @@ export const SettingsMenu = async () => {
             href="/settings/keys"
           />
           <SettingsMenuItem
-            label="Account Settings"
-            Icon={UserCircleIcon}
-            href="/settings/account"
-          />
-          <SettingsMenuItem
             label="Workspace Settings"
             Icon={BuildingOffice2Icon}
             href="/settings/workspace"
+          />
+          <SettingsMenuItem
+            label="Account Settings"
+            Icon={UserCircleIcon}
+            href="/settings/account"
           />
           <SettingsMenuItem
             label="Log out"
