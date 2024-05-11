@@ -3,6 +3,7 @@ import { Fragment, useContext, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
+  Cog6ToothIcon,
   FolderIcon,
   SparklesIcon,
   XMarkIcon,
@@ -18,6 +19,7 @@ import { SettingsMenu } from "./SettingsMenu";
 const navigation = [
   { name: "Files", href: "/files", icon: FolderIcon },
   { name: "Create", href: "/create", icon: SparklesIcon },
+  { name: "Settings", href: "/settings", icon: Cog6ToothIcon },
   // { name: "Keys", href: "/keys", icon: KeyIcon },
 ];
 
