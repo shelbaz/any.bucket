@@ -18,7 +18,7 @@ const IntegrationPage = () => {
           ]}
         />
       </BreadcrumbsTopbar>
-      <div>
+      <div className="p-4 lg:p-12">
         <h1>Integration Page</h1>
       </div>
     </>

@@ -17,7 +17,7 @@ const WorkspacePage = () => {
           ]}
         />
       </BreadcrumbsTopbar>
-      <div>
+      <div className="p-4 lg:p-12">
         <h1>Workspace</h1>
       </div>
     </>

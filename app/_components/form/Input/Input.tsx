@@ -3,7 +3,7 @@ import clsx from "clsx";
 interface Props {
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  id: string;
+  id?: string;
   placeholder: string;
   autoFocus?: boolean;
   className?: string;

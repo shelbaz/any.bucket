@@ -1,13 +1,13 @@
-import { getWorkspacesByUserId } from "@/app/_db/workspace-membership";
+import { getBucketsByWorkspaceId } from "@/app/_db/bucket";
 import { getUserSession } from "@/app/_lib/session";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const session = await getUserSession(req);
-  const user = session.userId;
+  const workspaceId = session.workspaceId;
 
-  const workspaces = await getWorkspacesByUserId(new ObjectId(user));
+  const buckets = await getBucketsByWorkspaceId(new ObjectId(workspaceId));
 
-  return NextResponse.json({ workspaces }, { status: 200 });
+  return NextResponse.json({ buckets }, { status: 200 });
 }

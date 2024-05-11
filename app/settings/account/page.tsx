@@ -17,7 +17,7 @@ const AccountPage = () => {
           ]}
         />
       </BreadcrumbsTopbar>
-      <div>
+      <div className="p-4 lg:p-12">
         <h1>Account</h1>
       </div>
     </>

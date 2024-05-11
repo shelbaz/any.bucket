@@ -43,3 +43,32 @@ export const updateBucket = async (
 
   return updatedBucket as Bucket;
 };
+
+export const getBucketsByUserId = async (userId: ObjectId) => {
+  const db = await connectToDatabase();
+  const buckets = await db
+    .collection("buckets")
+    .find<Bucket>({ userId })
+    .toArray();
+
+  return buckets;
+};
+
+export const getBucketsByWorkspaceId = async (workspaceId: ObjectId) => {
+  const db = await connectToDatabase();
+  const buckets = await db
+    .collection("buckets")
+    .find<Bucket>({ workspaceId })
+    .toArray();
+
+  return buckets;
+};
+
+export const getBucketById = async (bucketId: ObjectId) => {
+  const db = await connectToDatabase();
+  const bucket = await db
+    .collection("buckets")
+    .findOne<Bucket>({ _id: bucketId });
+
+  return bucket;
+};
