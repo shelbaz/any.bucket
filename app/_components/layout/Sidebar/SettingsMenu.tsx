@@ -86,7 +86,7 @@ export const SettingsMenu = async () => {
           <SettingsMenuItem
             label="Manage Buckets"
             Icon={AdjustmentsVerticalIcon}
-            href="/settings/buckets?new=true"
+            href="/settings/buckets"
           />
           <SettingsMenuItem
             label="Integrations"

@@ -55,13 +55,11 @@ export const CreateOrUpdateIntegrationModal = ({
       modalClass="!max-w-lg w-full"
       isOpen={isOpen}
       handleClose={handleClose}
-      title={
-        integrationId ? "Update Integration Key" : "Create Integration Key"
-      }
+      title={integrationId ? "Update Integration" : "Create Integration"}
       body={
         <div className="pb-2 space-y-4">
           <Select
-            label="Integration"
+            label="Service"
             options={integrationOptions}
             value={
               integrationOptions.find((i) => i.value === name) ??
@@ -87,7 +85,7 @@ export const CreateOrUpdateIntegrationModal = ({
         </div>
       }
       confirmButton={{
-        label: "Save Key",
+        label: "Save Integration",
         onClick: saveKey,
         loading: isLoading,
       }}
