@@ -20,7 +20,6 @@ const navigation = [
   { name: "Files", href: "/files", icon: FolderIcon },
   { name: "Create", href: "/create", icon: SparklesIcon },
   { name: "Settings", href: "/settings", icon: Cog6ToothIcon },
-  // { name: "Keys", href: "/keys", icon: KeyIcon },
 ];
 
 export const Sidebar = ({ children }: { children?: React.ReactNode }) => {

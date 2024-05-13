@@ -7,13 +7,13 @@ import {
   Breadcrumbs,
 } from "@/app/_components/layout/Breadcrumbs";
 import { Loader } from "@/app/_components/loaders/Loader";
+import { CreateOrUpdateIntegrationModal } from "@/app/_components/modals/CreateOrUpdateIntegrationModal/CreateOrUpdateIntegrationModal";
 import { SessionContext } from "@/app/_context/SessionContext";
-import { Bucket } from "@/app/_db/bucket";
 import { Integration } from "@/app/_db/integration";
-import { getProviderLabel } from "@/app/_helpers/buckets/provider-options";
-import { useCreateBucket } from "@/app/_hooks/bucket/use-create-bucket";
-import { useUpdateBucket } from "@/app/_hooks/bucket/use-update-bucket";
+import { getIntegrationLabel } from "@/app/_helpers/integrations/integration-options";
+import { useCreateKey } from "@/app/_hooks/key/use-create-key";
 import { useListKeys } from "@/app/_hooks/key/use-list-keys";
+import { useUpdateKey } from "@/app/_hooks/key/use-update-key";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import { ObjectId } from "mongodb";
 import Image from "next/image";
@@ -28,18 +28,15 @@ const KeysPage = () => {
   } = useListKeys({
     workspaceId: session.workspaceId,
   });
-  const [createOrUpdateBucketModalIsOpen, setCreateOrUpdateBucketModalIsOpen] =
-    useState(false);
+  const { createKey } = useCreateKey({ workspaceId: session.workspaceId });
+  const { updateKey } = useUpdateKey({ workspaceId: session.workspaceId });
+  const [
+    createOrUpdateIntegrationModalIsOpen,
+    setCreateOrUpdateIntegrationModalIsOpen,
+  ] = useState(false);
   const [integrationId, setIntegrationId] = useState<ObjectId | null>(null);
   const [selectedIntegration, setSelectedIntegration] =
     useState<Integration | null>(null);
-
-  const { createBucket } = useCreateBucket({
-    workspaceId: session.workspaceId,
-  });
-  const { updateBucket } = useUpdateBucket({
-    workspaceId: session.workspaceId,
-  });
 
   const handleResetForm = () => {
     setSelectedIntegration(null);
@@ -47,26 +44,31 @@ const KeysPage = () => {
   };
 
   const handleCloseModal = () => {
-    setCreateOrUpdateBucketModalIsOpen(false);
+    setCreateOrUpdateIntegrationModalIsOpen(false);
     setTimeout(handleResetForm, 300);
   };
 
   const handleCreateOrUpdate = async (
-    bucket: Omit<Bucket, "workspaceId" | "_id" | "updatedAt" | "createdAt">
+    integration: Omit<
+      Integration,
+      "workspaceId" | "_id" | "updatedAt" | "createdAt"
+    >
   ) => {
-    if (!bucket) return;
+    if (!integration) return;
 
     let response;
     if (!integrationId) {
-      response = await createBucket(bucket);
+      response = await createKey(integration);
     } else {
-      response = await updateBucket(integrationId, bucket);
+      response = await updateKey(integrationId, integration);
     }
 
     if (response) {
       handleResetForm();
     }
   };
+
+  console.log(selectedIntegration);
 
   return (
     <>
@@ -82,7 +84,7 @@ const KeysPage = () => {
       <div className="p-4 lg:p-12 max-w-6xl mx-auto">
         <div className="flex justify-between items-end">
           <h1 className="text-2xl font-semibold text-zinc-800 -mb-1 flex items-center">
-            <span>Keys</span>
+            <span>Integrations</span>
             {keysData?.integrations.length ? (
               <span className="h-5 w-5 ml-2 -mb-0.5 text-xs font-extrabold bg-zinc-200 text-zinc-700 rounded-full items-center justify-center flex">
                 {keysData.integrations.length}
@@ -93,9 +95,9 @@ const KeysPage = () => {
           </h1>
           <Button
             variant="primary"
-            label="Add Key"
+            label="Add Integration"
             onClick={() => {
-              setCreateOrUpdateBucketModalIsOpen(true);
+              setCreateOrUpdateIntegrationModalIsOpen(true);
             }}
             Icon={<PlusIcon className="h-4 w-4" />}
           />
@@ -103,21 +105,21 @@ const KeysPage = () => {
         <ul className="mt-6 flex flex-col space-y-4">
           {keysData?.integrations.length === 0 && (
             <DocumentsEmptyState
-              title="No Keys Yet"
-              description="Click 'Add Key' in the top-right to get started."
+              title="No Integrations Yet"
+              description="Click 'Add Integration' in the top-right to get started."
             />
           )}
           {keysData?.integrations.map((integration) => (
             <OptionCard
               key={integration._id.toString()}
-              title={integration.name}
+              title={getIntegrationLabel(integration.name)}
               options={[
                 {
                   label: "Edit Details",
                   action: () => {
                     setIntegrationId(integration._id);
                     setSelectedIntegration(integration);
-                    setCreateOrUpdateBucketModalIsOpen(true);
+                    setCreateOrUpdateIntegrationModalIsOpen(true);
                   },
                 },
               ]}
@@ -141,20 +143,14 @@ const KeysPage = () => {
         </ul>
       </div>
 
-      {/* <CreateOrUpdateBucketModal
-        isOpen={createOrUpdateBucketModalIsOpen}
+      <CreateOrUpdateIntegrationModal
+        isOpen={createOrUpdateIntegrationModalIsOpen}
         handleClose={handleCloseModal}
         handleSave={handleCreateOrUpdate}
-        provider={selectedBucket?.provider}
-        accessKeyId={selectedBucket?.accessKeyId}
-        secretAccessKey={selectedBucket?.secretAccessKey}
-        endpoint={selectedBucket?.endpoint}
-        name={selectedBucket?.name}
-        displayName={selectedBucket?.displayName}
-        region={selectedBucket?.region}
-        publicDomain={selectedBucket?.publicDomain}
-        integrationId={selectedBucket?._id}
-      /> */}
+        key={selectedIntegration?.key}
+        name={selectedIntegration?.name ?? "openai"}
+        integrationId={selectedIntegration?._id}
+      />
     </>
   );
 };

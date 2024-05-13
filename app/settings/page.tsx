@@ -14,10 +14,10 @@ const settingsCards = [
     path: "/settings/buckets",
   },
   {
-    title: "API Keys",
-    description: "Open AI keys for generating images and more",
+    title: "Integrations",
+    description: "Set OpenAI keys for generating images (more to come)",
     icon: "🔑",
-    path: "/settings/keys",
+    path: "/settings/integrations",
   },
   {
     title: "Workspace",

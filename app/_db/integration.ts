@@ -4,12 +4,15 @@ import { connectToDatabase } from "./client";
 
 export interface Integration extends BaseEntity {
   workspaceId: ObjectId;
-  value: string;
-  name: "openai";
+  key: string;
+  name: string;
 }
 
 export const createIntegration = async (
-  integrationDetails: Omit<Integration, "_id" | "updatedAt" | "createdAt">
+  integrationDetails: Omit<
+    Integration,
+    "workspaceId" | "_id" | "updatedAt" | "createdAt"
+  >
 ) => {
   const db = await connectToDatabase();
   const newIntegration = await db.collection("integrations").insertOne({
