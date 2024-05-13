@@ -124,11 +124,12 @@ const BucketsPage = () => {
                 },
               ]}
               icon={
-                <div className="h-16 w-16 overflow-hidden rounded-md bg-white relative">
+                <div className="h-16 w-16 flex items-center justify-center overflow-hidden rounded-md bg-white relative">
                   <Image
                     src={`/images/icons/providers/${bucket.provider}.svg`}
                     alt={bucket.provider}
-                    fill
+                    height={48}
+                    width={48}
                   />
                 </div>
               }

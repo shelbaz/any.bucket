@@ -44,7 +44,7 @@ export const SettingsMenuItem = ({
 );
 
 export const SettingsMenu = async () => {
-  const session = use(SessionContext);
+  const { session } = use(SessionContext);
 
   return (
     <div className="relative">
