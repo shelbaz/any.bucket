@@ -10,7 +10,7 @@ import { Loader } from "@/app/_components/loaders/Loader";
 import { CreateOrUpdateIntegrationModal } from "@/app/_components/modals/CreateOrUpdateIntegrationModal/CreateOrUpdateIntegrationModal";
 import { SessionContext } from "@/app/_context/SessionContext";
 import { Integration } from "@/app/_db/integration";
-import { getIntegrationLabel } from "@/app/_helpers/integrations/integration-options";
+import { getIntegrationDetails } from "@/app/_helpers/integrations/integration-options";
 import { useCreateKey } from "@/app/_hooks/key/use-create-key";
 import { useListKeys } from "@/app/_hooks/key/use-list-keys";
 import { useUpdateKey } from "@/app/_hooks/key/use-update-key";
@@ -111,7 +111,10 @@ const KeysPage = () => {
           {keysData?.integrations.map((integration) => (
             <OptionCard
               key={integration._id.toString()}
-              title={getIntegrationLabel(integration.name)}
+              title={getIntegrationDetails(integration.name)?.label ?? ""}
+              description={
+                getIntegrationDetails(integration.name)?.description ?? ""
+              }
               options={[
                 {
                   label: "Edit Details",

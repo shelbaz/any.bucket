@@ -1,5 +1,16 @@
-export const integrationOptions = [{ value: "openai", label: "OpenAI" }];
+export const integrationDetails = [
+  {
+    value: "openai",
+    label: "OpenAI",
+    description: "Enable generating text, images, chat, and more with AI.",
+  },
+];
 
-export const getIntegrationLabel = (integration: string) => {
-  return integrationOptions.find((o) => o.value === integration)?.label ?? "";
+export const integrationOptions = integrationDetails.map((i) => ({
+  value: i.value,
+  label: i.label,
+}));
+
+export const getIntegrationDetails = (value: string) => {
+  return integrationDetails.find((i) => i.value === value);
 };
