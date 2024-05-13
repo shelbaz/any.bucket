@@ -5,6 +5,7 @@ import {
   BreadcrumbsTopbar,
   Breadcrumbs,
 } from "@/app/_components/layout/Breadcrumbs";
+import { Loader } from "@/app/_components/loaders/Loader";
 import { CreateOrUpdateBucketModal } from "@/app/_components/modals/CreateOrUpdateBucketModal";
 import { SessionContext } from "@/app/_context/SessionContext";
 import { Bucket } from "@/app/_db/bucket";
@@ -21,7 +22,11 @@ import toast from "react-hot-toast";
 
 const BucketsPage = () => {
   const { session, updateSession } = use(SessionContext);
-  const { data: bucketsData, mutate: mutateBuckets } = useListBuckets({
+  const {
+    data: bucketsData,
+    mutate: mutateBuckets,
+    isLoading,
+  } = useListBuckets({
     workspaceId: session.workspaceId,
   });
   const [createOrUpdateBucketModalIsOpen, setCreateOrUpdateBucketModalIsOpen] =
@@ -138,6 +143,11 @@ const BucketsPage = () => {
               }
             />
           ))}
+          {isLoading && (
+            <div className="flex items-center justify-center h-48">
+              <Loader size={24} />
+            </div>
+          )}
         </ul>
       </div>
 

@@ -1,14 +1,13 @@
 "use client";
 import { createContext } from "react";
 import { SessionData, defaultSession } from "@/app/_lib";
-import { IronSession } from "iron-session";
 
 export const SessionContext = createContext<{
   session: SessionData;
-  updateSession: (session: SessionData) => Promise<IronSession<SessionData>>;
+  updateSession: (session: SessionData) => Promise<void>;
 }>({
   session: defaultSession,
-  updateSession: async () => defaultSession as IronSession<SessionData>,
+  updateSession: async () => {},
 });
 
 export const SessionProvider = ({
@@ -17,9 +16,7 @@ export const SessionProvider = ({
   children,
 }: {
   session: SessionData;
-  updateSession: (
-    session: Partial<SessionData>
-  ) => Promise<IronSession<SessionData>>;
+  updateSession: (session: Partial<SessionData>) => Promise<void>;
   children: React.ReactNode;
 }) => {
   return (
