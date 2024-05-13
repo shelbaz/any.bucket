@@ -18,7 +18,7 @@ export const OptionCard = ({
   path?: string;
   onClick?: () => void;
   icon: React.ReactNode;
-  description: string;
+  description?: string;
   options?: MoreButtonOption[];
   className?: string;
   selected?: boolean;
@@ -44,7 +44,9 @@ export const OptionCard = ({
               <CheckCircleIcon className="text-green-500 h-5 w-5 ml-2" />
             )}{" "}
           </h3>
-          <p className="mt-1 text-xl text-zinc-700">{description}</p>
+          {description && (
+            <p className="mt-1 text-xl text-zinc-700">{description}</p>
+          )}
         </div>
       </div>
       {options?.length ? (

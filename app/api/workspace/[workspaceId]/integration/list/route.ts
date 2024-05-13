@@ -7,7 +7,9 @@ export async function GET(req: NextRequest) {
   const session = await getUserSession(req);
   const workspaceId = session.workspaceId;
 
-  const buckets = await getIntegrationsByWorkspaceId(new ObjectId(workspaceId));
+  const integrations = await getIntegrationsByWorkspaceId(
+    new ObjectId(workspaceId)
+  );
 
-  return NextResponse.json({ buckets }, { status: 200 });
+  return NextResponse.json({ integrations }, { status: 200 });
 }
