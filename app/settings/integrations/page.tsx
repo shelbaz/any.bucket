@@ -65,10 +65,9 @@ const KeysPage = () => {
 
     if (response) {
       handleResetForm();
+      mutateKeys();
     }
   };
-
-  console.log("SELECTED:", selectedIntegration);
 
   return (
     <>

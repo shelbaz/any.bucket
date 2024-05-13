@@ -2,10 +2,7 @@ import { Modal } from "../Modal";
 import { useEffect, useState } from "react";
 import { Input } from "../../form/Input";
 import { Integration } from "@/app/_db/integration";
-import {
-  getIntegrationLabel,
-  integrationOptions,
-} from "@/app/_helpers/integrations/integration-options";
+import { integrationOptions } from "@/app/_helpers/integrations/integration-options";
 import { Select } from "../../form/Select";
 import { ObjectId } from "mongodb";
 

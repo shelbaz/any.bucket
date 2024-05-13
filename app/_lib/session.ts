@@ -75,7 +75,6 @@ export async function login(
 
   const workspaces = await getWorkspacesByUserId(user._id);
   const defaultBucketId = workspaces[0].defaultBucketId;
-  console.log("DEFAULT:", defaultBucketId);
   if (defaultBucketId) {
     const defaultBucket = await getBucketById(new ObjectId(defaultBucketId));
     session.bucketId = defaultBucket?._id.toString() ?? "";
