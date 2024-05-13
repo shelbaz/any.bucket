@@ -164,8 +164,14 @@ const FilePage = () => {
         )}
         {!isDragActive && !files.isLoading && !hasFolders && !hasObjects && (
           <DocumentsEmptyState
-            title="No files yet"
-            description="Drag and drop to get started"
+            title={
+              session.bucketId ? "No files yet" : "Add a bucket to view files"
+            }
+            description={
+              session.bucketId
+                ? "Drag and drop to get started"
+                : "Go to settings and add a bucket"
+            }
           />
         )}
       </div>

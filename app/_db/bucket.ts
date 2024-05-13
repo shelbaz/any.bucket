@@ -18,7 +18,6 @@ export interface Bucket extends BaseEntity {
 export const createBucket = async (
   bucketDetails: Omit<Bucket, "_id" | "updatedAt" | "createdAt">
 ) => {
-  console.log("DETAILS:", bucketDetails);
   const db = await connectToDatabase();
   const newBucket = await db.collection("buckets").insertOne({
     ...bucketDetails,

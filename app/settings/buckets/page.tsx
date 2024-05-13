@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/app/_components/buttons/Button";
 import { OptionCard } from "@/app/_components/cards/OptionCard";
+import { DocumentsEmptyState } from "@/app/_components/empty-states/DocumentsEmptyState";
 import {
   BreadcrumbsTopbar,
   Breadcrumbs,
@@ -120,6 +121,12 @@ const BucketsPage = () => {
           />
         </div>
         <ul className="mt-6 flex flex-col space-y-4">
+          {bucketsData?.buckets.length === 0 && (
+            <DocumentsEmptyState
+              title="No Buckets Yet"
+              description="Click 'Add Bucket' in the top-right to get started."
+            />
+          )}
           {bucketsData?.buckets.map((bucket) => (
             <OptionCard
               key={bucket._id.toString()}
