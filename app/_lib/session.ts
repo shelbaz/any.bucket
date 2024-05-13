@@ -9,6 +9,7 @@ import { createUser, doesUserExist, findUser } from "../_db/user";
 import { NextRequest } from "next/server";
 import { getWorkspacesByUserId } from "../_db/workspace-membership";
 import { getBucketById } from "../_db/bucket";
+import { ObjectId } from "mongodb";
 
 export async function logout() {
   const session = await getSession();
@@ -74,8 +75,9 @@ export async function login(
 
   const workspaces = await getWorkspacesByUserId(user._id);
   const defaultBucketId = workspaces[0].defaultBucketId;
+  console.log("DEFAULT:", defaultBucketId);
   if (defaultBucketId) {
-    const defaultBucket = await getBucketById(defaultBucketId);
+    const defaultBucket = await getBucketById(new ObjectId(defaultBucketId));
     session.bucketId = defaultBucket?._id.toString() ?? "";
     session.publicDomain = defaultBucket?.publicDomain ?? "";
   }

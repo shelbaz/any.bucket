@@ -72,6 +72,24 @@ export const createWorkspace = async (name: string, userId: ObjectId) => {
   return workspace;
 };
 
+export const updateWorkspace = async (
+  workspaceId: ObjectId,
+  workspaceDetails: Partial<Workspace>
+) => {
+  const db = await connectToDatabase();
+  const workspace = await db.collection("workspaces").findOneAndUpdate(
+    { _id: workspaceId },
+    {
+      $set: {
+        ...workspaceDetails,
+        updatedAt: new Date(),
+      },
+    }
+  );
+
+  return workspace;
+};
+
 export const renameWorkspace = async (workspaceId: string, name: string) => {
   const db = await connectToDatabase();
   const workspace = await db.collection("workspaces").findOneAndUpdate(

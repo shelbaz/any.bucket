@@ -10,11 +10,11 @@ import { Loader } from "@/app/_components/loaders/Loader";
 import { CreateOrUpdateBucketModal } from "@/app/_components/modals/CreateOrUpdateBucketModal";
 import { SessionContext } from "@/app/_context/SessionContext";
 import { Bucket } from "@/app/_db/bucket";
-import { getBucketIcon } from "@/app/_helpers/buckets/get-bucket-icon";
 import { getProviderLabel } from "@/app/_helpers/buckets/provider-options";
 import { useCreateBucket } from "@/app/_hooks/bucket/use-create-bucket";
 import { useListBuckets } from "@/app/_hooks/bucket/use-list-buckets";
 import { useUpdateBucket } from "@/app/_hooks/bucket/use-update-bucket";
+import { useUpdateWorkspace } from "@/app/_hooks/workspace/use-update-workspace";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import { ObjectId } from "mongodb";
 import Image from "next/image";
@@ -43,6 +43,7 @@ const BucketsPage = () => {
   const { updateBucket } = useUpdateBucket({
     workspaceId: session.workspaceId,
   });
+  const { updateWorkspace } = useUpdateWorkspace();
 
   const handleResetForm = () => {
     setSelectedBucket(null);
@@ -81,9 +82,11 @@ const BucketsPage = () => {
   const handleSelectBucket = async (bucket: Bucket) => {
     const toastId = toast.loading("Selecting bucket...");
     await updateSession({
-      ...session,
       bucketId: bucket._id.toString(),
       publicDomain: bucket.publicDomain || `${bucket.endpoint}/${bucket.name}`,
+    });
+    await updateWorkspace(session.workspaceId, {
+      defaultBucketId: bucket._id,
     });
     toast.success("Bucket selected", { id: toastId });
   };
