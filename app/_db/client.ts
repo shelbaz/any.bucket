@@ -1,5 +1,5 @@
 // Import the required modules
-import { type Db, MongoClient } from 'mongodb';
+import { type Db, MongoClient } from "mongodb";
 
 // Define the connection URL and the database name
 const url = process.env.MONGODB_URI ?? "";

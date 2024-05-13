@@ -82,7 +82,7 @@ export const SettingsMenu = async () => {
           </MenuButton>
         </div>
 
-        <MenuItems className="bg-white border overflow-hidden rounded-xl min-w-52 border-zinc-100 shadow-md absolute bottom-full right-0 mb-1 p-1">
+        <MenuItems className="bg-white border overflow-hidden rounded-xl min-w-52 border-zinc-200 shadow-md shadow-slate-100 absolute bottom-full right-0 mb-1 p-1">
           <SettingsMenuItem
             label="Add a Bucket"
             Icon={PlusIcon}

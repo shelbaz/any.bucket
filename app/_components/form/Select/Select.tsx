@@ -30,7 +30,7 @@ export function Select<T>({
             disabled && "opacity-40 pointer-events-none"
           )}
         >
-          <Listbox.Button className="relative w-full cursor-default border border-zinc-900 rounded-lg bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-300 sm:text-sm">
+          <Listbox.Button className="relative w-full cursor-default border border-zinc-900 rounded bg-white py-2 pl-3 pr-10 text-left focus:outline-none focus-visible:border-zinc-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-300 sm:text-sm">
             <span className="block truncate font-medium text-zinc-900">
               {value.label}
             </span>

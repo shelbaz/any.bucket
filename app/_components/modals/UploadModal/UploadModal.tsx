@@ -47,7 +47,7 @@ export const UploadModal = () => {
         setUploadComplete(true);
       }
     },
-    [files]
+    [files, folder, updateFileProgress, uploadFile]
   );
 
   return (

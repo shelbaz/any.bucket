@@ -111,7 +111,7 @@ export const MoreButtonBase = ({
   Icon = EllipsisHorizontalIcon,
   className = "",
   iconClassName = "h-5 w-5",
-  position = "top",
+  position = "left",
   children,
   buttonComponent,
   menuWidth = "narrow",
@@ -186,7 +186,7 @@ export const MoreButtonBase = ({
                 <MenuItems
                   static
                   className={clsx(
-                    "focus:outline-none z-50 overflow-hidden rounded-md border border-zinc-100 bg-white shadow-overlay mt-2 origin-top-right",
+                    "focus:outline-none z-50 overflow-hidden rounded-md border border-zinc-200 bg-white shadow-md shadow-slate-100 mt-2 origin-top-right",
                     portal ? "fixed" : `absolute ${positionClassName}`
                   )}
                   style={{

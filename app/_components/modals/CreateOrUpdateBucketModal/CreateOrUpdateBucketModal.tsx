@@ -1,19 +1,10 @@
 import { Modal } from "../Modal";
 import { useEffect, useState } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
 import { Input } from "../../form/Input";
 import { Bucket } from "@/app/_db/bucket";
 import { Select } from "../../form/Select";
-import { set } from "lodash";
-
-const providerOptions = [
-  { value: "s3", label: "AWS S3" },
-  { value: "cloudflare", label: "Cloudflare R2" },
-  { value: "wasabi", label: "Wasabi" },
-  { value: "minio", label: "Minio" },
-  { value: "backblaze", label: "Backblaze B2" },
-  { value: "other", label: "Other" },
-];
+import { ObjectId } from "mongodb";
+import { providerOptions } from "@/app/_helpers/buckets/provider-options";
 
 interface Props {
   isOpen: boolean;
@@ -29,7 +20,7 @@ interface Props {
   displayName?: string;
   region?: string;
   publicDomain?: string;
-  bucketId?: string;
+  bucketId?: ObjectId;
 }
 
 export const CreateOrUpdateBucketModal = ({
@@ -47,18 +38,17 @@ export const CreateOrUpdateBucketModal = ({
   bucketId,
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [newProvider, setNewProvider] = useState(provider);
-  const [newAccessKeyId, setNewAccessKeyId] = useState(accessKeyId ?? "");
-  const [newSecretAccessKey, setNewSecretAccessKey] = useState(
-    secretAccessKey ?? ""
-  );
-  const [newEndpoint, setNewEndpoint] = useState(endpoint ?? "");
-  const [newName, setNewName] = useState(name ?? "");
-  const [newDisplayName, setNewDisplayName] = useState(displayName ?? "");
-  const [newRegion, setNewRegion] = useState(region ?? "");
-  const [newPublicDomain, setNewPublicDomain] = useState(publicDomain ?? "");
+  const [newProvider, setNewProvider] = useState("");
+  const [newAccessKeyId, setNewAccessKeyId] = useState("");
+  const [newSecretAccessKey, setNewSecretAccessKey] = useState("");
+  const [newEndpoint, setNewEndpoint] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newDisplayName, setNewDisplayName] = useState("");
+  const [newRegion, setNewRegion] = useState("");
+  const [newPublicDomain, setNewPublicDomain] = useState("");
 
   useEffect(() => {
+    setNewProvider(provider ?? "");
     setNewAccessKeyId(accessKeyId ?? "");
     setNewSecretAccessKey(secretAccessKey ?? "");
     setNewEndpoint(endpoint ?? "");
@@ -67,6 +57,7 @@ export const CreateOrUpdateBucketModal = ({
     setNewRegion(region ?? "");
     setNewPublicDomain(publicDomain ?? "");
   }, [
+    provider,
     accessKeyId,
     secretAccessKey,
     endpoint,
@@ -82,6 +73,7 @@ export const CreateOrUpdateBucketModal = ({
     setIsLoading(true);
 
     await handleSave({
+      provider: newProvider,
       accessKeyId: newAccessKeyId,
       secretAccessKey: newSecretAccessKey,
       endpoint: newEndpoint,
@@ -94,26 +86,14 @@ export const CreateOrUpdateBucketModal = ({
     handleClose();
   };
 
-  const closeModal = () => {
-    setIsLoading(false);
-    setNewProvider("");
-    setNewAccessKeyId("");
-    setNewSecretAccessKey("");
-    setNewEndpoint("");
-    setNewName("");
-    setNewDisplayName("");
-    setNewRegion("");
-    setNewPublicDomain("");
-    handleClose();
-  };
-
   return (
     <Modal
+      modalClass="!max-w-lg w-full"
       isOpen={isOpen}
       handleClose={handleClose}
       title={bucketId ? "Update Bucket" : "Create Bucket"}
       body={
-        <div className="pb-2">
+        <div className="pb-2 space-y-4">
           <Select
             label="Provider"
             value={
@@ -125,17 +105,109 @@ export const CreateOrUpdateBucketModal = ({
             )}
             onChange={(option) => setNewProvider(option.value)}
           />
-          {/* <label
-            htmlFor="rename-file"
-            className="block text-sm font-semibold text-zinc-800 mb-1"
-          >
-            File name
-          </label> */}
+          <div>
+            <label
+              htmlFor="access-key-id"
+              className="block text-sm font-semibold text-zinc-800 mb-1"
+            >
+              Access Key ID
+            </label>
+            <Input
+              id="access-key-id"
+              value={newAccessKeyId}
+              onChange={(e) => setNewAccessKeyId(e.target.value)}
+              placeholder="AKIAIOSFODNN7EXAMPLE"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="secret-access-key"
+              className="block text-sm font-semibold text-zinc-800 mb-1"
+            >
+              Secret Access Key
+            </label>
+            <Input
+              id="secret-access-key"
+              value={newSecretAccessKey}
+              onChange={(e) => setNewSecretAccessKey(e.target.value)}
+              placeholder="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="endpoint"
+              className="block text-sm font-semibold text-zinc-800 mb-1"
+            >
+              Endpoint
+            </label>
+            <Input
+              id="endpoint"
+              value={newEndpoint}
+              onChange={(e) => setNewEndpoint(e.target.value)}
+              placeholder="https://s3.amazonaws.com"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="name"
+              className="block text-sm font-semibold text-zinc-800 mb-1"
+            >
+              Bucket Name
+            </label>
+            <Input
+              id="name"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              placeholder="my-bucket"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="display-name"
+              className="block text-sm font-semibold text-zinc-800 mb-1"
+            >
+              Display Name
+            </label>
+            <Input
+              id="display-name"
+              value={newDisplayName}
+              onChange={(e) => setNewDisplayName(e.target.value)}
+              placeholder="My Bucket"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="region"
+              className="block text-sm font-semibold text-zinc-800 mb-1"
+            >
+              Region
+            </label>
+            <Input
+              id="region"
+              value={newRegion}
+              onChange={(e) => setNewRegion(e.target.value)}
+              placeholder="us-west-1"
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="public-domain"
+              className="block text-sm font-semibold text-zinc-800 mb-1"
+            >
+              Public Domain
+            </label>
+            <Input
+              id="public-domain"
+              value={newPublicDomain}
+              onChange={(e) => setNewPublicDomain(e.target.value)}
+              placeholder="https://my-bucket.s3.amazonaws.com"
+            />
+          </div>
         </div>
       }
       confirmButton={{
         label: "Save Bucket",
-        onClick: () => saveBucket(),
+        onClick: saveBucket,
         loading: isLoading,
       }}
       cancelButton={{

@@ -14,9 +14,9 @@ import { Suspense } from "react";
 import { Main } from "./_components/layout/Main";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { SessionData, defaultSession, sessionOptions } from "./_lib";
-import { createContext } from "react";
+import { SessionData, sessionOptions } from "./_lib";
 import { SessionProvider } from "./_context/SessionContext";
+import { updateSession } from "./_lib/session";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,7 +35,10 @@ export default async function RootLayout({
     <html className="h-full bg-white">
       <body className="h-full">
         <Suspense>
-          <SessionProvider session={JSON.parse(JSON.stringify(session))}>
+          <SessionProvider
+            session={JSON.parse(JSON.stringify(session))}
+            updateSession={updateSession}
+          >
             <AppProvider>
               <UploadProvider>
                 <MediaProvider>

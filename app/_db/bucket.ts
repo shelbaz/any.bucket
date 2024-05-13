@@ -8,9 +8,11 @@ export interface Bucket extends BaseEntity {
   secretAccessKey: string;
   endpoint: string;
   name: string;
+  provider: string;
   displayName?: string;
   region?: string;
   publicDomain?: string;
+  connected?: boolean;
 }
 
 export const createBucket = async (

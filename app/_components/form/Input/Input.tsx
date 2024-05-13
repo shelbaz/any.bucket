@@ -28,7 +28,7 @@ export const Input = ({
     placeholder={placeholder}
     autoFocus={autoFocus}
     className={clsx(
-      "py-2 px-3 border border-zinc-900 rounded w-full focus:outline-none focus:shadow",
+      "py-2 px-3 border border-zinc-900 rounded w-full focus:outline-none focus:shadow sm:text-sm font-medium",
       className
     )}
     type={type ?? "text"}

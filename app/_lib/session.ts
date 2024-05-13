@@ -126,3 +126,12 @@ export const getUserSession = async (
   const session = request.cookies.get("session")?.value;
   return session ? JSON.parse(session) : defaultSession;
 };
+
+export const updateSession = async (updatedSession: Partial<SessionData>) => {
+  let session = await getSession();
+  Object.keys(updatedSession).forEach((key) => {
+    // @ts-ignore
+    session[key] = updatedSession[key as keyof SessionData];
+  });
+  await session.save();
+};
