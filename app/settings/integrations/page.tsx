@@ -68,7 +68,7 @@ const KeysPage = () => {
     }
   };
 
-  console.log(selectedIntegration);
+  console.log("SELECTED:", selectedIntegration);
 
   return (
     <>
@@ -147,7 +147,7 @@ const KeysPage = () => {
         isOpen={createOrUpdateIntegrationModalIsOpen}
         handleClose={handleCloseModal}
         handleSave={handleCreateOrUpdate}
-        key={selectedIntegration?.key}
+        integrationKey={selectedIntegration?.key ?? ""}
         name={selectedIntegration?.name ?? "openai"}
         integrationId={selectedIntegration?._id}
       />

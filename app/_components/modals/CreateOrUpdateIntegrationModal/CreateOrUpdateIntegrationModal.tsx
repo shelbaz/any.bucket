@@ -19,7 +19,7 @@ interface Props {
     >
   ) => Promise<void>;
   name?: string;
-  key?: string;
+  integrationKey?: string;
   integrationId?: ObjectId;
 }
 
@@ -28,7 +28,7 @@ export const CreateOrUpdateIntegrationModal = ({
   handleClose,
   handleSave,
   name,
-  key,
+  integrationKey,
   integrationId,
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -37,10 +37,10 @@ export const CreateOrUpdateIntegrationModal = ({
 
   useEffect(() => {
     setNewName(name ?? "");
-    setNewKey(key ?? "");
-  }, [key, name]);
+    setNewKey(integrationKey ?? "");
+  }, [integrationKey, name]);
 
-  const saveBucket = async () => {
+  const saveKey = async () => {
     if (!isOpen) return;
 
     setIsLoading(true);
@@ -82,7 +82,7 @@ export const CreateOrUpdateIntegrationModal = ({
             </label>
             <Input
               id="key-id"
-              value={key}
+              value={newKey}
               onChange={(e) => setNewKey(e.target.value)}
               placeholder="sk-proj-SJzO5zLkOchcDvFHIf3qL3BlbkFJZSDqyW8cacFfdIBca"
             />
@@ -91,7 +91,7 @@ export const CreateOrUpdateIntegrationModal = ({
       }
       confirmButton={{
         label: "Save Key",
-        onClick: saveBucket,
+        onClick: saveKey,
         loading: isLoading,
       }}
       cancelButton={{
