@@ -73,7 +73,7 @@ export const CreateOrUpdateBucketModal = ({
     setIsLoading(true);
 
     await handleSave({
-      provider: newProvider,
+      provider: newProvider ?? providerOptions[0].value,
       accessKeyId: newAccessKeyId,
       secretAccessKey: newSecretAccessKey,
       endpoint: newEndpoint,
@@ -116,7 +116,7 @@ export const CreateOrUpdateBucketModal = ({
               id="access-key-id"
               value={newAccessKeyId}
               onChange={(e) => setNewAccessKeyId(e.target.value)}
-              placeholder="AKIAIOSFODNN7EXAMPLE"
+              placeholder="AKIAQKKPGPXGXG3WEHF3"
             />
           </div>
           <div>
@@ -130,7 +130,7 @@ export const CreateOrUpdateBucketModal = ({
               id="secret-access-key"
               value={newSecretAccessKey}
               onChange={(e) => setNewSecretAccessKey(e.target.value)}
-              placeholder="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+              placeholder="2T6RIC5w2X0hqX93loiMBiJGRN5gEXAMPLEKEY"
             />
           </div>
           <div>
@@ -186,23 +186,25 @@ export const CreateOrUpdateBucketModal = ({
               id="region"
               value={newRegion}
               onChange={(e) => setNewRegion(e.target.value)}
-              placeholder="us-west-1"
+              placeholder="us-east-1"
             />
           </div>
-          <div>
-            <label
-              htmlFor="public-domain"
-              className="block text-sm font-semibold text-zinc-800 mb-1"
-            >
-              Public Domain
-            </label>
-            <Input
-              id="public-domain"
-              value={newPublicDomain}
-              onChange={(e) => setNewPublicDomain(e.target.value)}
-              placeholder="https://my-bucket.s3.amazonaws.com"
-            />
-          </div>
+          {newProvider === "cloudflare" && (
+            <div>
+              <label
+                htmlFor="public-domain"
+                className="block text-sm font-semibold text-zinc-800 mb-1"
+              >
+                Public Domain
+              </label>
+              <Input
+                id="public-domain"
+                value={newPublicDomain}
+                onChange={(e) => setNewPublicDomain(e.target.value)}
+                placeholder="https://files.customdomain.com"
+              />
+            </div>
+          )}
         </div>
       }
       confirmButton={{

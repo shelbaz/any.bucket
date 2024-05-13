@@ -68,6 +68,12 @@ const BucketsPage = () => {
     if (response) {
       handleResetForm();
       mutateBuckets();
+      updateSession({
+        bucketId: response.bucket._id.toString(),
+        publicDomain:
+          response.bucket.publicDomain ||
+          `${response.bucket.endpoint}/${response.bucket.name}`,
+      });
     }
   };
 

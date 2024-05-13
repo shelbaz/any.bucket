@@ -4,7 +4,7 @@ import { SessionData, defaultSession } from "@/app/_lib";
 
 export const SessionContext = createContext<{
   session: SessionData;
-  updateSession: (session: SessionData) => Promise<void>;
+  updateSession: (session: Partial<SessionData>) => Promise<void>;
 }>({
   session: defaultSession,
   updateSession: async () => {},
