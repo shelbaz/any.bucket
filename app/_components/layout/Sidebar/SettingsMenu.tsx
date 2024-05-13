@@ -2,9 +2,9 @@ import { Button } from "../../buttons/Button";
 import {
   ArrowRightStartOnRectangleIcon,
   Cog6ToothIcon,
-  PlusIcon,
 } from "@heroicons/react/16/solid";
 import {
+  AdjustmentsVerticalIcon,
   BuildingOffice2Icon,
   KeyIcon,
   UserCircleIcon,
@@ -84,8 +84,8 @@ export const SettingsMenu = async () => {
 
         <MenuItems className="bg-white border overflow-hidden rounded-xl min-w-52 border-zinc-200 shadow-md shadow-slate-100 absolute bottom-full right-0 mb-1 p-1">
           <SettingsMenuItem
-            label="Add a Bucket"
-            Icon={PlusIcon}
+            label="Manage Buckets"
+            Icon={AdjustmentsVerticalIcon}
             href="/settings/buckets?new=true"
           />
           <SettingsMenuItem

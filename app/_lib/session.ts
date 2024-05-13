@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { createUser, doesUserExist, findUser } from "../_db/user";
 import { NextRequest } from "next/server";
 import { getWorkspacesByUserId } from "../_db/workspace-membership";
+import { getBucketById } from "../_db/bucket";
 
 export async function logout() {
   const session = await getSession();
@@ -71,13 +72,19 @@ export async function login(
     return { error: "This email and password combo don't match. Try again!" };
   }
 
-  const workspace = await getWorkspacesByUserId(user._id);
+  const workspaces = await getWorkspacesByUserId(user._id);
+  const defaultBucketId = workspaces[0].defaultBucketId;
+  if (defaultBucketId) {
+    const defaultBucket = await getBucketById(defaultBucketId);
+    session.bucketId = defaultBucket?._id.toString() ?? "";
+    session.publicDomain = defaultBucket?.publicDomain ?? "";
+  }
 
   session.isLoggedIn = true;
   session.userId = user._id.toString();
   session.email = user.email;
-  session.workspaceId = workspace[0]._id.toString();
-  session.plan = workspace[0].plan;
+  session.workspaceId = workspaces[0]._id.toString();
+  session.plan = workspaces[0].plan;
 
   await session.save();
   redirect("/files");

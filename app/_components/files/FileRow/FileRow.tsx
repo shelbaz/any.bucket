@@ -22,9 +22,16 @@ interface Props {
   label?: string;
   bytes?: number;
   extension: string;
+  publicDomain: string;
 }
 
-export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
+export const FileRow = ({
+  objectKey,
+  label,
+  bytes,
+  extension,
+  publicDomain,
+}: Props) => {
   const { setRenameFileModal, renameFileModal, setMoveFileModal } =
     useContext(AppContext);
   const { mediaRef, mediaFile } = useContext(MediaContext);
@@ -39,9 +46,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
       label: "Copy link",
       action: async () => {
         const toastId = toast.loading("Copying");
-        await navigator.clipboard.writeText(
-          `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`
-        );
+        await navigator.clipboard.writeText(`${publicDomain}/${objectKey}`);
 
         toast.success("Link copied to clipboard", { id: toastId });
       },
@@ -49,7 +54,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
     {
       label: "Download",
       action: () => {
-        downloadFile(`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`);
+        downloadFile(`${publicDomain}/${objectKey}`);
       },
     },
     {
@@ -89,7 +94,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
     },
   ];
 
-  const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`;
+  const fileUrl = `${publicDomain}/${objectKey}`;
   const isSelected = objectKey === mediaFile;
   const isPlaying = !mediaRef?.current?.paused && isSelected;
 
@@ -109,7 +114,7 @@ export const FileRow = ({ objectKey, label, bytes, extension }: Props) => {
                 {fileType === "image" && (
                   <div className="w-8 h-8 bg-zinc-100 relative overflow-hidden rounded">
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
+                      src={`${publicDomain}/${objectKey}`}
                       alt={label ?? objectKey}
                       fill
                       className={

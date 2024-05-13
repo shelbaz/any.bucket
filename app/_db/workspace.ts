@@ -7,6 +7,7 @@ export interface Workspace extends BaseEntity {
   name: string;
   ownerId: ObjectId;
   plan: "free" | "paid";
+  defaultBucketId?: ObjectId;
 }
 
 export const findOrCreateWorkspace = async (userId: string) => {

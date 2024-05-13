@@ -34,6 +34,8 @@ const BucketsPage = () => {
   const [bucketId, setBucketId] = useState<ObjectId | null>(null);
   const [selectedBucket, setSelectedBucket] = useState<Bucket | null>(null);
 
+  console.log("WORKSPACE ID:", session.workspaceId);
+
   const { createBucket } = useCreateBucket({
     workspaceId: session.workspaceId,
   });
@@ -69,6 +71,16 @@ const BucketsPage = () => {
     }
   };
 
+  const handleSelectBucket = async (bucket: Bucket) => {
+    const toastId = toast.loading("Selecting bucket...");
+    await updateSession({
+      ...session,
+      bucketId: bucket._id.toString(),
+      publicDomain: bucket.publicDomain || `${bucket.endpoint}/${bucket.name}`,
+    });
+    toast.success("Bucket selected", { id: toastId });
+  };
+
   return (
     <>
       <BreadcrumbsTopbar>
@@ -101,7 +113,7 @@ const BucketsPage = () => {
             Icon={<PlusIcon className="h-4 w-4" />}
           />
         </div>
-        <ul className="mt-6">
+        <ul className="mt-6 flex flex-col space-y-4">
           {bucketsData?.buckets.map((bucket) => (
             <OptionCard
               key={bucket._id.toString()}
@@ -110,14 +122,7 @@ const BucketsPage = () => {
               options={[
                 {
                   label: "Select Bucket",
-                  action: async () => {
-                    const toastId = toast.loading("Selecting bucket...");
-                    await updateSession({
-                      ...session,
-                      bucketId: bucket._id.toString(),
-                    });
-                    toast.success("Bucket selected", { id: toastId });
-                  },
+                  action: () => handleSelectBucket(bucket),
                 },
                 {
                   label: "Edit Details",
@@ -139,8 +144,12 @@ const BucketsPage = () => {
                 </div>
               }
               className={
-                session.bucketId === bucket._id.toString() ? "border-black" : ""
+                session.bucketId === bucket._id.toString()
+                  ? "!border-green-600"
+                  : ""
               }
+              selected={session.bucketId === bucket._id.toString()}
+              onClick={() => handleSelectBucket(bucket)}
             />
           ))}
           {isLoading && (

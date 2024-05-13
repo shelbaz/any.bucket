@@ -59,6 +59,7 @@ export const MoreButtonMenuItem = ({
             option.footer && "border-t border-zinc-100 bg-zinc-100"
           )}
           onClick={(e) => {
+            e.stopPropagation();
             setShowChildren?.(true);
             setTimeout(() => setShowChildren?.(false), 800);
             option.action?.(e);
@@ -158,6 +159,9 @@ export const MoreButtonBase = ({
                     isDisabled &&
                       "pointer-events-none bg-gray-200 border-gray-300 text-gray-400"
                   )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                 >
                   <span className="sr-only" data-testid={dataTestId}>
                     Open options

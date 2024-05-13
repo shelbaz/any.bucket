@@ -24,6 +24,7 @@ import { PaginationButtons } from "@/app/_components/pagination/PaginationButton
 import { MoveModal } from "@/app/_components/modals/MoveModal";
 import { Folder } from "@/app/_types";
 import { useMoveFile } from "@/app/_hooks/files/use-move-file";
+import { SessionContext } from "@/app/_context/SessionContext";
 
 const FilePage = () => {
   const {
@@ -38,6 +39,7 @@ const FilePage = () => {
   const router = useRouter();
   const { setFiles, setUploadModalIsOpen } = useContext(UploadContext);
   const { folder } = useContext(AppContext);
+  const { session } = useContext(SessionContext);
   const crumbs =
     folder
       ?.split("/")
@@ -117,6 +119,7 @@ const FilePage = () => {
                     extension={
                       object.Key?.split(".").pop()?.toLowerCase() ?? "file"
                     }
+                    publicDomain={session.publicDomain}
                   />
                 ))}
               </ul>
@@ -138,6 +141,7 @@ const FilePage = () => {
                     extension={
                       object.Key?.split(".").pop()?.toLowerCase() ?? "file"
                     }
+                    publicDomain={session.publicDomain}
                   />
                 ))}
               </ul>

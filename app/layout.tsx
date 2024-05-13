@@ -47,7 +47,9 @@ export default async function RootLayout({
                     <Main>
                       <div className="relative min-h-screen">
                         {children}
-                        <MediaPlayer />
+                        <MediaPlayer
+                          session={JSON.parse(JSON.stringify(session))}
+                        />
                       </div>
                     </Main>
                   </div>

@@ -8,6 +8,7 @@ export interface SessionData {
   plan: string;
   workspaceId: string;
   bucketId: string;
+  publicDomain: string;
 }
 
 export const defaultSession: SessionData = {
@@ -18,6 +19,7 @@ export const defaultSession: SessionData = {
   plan: "",
   workspaceId: "",
   bucketId: "",
+  publicDomain: "",
 };
 
 export const sessionOptions: SessionOptions = {

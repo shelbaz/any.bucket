@@ -1,3 +1,4 @@
+import { Bucket, getBucketById } from "@/app/_db/bucket";
 import { getUserSession } from "@/app/_lib/session";
 import {
   S3Client,
@@ -5,6 +6,7 @@ import {
   ListObjectsV2Command,
   CommonPrefix,
 } from "@aws-sdk/client-s3";
+import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
 const formatFolders = (prefixes?: CommonPrefix[]) => {
@@ -18,18 +20,18 @@ const formatFolders = (prefixes?: CommonPrefix[]) => {
   });
 };
 
-const listObjects = async (options?: { prefix?: string }) => {
+const listObjects = async (options?: { bucket: Bucket; prefix?: string }) => {
   const prefix = options?.prefix;
-  const s3Url = process.env.S3_ENDPOINT;
-  const bucket = process.env.S3_BUCKET_NAME;
+  const s3Url = options?.bucket.endpoint;
+  const bucket = options?.bucket.name;
 
   const client = new S3Client({
     endpoint: s3Url,
     forcePathStyle: true,
-    region: process.env.S3_REGION ?? "auto",
+    region: options?.bucket.region ?? "auto",
     credentials: {
-      accessKeyId: process.env.S3_ACCESS_KEY_ID ?? "",
-      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY ?? "",
+      accessKeyId: options?.bucket.accessKeyId ?? "",
+      secretAccessKey: options?.bucket.secretAccessKey ?? "",
     },
   });
 
@@ -55,7 +57,14 @@ export async function GET(req: NextRequest) {
   const size = Number(searchParams.get("size") ?? 24);
   const page = Number(searchParams.get("page") ?? 1);
 
-  const response = await listObjects({ prefix: folder });
+  const bucketId = session.bucketId;
+  const bucket = await getBucketById(new ObjectId(bucketId));
+
+  if (!bucket) {
+    return NextResponse.json("Bucket not found", { status: 404 });
+  }
+
+  const response = await listObjects({ bucket, prefix: folder });
 
   if (!response) {
     return NextResponse.json("Failed to list objects", { status: 500 });
