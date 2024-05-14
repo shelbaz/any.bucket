@@ -92,6 +92,12 @@ const FilePage = () => {
       label: bucket.displayName || getProviderLabel(bucket.provider),
     })) ?? [];
 
+  const getBucketFromOption = (option: { value: string; label: string }) => {
+    return bucketData?.buckets?.find(
+      (bucket) => bucket._id.toString() === option.value
+    );
+  };
+
   return (
     <>
       <div className="min-h-screen pb-24 relative" {...getRootProps()}>
@@ -108,7 +114,7 @@ const FilePage = () => {
         )}
         <input {...getInputProps({ className: "dropzone" })} />
         <BreadcrumbsTopbar>
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full h-[38px]">
             <Breadcrumbs
               basePath="/files"
               crumbs={[{ segment: "/", title: "Files" }, ...crumbs]}
@@ -123,8 +129,14 @@ const FilePage = () => {
                 }}
                 options={bucketOptions}
                 onChange={async (option) => {
+                  const bucket = getBucketFromOption(option);
                   files.mutate(undefined, { revalidate: false });
-                  await updateSession({ bucketId: option.value?.toString() });
+                  await updateSession({
+                    bucketId: option.value?.toString(),
+                    publicDomain:
+                      bucket?.publicDomain ||
+                      `${bucket?.endpoint}/${bucket?.name}`,
+                  });
                   router.push("/files");
                   files.mutate();
                 }}
