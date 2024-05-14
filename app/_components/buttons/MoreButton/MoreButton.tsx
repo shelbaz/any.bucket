@@ -1,10 +1,4 @@
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from "@headlessui/react";
+import { Menu, Transition } from "@headlessui/react";
 import React, {
   FunctionComponent,
   MouseEvent,
@@ -45,7 +39,7 @@ export const MoreButtonMenuItem = ({
   setShowChildren?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
-    <MenuItem
+    <Menu.Item
       key={option.label}
       disabled={!!option.disabled}
       data-testid={option.dataTestId}
@@ -78,7 +72,7 @@ export const MoreButtonMenuItem = ({
           {option.itemComponent && option.itemComponent}
         </div>
       )}
-    </MenuItem>
+    </Menu.Item>
   );
 };
 
@@ -152,7 +146,7 @@ export const MoreButtonBase = ({
           <>
             {!buttonComponent ? (
               <div onMouseDown={handleButtonClick}>
-                <MenuButton
+                <Menu.Button
                   className={clsx(
                     "flex cursor-pointer items-center justify-center p-1 hover:bg-zinc-100 text-zinc-500 hover:text-black rounded-md",
                     className,
@@ -167,16 +161,16 @@ export const MoreButtonBase = ({
                     Open options
                   </span>
                   <Icon className={iconClassName} />
-                </MenuButton>
+                </Menu.Button>
               </div>
             ) : (
               <div onMouseDown={handleButtonClick}>
-                <MenuButton>{buttonComponent}</MenuButton>
+                <Menu.Button>{buttonComponent}</Menu.Button>
               </div>
             )}
 
             {renderMethod(
-              <Transition
+              <Transition.Root
                 show={open}
                 as="div"
                 enter="transition ease-out duration-100 delay-0"
@@ -187,7 +181,7 @@ export const MoreButtonBase = ({
                 leaveTo="transform opacity-0 scale-95"
                 className="z-50"
               >
-                <MenuItems
+                <Menu.Items
                   static
                   className={clsx(
                     "focus:outline-none z-50 overflow-hidden rounded-md border border-zinc-200 bg-white shadow-md shadow-slate-100 mt-2 origin-top-right",
@@ -214,9 +208,9 @@ export const MoreButtonBase = ({
                         );
                       })}
                   </div>
-                </MenuItems>
+                </Menu.Items>
                 {showChildren && children ? children : <></>}
-              </Transition>,
+              </Transition.Root>,
               document.body
             )}
           </>

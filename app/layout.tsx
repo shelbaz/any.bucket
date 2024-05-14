@@ -60,7 +60,6 @@ export default async function RootLayout({
                     </Main>
                   </div>
                   <ConfirmModalWrapper />
-                  <UploadModal />
                 </MediaProvider>
               </UploadProvider>
             </AppProvider>

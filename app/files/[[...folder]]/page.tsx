@@ -28,6 +28,7 @@ import { SessionContext } from "@/app/_context/SessionContext";
 import { useListBuckets } from "@/app/_hooks/bucket/use-list-buckets";
 import { getProviderLabel } from "@/app/_helpers/buckets/provider-options";
 import { Select } from "@/app/_components/form/Select";
+import { UploadModal } from "@/app/_components/modals/UploadModal/UploadModal";
 
 const FilePage = () => {
   const {
@@ -249,6 +250,7 @@ const FilePage = () => {
         }}
         isOpen={moveFileModal.isOpen}
       />
+      <UploadModal />
     </>
   );
 };
