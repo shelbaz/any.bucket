@@ -40,31 +40,29 @@ export default async function RootLayout({
         defer
       />
       <body className="h-full">
-        <Suspense>
-          <SessionProvider
-            session={JSON.parse(JSON.stringify(session))}
-            updateSession={updateSession}
-          >
-            <AppProvider>
-              <UploadProvider>
-                <MediaProvider>
-                  <div>
-                    <Sidebar />
-                    <Main>
-                      <div className="relative min-h-screen">
-                        {children}
-                        <MediaPlayer
-                          session={JSON.parse(JSON.stringify(session))}
-                        />
-                      </div>
-                    </Main>
-                  </div>
-                  <ConfirmModalWrapper />
-                </MediaProvider>
-              </UploadProvider>
-            </AppProvider>
-          </SessionProvider>
-        </Suspense>
+        <SessionProvider
+          session={JSON.parse(JSON.stringify(session))}
+          updateSession={updateSession}
+        >
+          <AppProvider>
+            <UploadProvider>
+              <MediaProvider>
+                <div>
+                  <Sidebar />
+                  <Main>
+                    <div className="relative min-h-screen">
+                      {children}
+                      <MediaPlayer
+                        session={JSON.parse(JSON.stringify(session))}
+                      />
+                    </div>
+                  </Main>
+                </div>
+                <ConfirmModalWrapper />
+              </MediaProvider>
+            </UploadProvider>
+          </AppProvider>
+        </SessionProvider>
         <Toaster position="bottom-center" reverseOrder={false} />
       </body>
     </html>

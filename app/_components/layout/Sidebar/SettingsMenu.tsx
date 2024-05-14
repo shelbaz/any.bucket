@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "../../buttons/Button";
 import {
   ArrowRightStartOnRectangleIcon,
@@ -10,7 +11,7 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, use } from "react";
+import { Fragment, useContext } from "react";
 import { SessionContext } from "@/app/_context/SessionContext";
 import clsx from "clsx";
 import Link from "next/link";
@@ -44,7 +45,7 @@ export const SettingsMenuItem = ({
 );
 
 export const SettingsMenu = async () => {
-  const { session } = use(SessionContext);
+  const { session } = useContext(SessionContext);
 
   return (
     <div className="relative">

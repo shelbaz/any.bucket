@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useContext, useState } from "react";
+import { Fragment, Suspense, useContext, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -39,7 +39,7 @@ export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
   }
 
   return (
-    <>
+    <Suspense>
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -133,7 +133,9 @@ export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
                       </li>
                       <li className="pt-4 mt-auto border-t border-zinc-200 px-4">
                         <div>{children}</div>
-                        <SettingsMenu />
+                        <Suspense>
+                          <SettingsMenu />
+                        </Suspense>
                       </li>
                     </ul>
                   </nav>
@@ -186,7 +188,9 @@ export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
               </li>
               <li className="pt-4 mt-auto border-t border-zinc-200 pl-6 pr-4">
                 <div>{children}</div>
-                <SettingsMenu />
+                <Suspense>
+                  <SettingsMenu />
+                </Suspense>
               </li>
 
               <li className="mb-8 px-6">
@@ -207,6 +211,6 @@ export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
       </div>
-    </>
+    </Suspense>
   );
 };
