@@ -7,9 +7,11 @@ export async function POST(req: NextRequest, params: { workspaceId: string }) {
   const { workspaceId } = params;
   const integrationId = await createIntegration({
     ...integrationDetails,
-    workspaceId: new ObjectId(workspaceId),
+    workspaceId: ObjectId.createFromHexString(workspaceId),
   });
-  const bucket = await getIntegrationById(new ObjectId(integrationId));
+  const bucket = await getIntegrationById(
+    ObjectId.createFromHexString(integrationId)
+  );
 
   return NextResponse.json({ bucket }, { status: 200 });
 }

@@ -5,10 +5,10 @@ import {
   BreadcrumbsTopbar,
 } from "@/app/_components/layout/Breadcrumbs";
 import { useListFiles } from "../../_hooks/files/use-list-files";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FolderCard } from "@/app/_components/files/FolderCard";
 import { FileCard } from "@/app/_components/files/FileCard";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AppContext } from "@/app/_context/AppContext";
 import { FolderRow } from "@/app/_components/files/FolderRow";
 import { FileRow } from "@/app/_components/files/FileRow";
@@ -25,6 +25,9 @@ import { MoveModal } from "@/app/_components/modals/MoveModal";
 import { Folder } from "@/app/_types";
 import { useMoveFile } from "@/app/_hooks/files/use-move-file";
 import { SessionContext } from "@/app/_context/SessionContext";
+import { useListBuckets } from "@/app/_hooks/bucket/use-list-buckets";
+import { getProviderLabel } from "@/app/_helpers/buckets/provider-options";
+import { Select } from "@/app/_components/form/Select";
 
 const FilePage = () => {
   const {
@@ -39,11 +42,19 @@ const FilePage = () => {
   const router = useRouter();
   const { setFiles, setUploadModalIsOpen } = useContext(UploadContext);
   const { folder } = useContext(AppContext);
-  const { session } = useContext(SessionContext);
+  const { session, updateSession } = useContext(SessionContext);
   const crumbs =
     folder
       ?.split("/")
       .map((folder) => ({ title: decodeURI(folder), segment: folder })) ?? [];
+
+  const { data: bucketData } = useListBuckets({
+    workspaceId: session.workspaceId,
+  });
+  const currentBucket = bucketData?.buckets?.find(
+    (bucket) => bucket._id.toString() === session.bucketId
+  );
+
   const { renameFile } = useRenameFile({
     objectKey: renameFileModal.objectKey,
   });
@@ -75,7 +86,11 @@ const FilePage = () => {
   const foldersData = files.data?.folders ?? [];
   const objectsData = files.data?.objects ?? [];
 
-  const isTruncated = files.data?.isTruncated ?? false;
+  const bucketOptions =
+    bucketData?.buckets?.map((bucket) => ({
+      value: bucket._id.toString(),
+      label: bucket.displayName || getProviderLabel(bucket.provider),
+    })) ?? [];
 
   return (
     <>
@@ -93,10 +108,30 @@ const FilePage = () => {
         )}
         <input {...getInputProps({ className: "dropzone" })} />
         <BreadcrumbsTopbar>
-          <Breadcrumbs
-            basePath="/files"
-            crumbs={[{ segment: "/", title: "Files" }, ...crumbs]}
-          />
+          <div className="flex items-center justify-between w-full">
+            <Breadcrumbs
+              basePath="/files"
+              crumbs={[{ segment: "/", title: "Files" }, ...crumbs]}
+            />
+            {currentBucket ? (
+              <Select
+                value={{
+                  value: currentBucket?._id.toString(),
+                  label:
+                    currentBucket?.displayName ||
+                    getProviderLabel(currentBucket?.provider ?? ""),
+                }}
+                options={bucketOptions}
+                onChange={async (option) => {
+                  files.mutate(undefined, { revalidate: false });
+                  await updateSession({ bucketId: option.value?.toString() });
+                  router.push("/files");
+                  files.mutate();
+                }}
+                className="!border-zinc-200 !text-xs hover:!border-zinc-300 cursor-pointer"
+              />
+            ) : null}
+          </div>
         </BreadcrumbsTopbar>
 
         {hasFolders || hasObjects ? (

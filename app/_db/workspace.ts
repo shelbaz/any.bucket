@@ -55,7 +55,7 @@ export const findWorkspaceById = async (workspaceId: ObjectId) => {
   const db = await connectToDatabase();
   const workspace = await db
     .collection("workspaces")
-    .findOne<Workspace>({ _id: new ObjectId(workspaceId) });
+    .findOne<Workspace>({ _id: workspaceId });
 
   return workspace;
 };
@@ -93,7 +93,7 @@ export const updateWorkspace = async (
 export const renameWorkspace = async (workspaceId: string, name: string) => {
   const db = await connectToDatabase();
   const workspace = await db.collection("workspaces").findOneAndUpdate(
-    { _id: new ObjectId(workspaceId) },
+    { _id: ObjectId.createFromHexString(workspaceId) },
     {
       $set: {
         name,

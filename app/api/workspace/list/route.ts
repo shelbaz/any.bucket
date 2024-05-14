@@ -7,7 +7,9 @@ export async function GET(req: NextRequest) {
   const session = await getUserSession(req);
   const user = session.userId;
 
-  const workspaces = await getWorkspacesByUserId(new ObjectId(user));
+  const workspaces = await getWorkspacesByUserId(
+    ObjectId.createFromHexString(user)
+  );
 
   return NextResponse.json({ workspaces }, { status: 200 });
 }

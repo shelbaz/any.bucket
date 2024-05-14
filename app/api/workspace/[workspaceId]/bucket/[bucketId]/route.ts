@@ -6,7 +6,9 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { bucketId: string } }
 ) {
-  const bucket = await getBucketById(new ObjectId(params.bucketId));
+  const bucket = await getBucketById(
+    ObjectId.createFromHexString(params.bucketId)
+  );
 
   return NextResponse.json({ bucket }, { status: 200 });
 }
@@ -16,7 +18,10 @@ export async function PUT(
   { params }: { params: { bucketId: string } }
 ) {
   const body = await req.json();
-  const bucket = await updateBucket(new ObjectId(params.bucketId), body);
+  const bucket = await updateBucket(
+    ObjectId.createFromHexString(params.bucketId),
+    body
+  );
 
   return NextResponse.json({ bucket }, { status: 200 });
 }

@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
   const page = Number(searchParams.get("page") ?? 1);
 
   const bucketId = session.bucketId;
-  const bucket = await getBucketById(new ObjectId(bucketId));
+  const bucket = await getBucketById(ObjectId.createFromHexString(bucketId));
 
   if (!bucket) {
     return NextResponse.json("Bucket not found", { status: 404 });

@@ -6,7 +6,9 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { workspaceId: string } }
 ) {
-  const workspace = await findWorkspaceById(new ObjectId(params.workspaceId));
+  const workspace = await findWorkspaceById(
+    ObjectId.createFromHexString(params.workspaceId)
+  );
 
   return NextResponse.json({ workspace }, { status: 200 });
 }
@@ -17,7 +19,7 @@ export async function PUT(
 ) {
   const body = await req.json();
   const workspace = await updateWorkspace(
-    new ObjectId(params.workspaceId),
+    ObjectId.createFromHexString(params.workspaceId),
     body
   );
 

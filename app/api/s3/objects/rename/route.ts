@@ -62,7 +62,9 @@ export async function PUT(req: NextRequest) {
   const oldKey = body.oldKey;
   const newKey = body.newKey;
 
-  const bucket = await getBucketById(new ObjectId(session.bucketId));
+  const bucket = await getBucketById(
+    ObjectId.createFromHexString(session.bucketId)
+  );
   if (!bucket) {
     return NextResponse.json("Bucket not found", { status: 404 });
   }

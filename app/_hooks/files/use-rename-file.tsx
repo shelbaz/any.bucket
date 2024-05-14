@@ -34,7 +34,7 @@ export const useRenameFile = ({ objectKey }: { objectKey: string }) => {
         },
       });
 
-      files.mutate(
+      await files.mutate(
         { ...files.data, objects: newObjectsData },
         { revalidate: false }
       );

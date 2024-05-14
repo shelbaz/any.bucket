@@ -10,7 +10,6 @@ const validateSession = async () => {
 
 export async function middleware(request: NextRequest) {
   const url = request.url;
-  const readonly = process.env.NEXT_PUBLIC_READONLY === "true";
   const [hasValidSession, session] = await validateSession();
 
   if (session) {
@@ -23,16 +22,12 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (url.includes("api/s3") && (!hasValidSession || readonly)) {
+  if (url.includes("api/s3") && !hasValidSession) {
     return NextResponse.json("Unauthorized", { status: 401 });
   }
 
   if (url.includes("api/images")) {
     if (!hasValidSession) {
-      return NextResponse.json("Unauthorized", { status: 401 });
-    }
-
-    if (readonly) {
       return NextResponse.json("Unauthorized", { status: 401 });
     }
   }

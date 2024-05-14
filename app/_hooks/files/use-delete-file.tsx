@@ -11,6 +11,7 @@ export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
   const files = useListFiles({ folder });
 
   const deleteFile = async () => {
+    const toastId = toast.loading("Deleting file...");
     try {
       await fetcher("/api/s3/objects/delete", {
         method: "DELETE",
@@ -19,7 +20,7 @@ export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
         },
       });
 
-      toast.success("File deleted");
+      toast.success("File deleted", { id: toastId });
       const newObjectsData = [...(files.data?.objects ?? [])].filter(
         (object: _Object) => {
           return object.Key !== objectKey;
@@ -31,7 +32,7 @@ export const useDeleteFile = ({ objectKey }: { objectKey: string }) => {
       );
       return;
     } catch (error) {
-      toast.error("Failed to delete file");
+      toast.error("Failed to delete file", { id: toastId });
     }
   };
 

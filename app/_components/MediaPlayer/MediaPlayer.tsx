@@ -35,6 +35,7 @@ const getSizeClassesFromExt = (ext: string) => {
     case "jpg":
     case "jpeg":
     case "svg":
+    case "webp":
       return "max-w-1/2 w-[40vw] min-w-60 max-h-[80vh]";
     case "epub":
       return "w-full h-full lg:w-[75vw] lg:h-[90vh] z-50";

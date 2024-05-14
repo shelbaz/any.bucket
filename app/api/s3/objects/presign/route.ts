@@ -39,7 +39,9 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const fileName = body.fileName;
   const folder = body.folder;
-  const bucket = await getBucketById(new ObjectId(session.bucketId));
+  const bucket = await getBucketById(
+    ObjectId.createFromHexString(session.bucketId)
+  );
 
   if (!bucket) {
     return NextResponse.json("Bucket not found", { status: 404 });

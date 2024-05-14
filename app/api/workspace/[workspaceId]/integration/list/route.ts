@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
   const workspaceId = session.workspaceId;
 
   const integrations = await getIntegrationsByWorkspaceId(
-    new ObjectId(workspaceId)
+    ObjectId.createFromHexString(workspaceId)
   );
 
   return NextResponse.json({ integrations }, { status: 200 });

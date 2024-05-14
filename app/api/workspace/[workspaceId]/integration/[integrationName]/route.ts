@@ -14,7 +14,7 @@ export async function GET(
   const workspaceId = session.workspaceId;
   const bucket = await getIntegrationByNameAndWorkspaceId(
     params.integrationName,
-    new ObjectId(workspaceId)
+    ObjectId.createFromHexString(workspaceId)
   );
 
   return NextResponse.json({ bucket }, { status: 200 });
@@ -30,7 +30,7 @@ export async function PUT(
   const bucket = await updateIntegration({
     integrationName: params.integrationName,
     integrationDetails: body,
-    workspaceId: new ObjectId(workspaceId),
+    workspaceId: ObjectId.createFromHexString(workspaceId),
   });
 
   return NextResponse.json({ bucket }, { status: 200 });

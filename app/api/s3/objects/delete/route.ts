@@ -35,7 +35,9 @@ export async function DELETE(req: NextRequest) {
   const session = await getUserSession(req);
   const body = await req.json();
   const key = body.key;
-  const bucket = await getBucketById(new ObjectId(session.bucketId));
+  const bucket = await getBucketById(
+    ObjectId.createFromHexString(session.bucketId)
+  );
 
   if (!bucket) {
     return NextResponse.json("Bucket not found", { status: 404 });

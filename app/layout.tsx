@@ -7,7 +7,6 @@ import { AppProvider } from "./_context/AppContext";
 import { MediaProvider } from "./_context/MediaContext";
 import { MediaPlayer } from "./_components/MediaPlayer";
 import { ConfirmModalWrapper } from "./_components/modals/ConfirmModal/ConfirmModalWrapper";
-import { EnsureBearerToken } from "./_components/EnsureBearerToken";
 import { UploadModal } from "./_components/modals/UploadModal/UploadModal";
 import { UploadProvider } from "./_context/UploadContext";
 import { Suspense } from "react";
@@ -54,7 +53,6 @@ export default async function RootLayout({
                     </Main>
                   </div>
                   <ConfirmModalWrapper />
-                  <EnsureBearerToken />
                   <UploadModal />
                 </MediaProvider>
               </UploadProvider>
