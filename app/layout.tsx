@@ -16,6 +16,7 @@ import { cookies } from "next/headers";
 import { SessionData, sessionOptions } from "./_lib";
 import { SessionProvider } from "./_context/SessionContext";
 import { updateSession } from "./_lib/session";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,8 @@ export default async function RootLayout({
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   return (
     <html className="h-full bg-white">
+      <Script>{`window.lemonSqueezyAffiliateConfig = { "store": "filerocks" };`}</Script>
+      <Script src="https://lmsqueezy.com/affiliate.js" defer />
       <body className="h-full">
         <Suspense>
           <SessionProvider
