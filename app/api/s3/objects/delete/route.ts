@@ -17,7 +17,7 @@ const deleteObject = async ({
   const client = new S3Client({
     endpoint: s3Url,
     forcePathStyle: true,
-    region: bucket.region ?? "auto",
+    region: bucket.region || "auto",
     credentials: {
       accessKeyId: bucket.accessKeyId ?? "",
       secretAccessKey: bucket.secretAccessKey ?? "",

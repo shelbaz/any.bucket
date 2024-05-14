@@ -28,7 +28,7 @@ const listObjects = async (options?: { bucket: Bucket; prefix?: string }) => {
   const client = new S3Client({
     endpoint: s3Url,
     forcePathStyle: true,
-    region: options?.bucket.region ?? "auto",
+    region: options?.bucket.region || "auto",
     credentials: {
       accessKeyId: options?.bucket.accessKeyId ?? "",
       secretAccessKey: options?.bucket.secretAccessKey ?? "",

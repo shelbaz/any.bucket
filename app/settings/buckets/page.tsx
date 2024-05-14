@@ -12,6 +12,7 @@ import { SessionContext } from "@/app/_context/SessionContext";
 import { Bucket } from "@/app/_db/bucket";
 import { getProviderLabel } from "@/app/_helpers/buckets/provider-options";
 import { useCreateBucket } from "@/app/_hooks/bucket/use-create-bucket";
+import { useDeleteBucket } from "@/app/_hooks/bucket/use-delete-bucket";
 import { useListBuckets } from "@/app/_hooks/bucket/use-list-buckets";
 import { useUpdateBucket } from "@/app/_hooks/bucket/use-update-bucket";
 import { useUpdateWorkspace } from "@/app/_hooks/workspace/use-update-workspace";
@@ -35,12 +36,13 @@ const BucketsPage = () => {
   const [bucketId, setBucketId] = useState<ObjectId | null>(null);
   const [selectedBucket, setSelectedBucket] = useState<Bucket | null>(null);
 
-  console.log("WORKSPACE ID:", session.workspaceId);
-
   const { createBucket } = useCreateBucket({
     workspaceId: session.workspaceId,
   });
   const { updateBucket } = useUpdateBucket({
+    workspaceId: session.workspaceId,
+  });
+  const { deleteBucket } = useDeleteBucket({
     workspaceId: session.workspaceId,
   });
   const { updateWorkspace } = useUpdateWorkspace();
@@ -110,9 +112,7 @@ const BucketsPage = () => {
               <span className="h-5 w-5 ml-2 -mb-0.5 text-xs font-extrabold bg-zinc-200 text-zinc-700 rounded-full items-center justify-center flex">
                 {bucketsData.buckets.length}
               </span>
-            ) : (
-              ""
-            )}
+            ) : null}
           </h1>
           <Button
             variant="primary"
@@ -147,6 +147,20 @@ const BucketsPage = () => {
                     setSelectedBucket(bucket);
                     setCreateOrUpdateBucketModalIsOpen(true);
                   },
+                },
+                {
+                  label: "Delete Bucket",
+                  action: async () => {
+                    const toastId = toast.loading("Deleting bucket...");
+                    await deleteBucket(bucket._id);
+                    mutateBuckets();
+                    toast.success("Bucket deleted", { id: toastId });
+                  },
+                  disabled: bucket._id.toString() === session.bucketId,
+                  className:
+                    bucket._id.toString() === session.bucketId
+                      ? "opacity-50"
+                      : "",
                 },
               ]}
               icon={

@@ -48,7 +48,7 @@ export const CreateOrUpdateBucketModal = ({
   const [newPublicDomain, setNewPublicDomain] = useState("");
 
   useEffect(() => {
-    setNewProvider(provider ?? "");
+    setNewProvider(provider ?? providerOptions[0].value);
     setNewAccessKeyId(accessKeyId ?? "");
     setNewSecretAccessKey(secretAccessKey ?? "");
     setNewEndpoint(endpoint ?? "");

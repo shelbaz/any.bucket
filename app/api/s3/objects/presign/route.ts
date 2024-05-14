@@ -22,7 +22,7 @@ const generatePresignedUrl = async ({
     forcePathStyle: true,
     region: bucket.region ?? "auto",
     credentials: {
-      accessKeyId: bucket.accessKeyId ?? "",
+      accessKeyId: bucket.accessKeyId || "",
       secretAccessKey: bucket.secretAccessKey ?? "",
     },
   });

@@ -10,7 +10,6 @@ export const useCreateBucket = ({ workspaceId }: { workspaceId: string }) => {
       "_id" | "updatedAt" | "createdAt" | "workspaceId"
     >
   ) => {
-    console.log("WORKSPACE ID:", workspaceId);
     const response = await fetcher(`/api/workspace/${workspaceId}/bucket`, {
       method: "POST",
       headers: {

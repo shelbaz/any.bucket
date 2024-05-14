@@ -74,3 +74,12 @@ export const getBucketById = async (bucketId: ObjectId) => {
 
   return bucket;
 };
+
+export const deleteBucket = async (bucketId: ObjectId) => {
+  const db = await connectToDatabase();
+  const bucket = await db
+    .collection("buckets")
+    .findOneAndDelete({ _id: bucketId });
+
+  return bucket;
+};
