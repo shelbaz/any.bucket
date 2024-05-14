@@ -126,22 +126,18 @@ export function SignupForm() {
                   <div>
                     <img
                       className="w-auto mx-auto"
-                      src="https://landingfoliocom.imgix.net/store/collection/clarity-dashboard/images/previews/sign-in/2/sign-in-illustration.png"
+                      src="https://file.swell.so/file.rocks/login-screen@2x.png"
                       alt=""
                     />
-                    <p className="mt-4 text-2xl font-bold text-zinc-900">
-                      Build Beautiful Admin Panel
+                    <p className="mt-6 text-2xl font-bold text-zinc-900">
+                      Manage Any S3-Compatible Storage
                     </p>
                     <p className="mt-4 text-sm font-medium text-zinc-500">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Turpis morbi pulvinar venenatis non.
+                      You're tired of paying for Dropbox, Google Drive, or
+                      iCloud... But you don't want to give up the convenience of
+                      a cloud storage service. file.rocks is the ease of cloud
+                      with the ownership of S3.
                     </p>
-
-                    <div className="flex items-center justify-center mt-16 space-x-1.5">
-                      <div className="w-2.5 h-2.5 bg-zinc-600 rounded-full"></div>
-                      <div className="w-2.5 h-2.5 bg-zinc-300 rounded-full"></div>
-                      <div className="w-2.5 h-2.5 bg-zinc-300 rounded-full"></div>
-                    </div>
                   </div>
                 </div>
               </div>

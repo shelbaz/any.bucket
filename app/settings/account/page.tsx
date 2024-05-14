@@ -22,7 +22,7 @@ const AccountPage = () => {
           ]}
         />
       </BreadcrumbsTopbar>
-      <div className="p-4 lg:p-12 max-w-6xl mx-auto">
+      <div className="p-4 lg:p-12 max-w-screen-lg mx-auto">
         <div className="flex justify-between items-end">
           <h1 className="text-2xl font-semibold text-zinc-800 -mb-1 flex items-center">
             <span>Account Details</span>

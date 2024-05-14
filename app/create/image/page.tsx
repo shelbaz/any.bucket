@@ -190,9 +190,10 @@ const ImagePage = () => {
             const imageName =
               image.revised_prompt?.slice(0, 24) ?? `image - ${index}`;
             const imageBase64 = `data:image/png;base64, ${image.b64_json}`;
+            const key = imageBase64.slice(0, 24);
             return (
               <div
-                key={imageName}
+                key={key}
                 className="group relative col-span-12 sm:col-span-6 xl:col-span-4 rounded-lg aspect-square overflow-hidden"
               >
                 <Image

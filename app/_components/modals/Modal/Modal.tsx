@@ -131,21 +131,22 @@ export const Modal = ({
             </div>
             <div className="p-6">{body || children}</div>
             {(confirmButton || cancelButton) && (
-              <div className="py-3 px-6 flex space-x-2 border-t border-zinc-200">
-                {confirmButton && (
-                  <Button
-                    label={confirmButton.label ?? "Confirm"}
-                    onClick={confirmButton.onClick}
-                    isLoading={confirmButton.loading}
-                    variant="primary"
-                  />
-                )}
+              <div className="py-3 px-6 flex space-x-2 border-t border-zinc-200 justify-end">
                 {cancelButton && (
                   <Button
                     label={cancelButton.label ?? "Cancel"}
                     onClick={cancelButton.onClick}
                     isLoading={cancelButton.loading}
                     variant="secondary"
+                    className="!border-transparent"
+                  />
+                )}
+                {confirmButton && (
+                  <Button
+                    label={confirmButton.label ?? "Confirm"}
+                    onClick={confirmButton.onClick}
+                    isLoading={confirmButton.loading}
+                    variant="primary"
                   />
                 )}
               </div>
