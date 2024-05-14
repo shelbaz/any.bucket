@@ -33,8 +33,12 @@ export default async function RootLayout({
   const session = await getIronSession<SessionData>(cookies(), sessionOptions);
   return (
     <html className="h-full bg-white">
-      <Script>{`window.lemonSqueezyAffiliateConfig = { "store": "filerocks" };`}</Script>
-      <Script src="https://lmsqueezy.com/affiliate.js" defer />
+      <Script id="affiliate-config">{`window.lemonSqueezyAffiliateConfig = { "store": "filerocks" };`}</Script>
+      <Script
+        id="affiliate-script"
+        src="https://lmsqueezy.com/affiliate.js"
+        defer
+      />
       <body className="h-full">
         <Suspense>
           <SessionProvider
