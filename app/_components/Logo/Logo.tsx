@@ -3,20 +3,28 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export const Logo = ({ href }: { href?: string }) => {
-  const logo = process.env.NEXT_PUBLIC_LOGO || "🪨";
-  const isImage = logo.startsWith("http");
-
+export const Logo = ({
+  href,
+  src,
+  height,
+  width,
+}: {
+  href?: string;
+  src?: string;
+  height?: number;
+  width?: number;
+}) => {
   return (
     <Link
       href={href ?? "/files"}
-      className="hover:opacity-75 w-24 flex items-center"
+      className="hover:opacity-75 flex items-center"
     >
-      {isImage ? (
-        <Image src={logo} alt="Logo" width={96} height={96} />
-      ) : (
-        <span className="text-5xl">{logo}</span>
-      )}
+      <Image
+        src={src ?? "https://file.swell.so/file.rocks/filerocks-logomark.svg"}
+        alt="Logo"
+        width={width ?? 64}
+        height={height ?? 64}
+      />
     </Link>
   );
 };

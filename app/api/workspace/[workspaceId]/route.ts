@@ -18,6 +18,7 @@ export async function PUT(
   { params }: { params: { workspaceId: string } }
 ) {
   const body = await req.json();
+  console.log("BODY:", body);
   const workspace = await updateWorkspace(
     ObjectId.createFromHexString(params.workspaceId),
     body

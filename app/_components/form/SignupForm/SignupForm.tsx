@@ -151,7 +151,12 @@ export function SignupForm() {
       </form>
 
       <div className="fixed top-4 left-6">
-        <Logo href="/" />
+        <Logo
+          href="/"
+          src="https://file.swell.so/file.rocks/filerocks-logo-full.svg"
+          height={64}
+          width={200}
+        />
       </div>
     </>
   );

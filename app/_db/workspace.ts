@@ -82,6 +82,9 @@ export const updateWorkspace = async (
     {
       $set: {
         ...workspaceDetails,
+        ...(workspaceDetails.defaultBucketId
+          ? { defaultBucketId: new ObjectId(workspaceDetails.defaultBucketId) }
+          : {}),
         updatedAt: new Date(),
       },
     }
