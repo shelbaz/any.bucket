@@ -1,1 +1,1 @@
-export { CreateOrUpdateBucketModal } from "./CreateOrUpdateIntegrationModal";
+export { CreateOrUpdateIntegrationModal } from "./CreateOrUpdateIntegrationModal";
