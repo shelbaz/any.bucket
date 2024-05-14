@@ -50,8 +50,6 @@ export const UploadModal = () => {
     [files, folder, updateFileProgress, uploadFile]
   );
 
-  console.log("OPEN:", uploadModalIsOpen);
-
   return (
     <Modal
       isOpen={uploadModalIsOpen}

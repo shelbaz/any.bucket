@@ -133,10 +133,10 @@ export function SignupForm() {
                       Manage Any S3-Compatible Storage
                     </p>
                     <p className="mt-4 text-sm font-medium text-zinc-500">
-                      You're tired of paying for Dropbox, Google Drive, or
-                      iCloud... But you don't want to give up the convenience of
-                      a cloud storage service. file.rocks is the ease of cloud
-                      with the ownership of S3.
+                      You&apos;re tired of paying for Dropbox, Google Drive, or
+                      iCloud... But you don&apos;t want to give up the
+                      convenience of a cloud storage service. file.rocks is the
+                      ease of cloud with the ownership of S3.
                     </p>
                   </div>
                 </div>
