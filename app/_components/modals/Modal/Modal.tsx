@@ -1,8 +1,15 @@
 import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
-import { Fragment, ReactNode } from "react";
+import { Fragment, ReactNode, isValidElement } from "react";
 import { Button } from "../../buttons/Button";
 import { XMarkIcon } from "@heroicons/react/16/solid";
+
+type ConfirmButtonProps = {
+  label?: string;
+  onClick?: () => void;
+  loading?: boolean;
+  disabled?: boolean;
+};
 
 interface Props {
   isOpen: boolean;
@@ -12,12 +19,7 @@ interface Props {
   titleStyle?: string;
   children?: ReactNode;
   body?: ReactNode;
-  confirmButton?: {
-    label?: string;
-    onClick?: () => void;
-    loading?: boolean;
-    disabled?: boolean;
-  };
+  confirmButton?: ConfirmButtonProps | React.ReactNode;
   cancelButton?: {
     label?: string;
     onClick?: () => void;
@@ -80,7 +82,7 @@ export const Modal = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-zinc-500 bg-opacity-75 transition-opacity" />
+            <Dialog.Overlay className="fixed inset-0 bg-zinc-500/75 transition-opacity" />
           </Transition.Child>
 
           {/* This element is to trick the browser into centering the modal contents. */}
@@ -134,21 +136,29 @@ export const Modal = ({
               </div>
               <div className="p-6">{body || children}</div>
               {(confirmButton || cancelButton) && (
-                <div className="py-3 px-6 flex space-x-2 border-t border-zinc-200">
-                  {confirmButton && (
-                    <Button
-                      label={confirmButton.label ?? "Confirm"}
-                      onClick={confirmButton.onClick}
-                      isLoading={confirmButton.loading}
-                      variant="primary"
-                    />
-                  )}
+                <div className="py-3 px-6 flex space-x-2 border-t border-zinc-200 justify-end">
                   {cancelButton && (
                     <Button
                       label={cancelButton.label ?? "Cancel"}
                       onClick={cancelButton.onClick}
                       isLoading={cancelButton.loading}
                       variant="secondary"
+                      className="!border-transparent"
+                    />
+                  )}
+                  {isValidElement(confirmButton) ? (
+                    confirmButton
+                  ) : (
+                    <Button
+                      label={
+                        (confirmButton as ConfirmButtonProps).label ?? "Confirm"
+                      }
+                      onClick={(confirmButton as ConfirmButtonProps).onClick}
+                      isLoading={(confirmButton as ConfirmButtonProps).loading}
+                      variant="primary"
+                      isDisabled={
+                        (confirmButton as ConfirmButtonProps).disabled
+                      }
                     />
                   )}
                 </div>

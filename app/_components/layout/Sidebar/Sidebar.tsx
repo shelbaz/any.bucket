@@ -1,28 +1,39 @@
 "use client";
-import { Fragment, useContext, useState } from "react";
+import { Fragment, Suspense, useContext, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
+  Cog6ToothIcon,
   Bars3Icon,
   FolderIcon,
   SparklesIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import {
+  Cog6ToothIcon as Cog6ToothIconSolid,
+  StarIcon,
+} from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { FileInput } from "../../upload/FileInput";
 import { _Object } from "@aws-sdk/client-s3";
 import { UploadContext } from "@/app/_context/UploadContext";
 import { Logo } from "../../Logo";
+import { SettingsMenu } from "./SettingsMenu";
+import { SessionContext } from "@/app/_context/SessionContext";
+import { Button } from "../../buttons/Button";
+import { startCase } from "lodash";
 
 const navigation = [
   { name: "Files", href: "/files", icon: FolderIcon },
   { name: "Create", href: "/create", icon: SparklesIcon },
-  // { name: "Keys", href: "/keys", icon: KeyIcon },
+  { name: "Settings", href: "/settings", icon: Cog6ToothIcon },
 ];
 
-export const Sidebar = () => {
+export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
+  const { session } = useContext(SessionContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const currentRootPath = usePathname().split("/")[1];
+  const pathname = usePathname();
+  const currentRootPath = pathname.split("/")[1];
   const { setFiles, setUploadModalIsOpen } = useContext(UploadContext);
 
   const uploadFiles = (files: File[]) => {
@@ -30,8 +41,13 @@ export const Sidebar = () => {
     setUploadModalIsOpen(true);
   };
 
+  // Don't show the sidebar on auth or landing page
+  if (pathname === "/" || pathname === "/login" || pathname === "/signup") {
+    return null;
+  }
+
   return (
-    <>
+    <Suspense>
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -84,15 +100,19 @@ export const Sidebar = () => {
                     </button>
                   </div>
                 </Transition.Child>
-                {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pt-4 pb-2">
-                  <div className="flex h-16 shrink-0 items-center">
-                    <span className="text-5xl">🪨</span>
+                {/* MOBILE Sidebar component, swap this element with another sidebar if you like */}
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white pt-4 pb-2">
+                  <div className="flex shrink-0 items-center px-6 pb-2">
+                    <Logo
+                      height={1}
+                      width={136}
+                      src="https://file.swell.so/file.rocks/filerocks-logo-full.svg"
+                    />{" "}
                   </div>
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
-                        <ul role="list" className="-mx-2 space-y-1">
+                        <ul role="list" className="-mx-2 space-y-1 px-4">
                           {navigation.map((item) => (
                             <li key={item.name}>
                               <a
@@ -119,6 +139,12 @@ export const Sidebar = () => {
                           ))}
                         </ul>
                       </li>
+                      <li className="pt-4 mt-auto border-t border-zinc-200 px-4">
+                        <div>{children}</div>
+                        <Suspense>
+                          <SettingsMenu />
+                        </Suspense>
+                      </li>
                     </ul>
                   </nav>
                 </div>
@@ -130,14 +156,18 @@ export const Sidebar = () => {
 
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-zinc-200 bg-white px-6 pt-4">
-          <div className="flex shrink-0 items-center">
-            <Logo />
+        <div className="flex grow flex-col gap-y-5 border-r border-zinc-200 bg-white pt-4">
+          <div className="flex shrink-0 items-center px-6 pb-2">
+            <Logo
+              height={1}
+              width={136}
+              src="https://file.swell.so/file.rocks/filerocks-logo-full.svg"
+            />
           </div>
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
-                <ul role="list" className="-mx-2 space-y-1">
+                <ul role="list" className="-mx-2 space-y-1 px-6">
                   {navigation.map((item) => (
                     <li key={item.name}>
                       <a
@@ -164,7 +194,47 @@ export const Sidebar = () => {
                   ))}
                 </ul>
               </li>
-              <li className="mt-auto mb-6">
+              <li className="pt-4 mt-auto border-t border-zinc-200 pl-6 pr-4">
+                <div>{children}</div>
+                <Suspense
+                  fallback={
+                    <div className="flex items-center justify-between">
+                      <div>
+                        {session.isLoggedIn ? (
+                          <>
+                            <h3
+                              className="line-clamp-1 font-medium text-sm text-zinc-900"
+                              style={{ overflowWrap: "anywhere" }}
+                              title={session.email || "Anonymous"}
+                            >
+                              {session.email || "Anonymous"}
+                            </h3>
+                            <p className="flex items-center text-xs text-zinc-500">
+                              {startCase(session.plan || "free")} Account
+                              {session.plan === "pro" && (
+                                <StarIcon className="h-3 w-3 ml-1" />
+                              )}
+                            </p>
+                          </>
+                        ) : null}
+                      </div>
+                      <div>
+                        <Button
+                          type="submit"
+                          variant="secondary"
+                          Icon={<Cog6ToothIconSolid />}
+                          className="border-transparent hover:!border-transparent text-zinc-500 !px-2 hover:bg-zinc-100"
+                          title="Settings"
+                        />
+                      </div>
+                    </div>
+                  }
+                >
+                  <SettingsMenu />
+                </Suspense>
+              </li>
+
+              <li className="mb-8 px-6">
                 <FileInput onInput={uploadFiles} />
               </li>
             </ul>
@@ -182,6 +252,6 @@ export const Sidebar = () => {
           <Bars3Icon className="h-6 w-6" aria-hidden="true" />
         </button>
       </div>
-    </>
+    </Suspense>
   );
 };

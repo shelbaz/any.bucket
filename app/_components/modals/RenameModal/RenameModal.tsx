@@ -23,6 +23,7 @@ export const RenameModal = ({
   }, [currentName]);
 
   const saveName = (name: string) => {
+    if (!isOpen) return;
     handleSave(name);
     handleClose();
   };

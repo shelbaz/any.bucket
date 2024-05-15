@@ -12,6 +12,7 @@ interface Props {
   label?: string;
   bytes?: number;
   extension: string;
+  publicDomain: string;
 }
 
 export const FileCard = ({
@@ -20,6 +21,7 @@ export const FileCard = ({
   label,
   bytes,
   extension,
+  publicDomain,
 }: Props) => {
   const fileType = getFileTypeFromExtension(extension);
   const noFilePreview = !["image", "audio"].includes(fileType);
@@ -37,7 +39,7 @@ export const FileCard = ({
           {fileType === "image" && (
             <div className="w-full h-full relative">
               <Image
-                src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
+                src={`${publicDomain}/${objectKey}`}
                 objectFit="cover"
                 alt={label ?? objectKey}
                 fill
@@ -48,9 +50,7 @@ export const FileCard = ({
           {fileType === "audio" && (
             <div className="flex justify-center items-center w-full h-full">
               <audio controls controlsList="nofullscreen nodownload">
-                <source
-                  src={`${process.env.NEXT_PUBLIC_S3_DOMAIN}/${objectKey}`}
-                />
+                <source src={`${publicDomain}/${objectKey}`} />
               </audio>
             </div>
           )}

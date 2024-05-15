@@ -53,7 +53,6 @@ export const MoreButtonMenuItem = ({
             option.footer && "border-t border-zinc-100 bg-zinc-100"
           )}
           onClick={(e) => {
-            e.preventDefault();
             e.stopPropagation();
             setShowChildren?.(true);
             setTimeout(() => setShowChildren?.(false), 800);
@@ -107,7 +106,7 @@ export const MoreButtonBase = ({
   Icon = EllipsisHorizontalIcon,
   className = "",
   iconClassName = "h-5 w-5",
-  position = "top",
+  position = "left",
   children,
   buttonComponent,
   menuWidth = "narrow",
@@ -154,6 +153,9 @@ export const MoreButtonBase = ({
                     isDisabled &&
                       "pointer-events-none bg-gray-200 border-gray-300 text-gray-400"
                   )}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                 >
                   <span className="sr-only" data-testid={dataTestId}>
                     Open options
@@ -168,7 +170,7 @@ export const MoreButtonBase = ({
             )}
 
             {renderMethod(
-              <Transition
+              <Transition.Root
                 show={open}
                 as="div"
                 enter="transition ease-out duration-100 delay-0"
@@ -177,11 +179,12 @@ export const MoreButtonBase = ({
                 leave="transition ease-in delay-0 duration-300"
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
+                className="z-50"
               >
                 <Menu.Items
                   static
                   className={clsx(
-                    "focus:outline-none z-50 overflow-hidden rounded-md border border-zinc-100 bg-white shadow-overlay mt-2 origin-top-right",
+                    "focus:outline-none z-50 overflow-hidden rounded-md border border-zinc-200 bg-white shadow-md shadow-slate-100 mt-2 origin-top-right",
                     portal ? "fixed" : `absolute ${positionClassName}`
                   )}
                   style={{
@@ -207,7 +210,7 @@ export const MoreButtonBase = ({
                   </div>
                 </Menu.Items>
                 {showChildren && children ? children : <></>}
-              </Transition>,
+              </Transition.Root>,
               document.body
             )}
           </>

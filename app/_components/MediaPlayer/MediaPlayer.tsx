@@ -17,6 +17,7 @@ import { PdfReader } from "./PdfReader";
 import { useListFiles } from "@/app/_hooks/files/use-list-files";
 import { AppContext } from "@/app/_context/AppContext";
 import { _Object } from "@aws-sdk/client-s3";
+import { SessionData } from "@/app/_lib";
 
 const getSizeClassesFromExt = (ext: string) => {
   switch (ext.toLocaleLowerCase()) {
@@ -34,6 +35,7 @@ const getSizeClassesFromExt = (ext: string) => {
     case "jpg":
     case "jpeg":
     case "svg":
+    case "webp":
       return "max-w-1/2 w-[40vw] min-w-60 max-h-[80vh]";
     case "epub":
       return "w-full h-full lg:w-[75vw] lg:h-[90vh] z-50";
@@ -44,7 +46,7 @@ const getSizeClassesFromExt = (ext: string) => {
   }
 };
 
-export const MediaPlayer = () => {
+export const MediaPlayer = ({ session }: { session: SessionData }) => {
   const [isLoading, setIsLoading] = useState(false);
   const {
     mediaFile,
@@ -140,7 +142,7 @@ export const MediaPlayer = () => {
   const extension = mediaFile.split(".").pop()?.toLowerCase() ?? "";
 
   const fileType = getFileTypeFromExtension(extension);
-  const fileUrl = `${process.env.NEXT_PUBLIC_S3_DOMAIN}/${mediaFile}`;
+  const fileUrl = `${session.publicDomain ?? ""}/${mediaFile}`;
 
   return (
     <div

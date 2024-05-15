@@ -29,6 +29,7 @@ export const MoveModal = ({
   }, [currentObjectKey]);
 
   const moveFile = (folderName: string) => {
+    if (!isOpen) return;
     handleSave(folderName);
     handleClose();
   };
