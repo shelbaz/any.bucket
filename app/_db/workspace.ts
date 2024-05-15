@@ -6,7 +6,7 @@ import { WorkspaceMembership } from "./workspace-membership";
 export interface Workspace extends BaseEntity {
   name: string;
   ownerId: ObjectId;
-  plan: "free" | "paid";
+  plan: "free" | "pro";
   defaultBucketId?: ObjectId;
 }
 

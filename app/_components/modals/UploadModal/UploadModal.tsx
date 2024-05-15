@@ -4,9 +4,16 @@ import { Modal } from "../Modal";
 import { UploadContext } from "@/app/_context/UploadContext";
 import { useUploadFile } from "@/app/_hooks/files";
 import { AppContext } from "@/app/_context/AppContext";
+import { PayButton } from "../../PayButton/PayButton";
+import { SessionContext } from "@/app/_context/SessionContext";
+import { Button } from "../../buttons/Button";
+import { useRouter } from "next/navigation";
+import { PlusIcon } from "@heroicons/react/16/solid";
 
 export const UploadModal = () => {
+  const router = useRouter();
   const { folder } = useContext(AppContext);
+  const { session } = useContext(SessionContext);
   const {
     fileQueue,
     setFiles,
@@ -50,26 +57,44 @@ export const UploadModal = () => {
     [files, folder, updateFileProgress, uploadFile]
   );
 
+  const getPrimaryButton = () => {
+    if (!session.plan || session.plan === "free") {
+      return <PayButton label="Purchase To Upload - $19 (one time)" />;
+    }
+
+    if (!session.bucketId) {
+      return (
+        <Button
+          label="Add a Bucket"
+          onClick={() => router.push("/settings/buckets")}
+          Icon={<PlusIcon className="h-4 w-4" />}
+        />
+      );
+    }
+
+    if (!uploadComplete && Object.keys(fileQueue).length === 0) {
+      return {
+        label: "Start uploading",
+        onClick: () => {
+          uploadFiles(0, 4);
+        },
+        disabled: Object.keys(fileQueue).length > 0 && !uploadComplete,
+      };
+    }
+
+    return {
+      label: "Done",
+      onClick: handleClose,
+      disabled: !uploadComplete,
+    };
+  };
+
   return (
     <Modal
       isOpen={uploadModalIsOpen}
       handleClose={handleClose}
       title="Upload Files"
-      confirmButton={
-        !uploadComplete && Object.keys(fileQueue).length === 0
-          ? {
-              label: "Start uploading",
-              onClick: () => {
-                uploadFiles(0, 4);
-              },
-              disabled: Object.keys(fileQueue).length > 0 && !uploadComplete,
-            }
-          : {
-              label: "Done",
-              onClick: handleClose,
-              disabled: !uploadComplete,
-            }
-      }
+      confirmButton={getPrimaryButton()}
       cancelButton={
         !uploadComplete
           ? {

@@ -1,8 +1,15 @@
 import { Dialog, Transition } from "@headlessui/react";
 import clsx from "clsx";
-import { Fragment, ReactNode } from "react";
+import { Fragment, ReactNode, isValidElement } from "react";
 import { Button } from "../../buttons/Button";
 import { XMarkIcon } from "@heroicons/react/16/solid";
+
+type ConfirmButtonProps = {
+  label?: string;
+  onClick?: () => void;
+  loading?: boolean;
+  disabled?: boolean;
+};
 
 interface Props {
   isOpen: boolean;
@@ -12,12 +19,7 @@ interface Props {
   titleStyle?: string;
   children?: ReactNode;
   body?: ReactNode;
-  confirmButton?: {
-    label?: string;
-    onClick?: () => void;
-    loading?: boolean;
-    disabled?: boolean;
-  };
+  confirmButton?: ConfirmButtonProps | React.ReactNode;
   cancelButton?: {
     label?: string;
     onClick?: () => void;
@@ -144,12 +146,19 @@ export const Modal = ({
                       className="!border-transparent"
                     />
                   )}
-                  {confirmButton && (
+                  {isValidElement(confirmButton) ? (
+                    confirmButton
+                  ) : (
                     <Button
-                      label={confirmButton.label ?? "Confirm"}
-                      onClick={confirmButton.onClick}
-                      isLoading={confirmButton.loading}
+                      label={
+                        (confirmButton as ConfirmButtonProps).label ?? "Confirm"
+                      }
+                      onClick={(confirmButton as ConfirmButtonProps).onClick}
+                      isLoading={(confirmButton as ConfirmButtonProps).loading}
                       variant="primary"
+                      isDisabled={
+                        (confirmButton as ConfirmButtonProps).disabled
+                      }
                     />
                   )}
                 </div>

@@ -3,6 +3,7 @@ import { Button } from "../../buttons/Button";
 import {
   ArrowRightStartOnRectangleIcon,
   Cog6ToothIcon,
+  StarIcon,
 } from "@heroicons/react/16/solid";
 import {
   AdjustmentsVerticalIcon,
@@ -15,6 +16,7 @@ import { Fragment, useContext } from "react";
 import { SessionContext } from "@/app/_context/SessionContext";
 import clsx from "clsx";
 import Link from "next/link";
+import { startCase } from "lodash";
 
 export const SettingsMenuItem = ({
   label,
@@ -56,7 +58,6 @@ export const SettingsMenu = async () => {
               <div>
                 {session.isLoggedIn ? (
                   <>
-                    <p className="text-xs text-zinc-500">Logged in as</p>
                     <h3
                       className="line-clamp-1 font-medium text-sm text-zinc-900"
                       style={{ overflowWrap: "anywhere" }}
@@ -64,6 +65,12 @@ export const SettingsMenu = async () => {
                     >
                       {session.email || "Anonymous"}
                     </h3>
+                    <p className="flex items-center text-xs text-zinc-500">
+                      {startCase(session.plan || "free")} Account
+                      {session.plan === "pro" && (
+                        <StarIcon className="h-3 w-3 ml-1" />
+                      )}
+                    </p>
                   </>
                 ) : null}
               </div>

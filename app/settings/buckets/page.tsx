@@ -114,14 +114,24 @@ const BucketsPage = () => {
               </span>
             ) : null}
           </h1>
-          <Button
-            variant="primary"
-            label="Add Bucket"
-            onClick={() => {
-              setCreateOrUpdateBucketModalIsOpen(true);
-            }}
-            Icon={<PlusIcon className="h-4 w-4" />}
-          />
+          {session.plan && session.plan !== "free" ? (
+            <Button
+              variant="primary"
+              label="Add Bucket"
+              onClick={() => {
+                setCreateOrUpdateBucketModalIsOpen(true);
+              }}
+              Icon={<PlusIcon className="h-4 w-4" />}
+            />
+          ) : (
+            <Button
+              variant="primary"
+              label="Upgrade Plan"
+              onClick={() => {
+                toast.error("Please upgrade your plan to add more buckets.");
+              }}
+            />
+          )}
         </div>
         <ul className="mt-6 flex flex-col space-y-4">
           {bucketsData?.buckets.length === 0 && (

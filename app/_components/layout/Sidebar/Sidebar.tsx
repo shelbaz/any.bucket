@@ -3,11 +3,11 @@ import { Fragment, Suspense, useContext, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
-  Cog6ToothIcon,
   FolderIcon,
   SparklesIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { Cog6ToothIcon, StarIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { FileInput } from "../../upload/FileInput";
@@ -15,6 +15,9 @@ import { _Object } from "@aws-sdk/client-s3";
 import { UploadContext } from "@/app/_context/UploadContext";
 import { Logo } from "../../Logo";
 import { SettingsMenu } from "./SettingsMenu";
+import { SessionContext } from "@/app/_context/SessionContext";
+import { Button } from "../../buttons/Button";
+import { startCase } from "lodash";
 
 const navigation = [
   { name: "Files", href: "/files", icon: FolderIcon },
@@ -23,6 +26,7 @@ const navigation = [
 ];
 
 export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
+  const { session } = useContext(SessionContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const currentRootPath = pathname.split("/")[1];
@@ -188,7 +192,40 @@ export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
               </li>
               <li className="pt-4 mt-auto border-t border-zinc-200 pl-6 pr-4">
                 <div>{children}</div>
-                <Suspense>
+                <Suspense
+                  fallback={
+                    <div className="flex items-center justify-between">
+                      <div>
+                        {session.isLoggedIn ? (
+                          <>
+                            <h3
+                              className="line-clamp-1 font-medium text-sm text-zinc-900"
+                              style={{ overflowWrap: "anywhere" }}
+                              title={session.email || "Anonymous"}
+                            >
+                              {session.email || "Anonymous"}
+                            </h3>
+                            <p className="flex items-center text-xs text-zinc-500">
+                              {startCase(session.plan || "free")} Account
+                              {session.plan === "pro" && (
+                                <StarIcon className="h-3 w-3 ml-1" />
+                              )}
+                            </p>
+                          </>
+                        ) : null}
+                      </div>
+                      <div>
+                        <Button
+                          type="submit"
+                          variant="secondary"
+                          Icon={<Cog6ToothIcon />}
+                          className="border-transparent hover:!border-transparent text-zinc-500 !px-2 hover:bg-zinc-100"
+                          title="Settings"
+                        />
+                      </div>
+                    </div>
+                  }
+                >
                   <SettingsMenu />
                 </Suspense>
               </li>

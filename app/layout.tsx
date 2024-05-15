@@ -39,6 +39,11 @@ export default async function RootLayout({
         src="https://lmsqueezy.com/affiliate.js"
         defer
       />
+      <Script
+        id="lemon.js"
+        src="https://assets.lemonsqueezy.com/lemon.js"
+        strategy="lazyOnload"
+      />
       <body className="h-full">
         <SessionProvider
           session={JSON.parse(JSON.stringify(session))}
@@ -59,6 +64,7 @@ export default async function RootLayout({
                   </Main>
                 </div>
                 <ConfirmModalWrapper />
+                <UploadModal />
               </MediaProvider>
             </UploadProvider>
           </AppProvider>

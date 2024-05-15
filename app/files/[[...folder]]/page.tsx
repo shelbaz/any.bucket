@@ -28,7 +28,9 @@ import { SessionContext } from "@/app/_context/SessionContext";
 import { useListBuckets } from "@/app/_hooks/bucket/use-list-buckets";
 import { getProviderLabel } from "@/app/_helpers/buckets/provider-options";
 import { Select } from "@/app/_components/form/Select";
-import { UploadModal } from "@/app/_components/modals/UploadModal/UploadModal";
+import { Button } from "@/app/_components/buttons/Button";
+import { PayButton } from "@/app/_components/PayButton/PayButton";
+import { PlusIcon } from "@heroicons/react/16/solid";
 
 const FilePage = () => {
   const {
@@ -120,7 +122,7 @@ const FilePage = () => {
               basePath="/files"
               crumbs={[{ segment: "/", title: "Files" }, ...crumbs]}
             />
-            {currentBucket ? (
+            {currentBucket && session.plan && session.plan !== "free" ? (
               <Select
                 value={{
                   value: currentBucket?._id.toString(),
@@ -144,6 +146,14 @@ const FilePage = () => {
                 className="!border-zinc-200 !text-xs hover:!border-zinc-300 cursor-pointer"
               />
             ) : null}
+            {session.plan && session.plan !== "free" && !currentBucket ? (
+              <Button
+                label="Add a Bucket"
+                onClick={() => router.push("/settings/buckets")}
+                Icon={<PlusIcon className="h-4 w-4" />}
+              />
+            ) : null}
+            {session.plan === "free" || !session.plan ? <PayButton /> : null}
           </div>
         </BreadcrumbsTopbar>
 
@@ -250,7 +260,6 @@ const FilePage = () => {
         }}
         isOpen={moveFileModal.isOpen}
       />
-      <UploadModal />
     </>
   );
 };

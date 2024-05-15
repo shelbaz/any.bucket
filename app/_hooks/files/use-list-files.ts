@@ -19,12 +19,14 @@ export const useListFiles = ({ folder }: { folder?: string }) => {
   const bucketId = session.bucketId;
   const fetcher = useFetcher();
   const response = useSWR(
-    `/api/s3/objects/list${createQueryString({
-      folder: folder ? `${folder}/` : undefined,
-      page,
-      pageSize,
-      bucketId,
-    })}`,
+    bucketId
+      ? `/api/s3/objects/list${createQueryString({
+          folder: folder ? `${folder}/` : undefined,
+          page,
+          pageSize,
+          bucketId,
+        })}`
+      : undefined,
     fetcher
   );
 

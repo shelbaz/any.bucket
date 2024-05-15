@@ -85,7 +85,7 @@ export async function login(
   session.userId = user._id.toString();
   session.email = user.email;
   session.workspaceId = workspaces[0]._id.toString();
-  session.plan = workspaces[0].plan;
+  session.plan = workspaces[0].plan ?? "free";
 
   await session.save();
   redirect("/files");
