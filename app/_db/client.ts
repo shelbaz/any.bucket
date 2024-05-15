@@ -5,25 +5,51 @@ import { type Db, MongoClient } from "mongodb";
 const url = process.env.MONGODB_URI ?? "";
 const dbName = process.env.MONGODB_DB_NAME ?? "";
 
-// Create a global variable to store the database connection
-let cachedDb: Db | null = null;
+// Replace with your MongoDB connection string
+const options = {};
+
+declare global {
+  var _mongoClientPromise: Promise<MongoClient>;
+}
+
+class Singleton {
+  private static _instance: Singleton;
+  private client: MongoClient;
+  private clientPromise: Promise<MongoClient>;
+
+  private constructor() {
+    this.client = new MongoClient(url, options);
+    this.clientPromise = this.client.connect();
+
+    if (process.env.NODE_ENV === "development") {
+      // In development mode, use a global variable to preserve the value
+      // across module reloads caused by HMR (Hot Module Replacement).
+      global._mongoClientPromise = this.clientPromise;
+    }
+  }
+
+  public static get instance() {
+    if (!this._instance) {
+      this._instance = new Singleton();
+    }
+    return this._instance.clientPromise;
+  }
+}
+
+const clientPromise = Singleton.instance;
+
+// Export a module-scoped MongoClient promise.
+// By doing this in a separate module,
+// the client can be shared across functions.
+export default clientPromise;
 
 // Create a helper function that connects to the database and returns the database object
 export async function connectToDatabase() {
   // Check if the database connection is cached
-  if (cachedDb) {
-    // Return the cached connection
-    return cachedDb;
-  }
-
-  // Create a new connection to the database
-  const client = await MongoClient.connect(url, {});
+  const client = await clientPromise;
 
   // Select the database
   const db = client.db(dbName);
-
-  // Cache the database connection
-  cachedDb = db;
 
   // Return the database object
   return db;
