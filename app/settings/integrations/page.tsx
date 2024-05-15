@@ -1,4 +1,5 @@
 "use client";
+import { PayButton } from "@/app/_components/PayButton";
 import { Button } from "@/app/_components/buttons/Button";
 import { OptionCard } from "@/app/_components/cards/OptionCard";
 import { DocumentsEmptyState } from "@/app/_components/empty-states/DocumentsEmptyState";
@@ -92,14 +93,18 @@ const KeysPage = () => {
               ""
             )}
           </h1>
-          <Button
-            variant="primary"
-            label="Add Integration"
-            onClick={() => {
-              setCreateOrUpdateIntegrationModalIsOpen(true);
-            }}
-            Icon={<PlusIcon className="h-4 w-4" />}
-          />
+          {session.plan && session.plan !== "free" ? (
+            <Button
+              variant="primary"
+              label="Add Integration"
+              onClick={() => {
+                setCreateOrUpdateIntegrationModalIsOpen(true);
+              }}
+              Icon={<PlusIcon className="h-4 w-4" />}
+            />
+          ) : (
+            <PayButton label="Purchase to Add Integrations - $19 (one time)" />
+          )}
         </div>
         <ul className="mt-6 flex flex-col space-y-4">
           {keysData?.integrations.length === 0 && (

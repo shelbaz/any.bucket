@@ -2,12 +2,16 @@
 import { Fragment, Suspense, useContext, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
+  Cog6ToothIcon,
   Bars3Icon,
   FolderIcon,
   SparklesIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { Cog6ToothIcon, StarIcon } from "@heroicons/react/16/solid";
+import {
+  Cog6ToothIcon as Cog6ToothIconSolid,
+  StarIcon,
+} from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import { FileInput } from "../../upload/FileInput";
@@ -218,7 +222,7 @@ export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
                         <Button
                           type="submit"
                           variant="secondary"
-                          Icon={<Cog6ToothIcon />}
+                          Icon={<Cog6ToothIconSolid />}
                           className="border-transparent hover:!border-transparent text-zinc-500 !px-2 hover:bg-zinc-100"
                           title="Settings"
                         />

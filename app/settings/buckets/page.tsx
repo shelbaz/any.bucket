@@ -1,4 +1,5 @@
 "use client";
+import { PayButton } from "@/app/_components/PayButton";
 import { Button } from "@/app/_components/buttons/Button";
 import { OptionCard } from "@/app/_components/cards/OptionCard";
 import { DocumentsEmptyState } from "@/app/_components/empty-states/DocumentsEmptyState";
@@ -124,13 +125,7 @@ const BucketsPage = () => {
               Icon={<PlusIcon className="h-4 w-4" />}
             />
           ) : (
-            <Button
-              variant="primary"
-              label="Upgrade Plan"
-              onClick={() => {
-                toast.error("Please upgrade your plan to add more buckets.");
-              }}
-            />
+            <PayButton label="Purchase to Add Bucket - $19 (one time)" />
           )}
         </div>
         <ul className="mt-6 flex flex-col space-y-4">

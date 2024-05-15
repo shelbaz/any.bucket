@@ -4,6 +4,7 @@ import { Button } from "../buttons/Button";
 import { useCallback, useContext, useEffect } from "react";
 import { SessionContext } from "@/app/_context/SessionContext";
 import { useUpdateWorkspace } from "@/app/_hooks/workspace/use-update-workspace";
+import { useIsMobile } from "@/app/_hooks/util";
 
 export const PayButton = ({
   label = "Purchase - $19 (one time)",
@@ -12,6 +13,7 @@ export const PayButton = ({
   label?: string;
   buttonClassName?: string;
 }) => {
+  const isMobile = useIsMobile();
   const { session, updateSession } = useContext(SessionContext);
   const { updateWorkspace } = useUpdateWorkspace();
 
@@ -66,7 +68,7 @@ export const PayButton = ({
       <div>
         <Button
           type="button"
-          label={label}
+          label={isMobile ? "Purchase - $19" : label}
           className={clsx(
             "!bg-purple-600 hover:!bg-purple-800",
             buttonClassName
