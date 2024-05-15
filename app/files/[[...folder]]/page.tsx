@@ -51,10 +51,10 @@ const FilePage = () => {
       ?.split("/")
       .map((folder) => ({ title: decodeURI(folder), segment: folder })) ?? [];
 
-  const { data: bucketData } = useListBuckets({
+  const { data: bucketsData, isLoading: bucketsLoading } = useListBuckets({
     workspaceId: session.workspaceId,
   });
-  const currentBucket = bucketData?.buckets?.find(
+  const currentBucket = bucketsData?.buckets?.find(
     (bucket) => bucket._id.toString() === session.bucketId
   );
 
@@ -90,13 +90,13 @@ const FilePage = () => {
   const objectsData = files.data?.objects ?? [];
 
   const bucketOptions =
-    bucketData?.buckets?.map((bucket) => ({
+    bucketsData?.buckets?.map((bucket) => ({
       value: bucket._id.toString(),
       label: bucket.displayName || getProviderLabel(bucket.provider),
     })) ?? [];
 
   const getBucketFromOption = (option: { value: string; label: string }) => {
-    return bucketData?.buckets?.find(
+    return bucketsData?.buckets?.find(
       (bucket) => bucket._id.toString() === option.value
     );
   };
@@ -146,7 +146,10 @@ const FilePage = () => {
                 className="!border-zinc-200 !text-xs hover:!border-zinc-300 cursor-pointer"
               />
             ) : null}
-            {session.plan && session.plan !== "free" && !currentBucket ? (
+            {session.plan &&
+            session.plan !== "free" &&
+            !currentBucket &&
+            !bucketsLoading ? (
               <Button
                 label="Add a Bucket"
                 onClick={() => router.push("/settings/buckets")}
