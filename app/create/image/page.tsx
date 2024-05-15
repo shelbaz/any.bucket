@@ -1,4 +1,5 @@
 "use client";
+import { PayButton } from "@/app/_components/PayButton";
 import { Button } from "@/app/_components/buttons/Button";
 import { MoreButton } from "@/app/_components/buttons/MoreButton";
 import { Select } from "@/app/_components/form/Select";
@@ -8,14 +9,18 @@ import {
   BreadcrumbsTopbar,
 } from "@/app/_components/layout/Breadcrumbs";
 import { Loader } from "@/app/_components/loaders/Loader";
+import { SessionContext } from "@/app/_context/SessionContext";
 import { downloadBase64File } from "@/app/_helpers/files/download-file";
 import { autoGrow } from "@/app/_helpers/ui";
 import { useUploadFile } from "@/app/_hooks/files";
 import { useGenerateImages } from "@/app/_hooks/image/use-generate-images";
+import { useListKeys } from "@/app/_hooks/key/use-list-keys";
+import { PlusIcon } from "@heroicons/react/16/solid";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ImageGenerateParams } from "openai/resources/index.mjs";
-import { useState } from "react";
-import toast, { LoaderIcon } from "react-hot-toast";
+import { useContext, useState } from "react";
+import toast from "react-hot-toast";
 
 type Model = "dall-e-2" | "dall-e-3";
 
@@ -50,6 +55,15 @@ const countOptions: Option<ImageGenerateParams["n"]>[] = [
 ];
 
 const ImagePage = () => {
+  const router = useRouter();
+  const { generateImages, isLoading } = useGenerateImages();
+  const { uploadB64Image } = useUploadFile();
+  const { session } = useContext(SessionContext);
+  const { data: integrationsData, isLoading: integrationsLoading } =
+    useListKeys({
+      workspaceId: session.workspaceId,
+    });
+
   const [loading, setLoading] = useState<{
     count: number;
   } | null>(null);
@@ -67,8 +81,6 @@ const ImagePage = () => {
   const [count, setCount] = useState<Option<ImageGenerateParams["n"]>>(
     countOptions[0]
   );
-  const { generateImages, isLoading } = useGenerateImages();
-  const { uploadB64Image } = useUploadFile();
 
   const handleGenerateImages = async (description: string) => {
     if (!description) {
@@ -104,6 +116,47 @@ const ImagePage = () => {
       setQuality(qualityOptions[0]);
       setCount(countOptions[0]);
     }
+  };
+
+  const getSubmitButton = () => {
+    if (!session.plan || session.plan === "free") {
+      return (
+        <PayButton
+          label="Purchase to Add Integrations - $19 (once)"
+          buttonClassName="w-full"
+        />
+      );
+    }
+
+    if (
+      integrationsData?.integrations?.filter(
+        (integration) => integration.name === "openai"
+      ).length === 0
+    ) {
+      return (
+        <Button
+          label="Add Integration"
+          onClick={() => {
+            router.push("/settings/integrations");
+          }}
+          Icon={<PlusIcon className="h-4 w-4" />}
+          className="w-full"
+        />
+      );
+    }
+
+    if (integrationsLoading) {
+      return <Button className="w-full" isLoading />;
+    }
+
+    return (
+      <Button
+        label="Generate"
+        onClick={() => handleGenerateImages(imageDescription)}
+        isLoading={isLoading}
+        className="w-full"
+      />
+    );
   };
 
   return (
@@ -167,12 +220,7 @@ const ImagePage = () => {
               />
             )}
           </div>
-          <Button
-            label="Generate Image"
-            onClick={() => handleGenerateImages(imageDescription)}
-            isLoading={isLoading}
-            className="mt-12"
-          />
+          <div className="mt-12">{getSubmitButton()}</div>
         </div>
         <div className="grid grid-cols-12 gap-4 mt-12">
           {loading &&
