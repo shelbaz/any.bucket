@@ -171,7 +171,7 @@ const FilePage = () => {
                     onClick={() => router.push(`/files/${folder.prefix}`)}
                   />
                 ))}
-                {objectsData?.map((object: _Object) => (
+                {objectsData?.map((object: _Object & { url: string }) => (
                   <FileRow
                     key={object.Key}
                     objectKey={object.Key ?? ""}
@@ -181,6 +181,7 @@ const FilePage = () => {
                       object.Key?.split(".").pop()?.toLowerCase() ?? "file"
                     }
                     publicDomain={session.publicDomain}
+                    objectUrl={object.url}
                   />
                 ))}
               </ul>

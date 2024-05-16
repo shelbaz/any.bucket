@@ -23,6 +23,7 @@ interface Props {
   bytes?: number;
   extension: string;
   publicDomain: string;
+  objectUrl: string;
 }
 
 export const FileRow = ({
@@ -31,6 +32,7 @@ export const FileRow = ({
   bytes,
   extension,
   publicDomain,
+  objectUrl,
 }: Props) => {
   const { setRenameFileModal, renameFileModal, setMoveFileModal } =
     useContext(AppContext);
@@ -41,12 +43,14 @@ export const FileRow = ({
 
   const { deleteFile } = useDeleteFile({ objectKey });
 
+  const fileUrl = objectUrl || `${publicDomain}/${objectKey}`;
+
   const options: MoreButtonOption[] = [
     {
       label: "Copy link",
       action: async () => {
         const toastId = toast.loading("Copying");
-        await navigator.clipboard.writeText(`${publicDomain}/${objectKey}`);
+        await navigator.clipboard.writeText(fileUrl);
 
         toast.success("Link copied to clipboard", { id: toastId });
       },
@@ -54,7 +58,7 @@ export const FileRow = ({
     {
       label: "Download",
       action: () => {
-        downloadFile(`${publicDomain}/${objectKey}`);
+        downloadFile(fileUrl);
       },
     },
     {
@@ -94,7 +98,6 @@ export const FileRow = ({
     },
   ];
 
-  const fileUrl = `${publicDomain}/${objectKey}`;
   const isSelected = objectKey === mediaFile;
   const isPlaying = !mediaRef?.current?.paused && isSelected;
 
@@ -114,7 +117,7 @@ export const FileRow = ({
                 {fileType === "image" && (
                   <div className="w-8 h-8 bg-zinc-100 relative overflow-hidden rounded">
                     <Image
-                      src={`${publicDomain}/${objectKey}`}
+                      src={fileUrl}
                       alt={label ?? objectKey}
                       fill
                       className={

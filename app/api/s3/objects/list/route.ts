@@ -5,9 +5,12 @@ import {
   _Object,
   ListObjectsV2Command,
   CommonPrefix,
+  GetObjectCommand,
 } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
+import { generatePresignedUrl } from "../presign/generate-presigned-url";
 
 const formatFolders = (prefixes?: CommonPrefix[]) => {
   if (!prefixes) return [];
@@ -73,13 +76,29 @@ export async function GET(req: NextRequest) {
   const pageContents =
     response.Contents?.slice(size * (page - 1), size * page) ?? [];
 
+  const pageContentsWithPresignedUrl = await Promise.all(
+    pageContents.map(async (object: _Object) => {
+      const command = new GetObjectCommand({
+        Bucket: bucket.name,
+        Key: object.Key,
+      });
+      const url = await generatePresignedUrl({
+        fileName: object.Key ?? "",
+        folder,
+        bucket,
+        command,
+      });
+      return { ...object, url };
+    })
+  );
+
   const totalPages = Math.ceil((response.Contents?.length ?? 0) / size);
 
   const moreBeforeContinue = (response.Contents?.length ?? 0) > size * page;
 
   return NextResponse.json(
     {
-      objects: pageContents,
+      objects: pageContentsWithPresignedUrl,
       folders: formatFolders(response.CommonPrefixes),
       isTruncated: response.IsTruncated,
       continuationToken: response.NextContinuationToken,

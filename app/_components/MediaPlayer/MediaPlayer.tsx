@@ -60,7 +60,7 @@ export const MediaPlayer = ({ session }: { session: SessionData }) => {
   } = useContext(MediaContext);
   const { folder } = useContext(AppContext);
   const files = useListFiles({ folder });
-  const objectsData: _Object[] = useMemo(
+  const objectsData: Array<_Object & { url: string }> = useMemo(
     () => files.data?.objects ?? [],
     [files]
   );
@@ -98,6 +98,11 @@ export const MediaPlayer = ({ session }: { session: SessionData }) => {
       setIsLoading(false);
     }, 1);
   }, [mediaFile]);
+
+  const currentObject = useMemo(
+    () => objectsData.find((obj) => obj.Key === mediaFile),
+    [objectsData, mediaFile]
+  );
 
   if (!mediaFile || isLoading) {
     return null;
@@ -142,7 +147,8 @@ export const MediaPlayer = ({ session }: { session: SessionData }) => {
   const extension = mediaFile.split(".").pop()?.toLowerCase() ?? "";
 
   const fileType = getFileTypeFromExtension(extension);
-  const fileUrl = `${session.publicDomain ?? ""}/${mediaFile}`;
+  const fileUrl =
+    currentObject?.url || `${session.publicDomain ?? ""}/${mediaFile}`;
 
   return (
     <div

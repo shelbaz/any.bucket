@@ -1,38 +1,9 @@
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { S3Client, _Object, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand, _Object } from "@aws-sdk/client-s3";
 import { NextRequest, NextResponse } from "next/server";
-import { Bucket, getBucketById } from "@/app/_db/bucket";
+import { getBucketById } from "@/app/_db/bucket";
 import { getUserSession } from "@/app/_lib/session";
 import { ObjectId } from "mongodb";
-
-const generatePresignedUrl = async ({
-  fileName,
-  folder,
-  bucket,
-}: {
-  fileName: string;
-  folder: string | undefined;
-  bucket: Bucket;
-}) => {
-  const s3Url = bucket.endpoint;
-  const name = bucket.name;
-
-  const client = new S3Client({
-    endpoint: s3Url,
-    forcePathStyle: true,
-    region: bucket.region ?? "auto",
-    credentials: {
-      accessKeyId: bucket.accessKeyId || "",
-      secretAccessKey: bucket.secretAccessKey ?? "",
-    },
-  });
-
-  const command = new PutObjectCommand({
-    Bucket: name,
-    Key: `${folder ? `${folder}/` : ""}${fileName}`,
-  });
-  return await getSignedUrl(client, command, { expiresIn: 60 });
-};
+import { generatePresignedUrl } from "./generate-presigned-url";
 
 export async function POST(req: NextRequest) {
   const session = await getUserSession(req);
@@ -47,7 +18,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json("Bucket not found", { status: 404 });
   }
 
-  const response = await generatePresignedUrl({ fileName, folder, bucket });
+  const command = new PutObjectCommand({
+    Bucket: bucket.name,
+    Key: folder ? `${folder}/${fileName}` : fileName,
+  });
+
+  const response = await generatePresignedUrl({
+    fileName,
+    folder,
+    bucket,
+    command,
+  });
 
   if (!response) {
     return NextResponse.json("Failed to get presigned S3 URL", { status: 500 });
