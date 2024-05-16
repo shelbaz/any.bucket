@@ -109,7 +109,7 @@ export const FileRow = ({
       )}
       onClick={handleFileClick}
     >
-      <div className="relative px-3 py-2">
+      <div className="relative p-2.5">
         <div>
           <div className="flex items-center justify-between">
             <span className="flex items-center line-clamp-1">
