@@ -16,14 +16,16 @@ import { useCreateBucket } from "@/app/_hooks/bucket/use-create-bucket";
 import { useDeleteBucket } from "@/app/_hooks/bucket/use-delete-bucket";
 import { useListBuckets } from "@/app/_hooks/bucket/use-list-buckets";
 import { useUpdateBucket } from "@/app/_hooks/bucket/use-update-bucket";
+import { useIsMobile } from "@/app/_hooks/util";
 import { useUpdateWorkspace } from "@/app/_hooks/workspace/use-update-workspace";
-import { PlusIcon } from "@heroicons/react/16/solid";
+import { PlusIcon, QuestionMarkCircleIcon } from "@heroicons/react/16/solid";
 import { ObjectId } from "mongodb";
 import Image from "next/image";
 import { use, useState } from "react";
 import toast from "react-hot-toast";
 
 const BucketsPage = () => {
+  const isMobile = useIsMobile();
   const { session, updateSession } = use(SessionContext);
   const {
     data: bucketsData,
@@ -115,18 +117,33 @@ const BucketsPage = () => {
               </span>
             ) : null}
           </h1>
-          {session.plan && session.plan !== "free" ? (
-            <Button
-              variant="primary"
-              label="Add Bucket"
-              onClick={() => {
-                setCreateOrUpdateBucketModalIsOpen(true);
-              }}
-              Icon={<PlusIcon className="h-4 w-4" />}
-            />
-          ) : (
-            <PayButton label="Purchase to Add Bucket - $19 (one time)" />
-          )}
+          <div className="flex items-center space-x-4">
+            <a
+              href="https://blog.file.rocks/posts/how-do-i-connect-an-amazon-s3-bucket-to-filerocks"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-500 hover:text-zinc-700 text-xs flex items-center space-x-1"
+            >
+              <QuestionMarkCircleIcon className="h-4 w-4" />{" "}
+              <span>
+                {isMobile
+                  ? "I need help"
+                  : "Need help configuring your bucket?"}
+              </span>
+            </a>
+            {session.plan && session.plan !== "free" ? (
+              <Button
+                variant="primary"
+                label="Add Bucket"
+                onClick={() => {
+                  setCreateOrUpdateBucketModalIsOpen(true);
+                }}
+                Icon={<PlusIcon className="h-4 w-4" />}
+              />
+            ) : (
+              <PayButton label="Purchase to Add Bucket - $19 (one time)" />
+            )}
+          </div>
         </div>
         <ul className="mt-6 flex flex-col space-y-4">
           {bucketsData?.buckets.length === 0 && (

@@ -5,6 +5,7 @@ import { Bucket } from "@/app/_db/bucket";
 import { Select } from "../../form/Select";
 import { ObjectId } from "mongodb";
 import { providerOptions } from "@/app/_helpers/buckets/provider-options";
+import { QuestionMarkCircleIcon } from "@heroicons/react/16/solid";
 
 interface Props {
   isOpen: boolean;
@@ -94,6 +95,15 @@ export const CreateOrUpdateBucketModal = ({
       title={bucketId ? "Update Bucket" : "Create Bucket"}
       body={
         <div className="pb-2 space-y-4">
+          <a
+            href="https://blog.file.rocks/posts/how-do-i-connect-an-amazon-s3-bucket-to-filerocks"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-zinc-500 hover:text-zinc-700 text-xs flex items-center space-x-1"
+          >
+            <QuestionMarkCircleIcon className="h-4 w-4" />{" "}
+            <span>Need help configuring your bucket?</span>
+          </a>
           <Select
             label="Provider"
             value={
