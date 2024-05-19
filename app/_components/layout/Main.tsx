@@ -1,10 +1,11 @@
 "use client";
 import { usePathname } from "next/navigation";
+import { noSidebarPages } from "./Sidebar/Sidebar";
 
 export const Main = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
 
-  if (pathname.includes("/login") || pathname.includes("/signup")) {
+  if (noSidebarPages.includes(pathname)) {
     return <main>{children}</main>;
   }
 

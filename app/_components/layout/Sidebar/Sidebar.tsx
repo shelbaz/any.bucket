@@ -29,6 +29,14 @@ const navigation = [
   { name: "Settings", href: "/settings", icon: Cog6ToothIcon },
 ];
 
+export const noSidebarPages = [
+  "/login",
+  "/signup",
+  "/",
+  "/forgot-password",
+  "/reset-password",
+];
+
 export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
   const { session } = useContext(SessionContext);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -42,7 +50,7 @@ export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
   };
 
   // Don't show the sidebar on auth or landing page
-  if (pathname === "/" || pathname === "/login" || pathname === "/signup") {
+  if (noSidebarPages.includes(pathname)) {
     return null;
   }
 

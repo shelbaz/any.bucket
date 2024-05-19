@@ -51,3 +51,42 @@ export const createUser = async (email: string, password: string) => {
 
   return { user, workspace: workspace.insertedId };
 };
+
+export const createResetToken = async (email: string) => {
+  const db = await connectToDatabase();
+  const newToken = await bcrypt.hash(
+    Math.random().toString(36).substring(7),
+    10
+  );
+  const token = await db.collection("resetTokens").insertOne({
+    token: newToken,
+    createdAt: new Date(),
+    email,
+  });
+
+  return newToken;
+};
+
+export const sendPasswordResetEmail = async (email: string, token: string) => {
+  // Send email here
+};
+
+export const validateResetToken = async (token: string, email: string) => {
+  const db = await connectToDatabase();
+  const resetToken = await db
+    .collection("resetTokens")
+    .findOne({ token, email });
+
+  return !!resetToken;
+};
+
+export const updateUserPassword = async (email: string, password: string) => {
+  const db = await connectToDatabase();
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const updated = await db
+    .collection("users")
+    .updateOne({ email }, { $set: { password: hashedPassword } });
+
+  return updated;
+};

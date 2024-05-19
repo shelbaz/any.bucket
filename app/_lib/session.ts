@@ -5,11 +5,21 @@ import { defaultSession, sessionOptions } from "./";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createUser, doesUserExist, findUser } from "../_db/user";
+import {
+  createResetToken,
+  createUser,
+  doesUserExist,
+  findUser,
+  updateUserPassword,
+  validateResetToken,
+} from "../_db/user";
 import { NextRequest } from "next/server";
 import { getWorkspacesByUserId } from "../_db/workspace-membership";
 import { getBucketById } from "../_db/bucket";
-import { ObjectId } from "mongodb";
+import { Resend } from "resend";
+import { ResetPasswordTemplate } from "../_components/emails/ResetPasswordTemplate";
+
+const resend = new Resend(process.env.RESEND_API_KEY ?? "");
 
 export async function logout() {
   const session = await getSession();
@@ -142,4 +152,74 @@ export const updateSession = async (updatedSession: Partial<SessionData>) => {
     session[key] = updatedSession[key as keyof SessionData];
   });
   await session.save();
+};
+
+export const sendPasswordResetEmail = async (
+  prevState: { error: undefined | string },
+  formData: FormData
+) => {
+  const formEmail = formData.get("email") as string;
+
+  const emailError = validateEmail(formEmail);
+
+  if (emailError) {
+    return { error: emailError };
+  }
+
+  const token = await createResetToken(formEmail);
+
+  if (!token) {
+    return { error: "No user found with that email." };
+  }
+
+  const { data, error } = await resend.emails.send({
+    from: "dustin@file.rocks",
+    to: [formEmail],
+    subject: "Reset Your Password - file.rocks",
+    react: ResetPasswordTemplate({ email: formEmail, token }),
+    text: `Reset your password: https://www.file.rocks/reset-password?email=${encodeURIComponent(
+      formEmail
+    )}&token=${token}`,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return {
+    success: `An email has been sent to ${formEmail} with instructions to reset your
+    password.`,
+  };
+};
+
+export const updatePassword = async (
+  prevState: { error: undefined | string },
+  formData: FormData
+) => {
+  const formEmail = formData.get("email") as string;
+  const formNewPassword = formData.get("new-password") as string;
+  const formResetToken = formData.get("token") as string;
+
+  const emailError = validateEmail(formEmail);
+  const passwordError = validatePassword(formNewPassword);
+
+  if (passwordError || emailError) {
+    return { error: passwordError || emailError };
+  }
+
+  const resetTokenIsValid = validateResetToken(formResetToken, formEmail);
+
+  if (!resetTokenIsValid) {
+    return { error: "Invalid password reset token" };
+  }
+
+  const updatedUser = await updateUserPassword(formEmail, formNewPassword);
+
+  if (!updatedUser) {
+    return { error: "Something went wrong!" };
+  }
+
+  return {
+    success: "Password updated successfully!",
+  };
 };
