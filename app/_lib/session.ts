@@ -173,8 +173,8 @@ export const sendPasswordResetEmail = async (
   }
 
   const { data, error } = await resend.emails.send({
-    from: "dustin@file.rocks",
-    to: [formEmail],
+    from: "Dustin McCaffree <dustin@file.rocks>",
+    to: formEmail,
     subject: "Reset Your Password - file.rocks",
     react: ResetPasswordTemplate({ email: formEmail, token }),
     text: `Reset your password: https://www.file.rocks/reset-password?email=${encodeURIComponent(
