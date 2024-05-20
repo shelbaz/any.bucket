@@ -43,7 +43,7 @@ const nextConfig = {
     fallback: [
       {
         source: "/_next/(.*?)([.]\\w{2,5})(\\?[^/]+)?",
-        destination: "https://blog.file.rocks/$1$2$3",
+        destination: "https://blog.file.rocks/_next/$1$2$3",
       },
     ],
   }),
