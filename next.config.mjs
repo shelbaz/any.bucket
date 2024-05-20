@@ -39,6 +39,14 @@ const nextConfig = {
       },
     ];
   },
+  rewrites: async () => ({
+    fallback: [
+      {
+        source: "/_next/:path*",
+        destination: "https://blog.file.rocks/_next/:path*",
+      },
+    ],
+  }),
   webpack: (config) => {
     config.resolve.alias.canvas = false;
 
