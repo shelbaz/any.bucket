@@ -45,16 +45,16 @@ const nextConfig = {
       destination: "https://blog.file.rocks/$1$2$3",
     },
     {
-      source: "/blog/([\\S\\s]+)/",
-      destination: "https://blog.file.rocks/$1/",
+      source: "/blog/([\\S\\s]+)",
+      destination: "https://blog.file.rocks/$1",
     },
     {
-      source: "/blog/posts/([\\S\\s]+)/",
+      source: "/blog/posts",
       destination: "https://blog.file.rocks/posts",
     },
     {
       source: "/blog/posts/([\\S\\s]+)",
-      destination: "https://blog.file.rocks/posts",
+      destination: "https://blog.file.rocks/posts/$1",
     },
     {
       source: "/blog",
