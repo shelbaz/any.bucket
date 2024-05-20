@@ -42,8 +42,8 @@ const nextConfig = {
   rewrites: async () => ({
     fallback: [
       {
-        source: "https://file.rocks/_next/:path*",
-        destination: "https://blog.file.rocks/_next/:path*",
+        source: "/_next/(.*?)([.]\\w{2,5})(\\?[^/]+)?",
+        destination: "https://blog.file.rocks/$1$2$3",
       },
     ],
   }),
