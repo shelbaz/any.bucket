@@ -48,6 +48,26 @@ const nextConfig = {
       source: "/blog/([\\S\\s]+)/",
       destination: "https://blog.file.rocks/$1/",
     },
+    {
+      source: "/blog/posts/([\\S\\s]+)/",
+      destination: "https://blog.file.rocks/posts",
+    },
+    {
+      source: "/blog/posts/([\\S\\s]+)",
+      destination: "https://blog.file.rocks/posts",
+    },
+    {
+      source: "/blog",
+      destination: "https://blog.file.rocks",
+    },
+    {
+      source: "/blog/(.*)",
+      destination: "https://blog.file.rocks/$1",
+    },
+    {
+      source: "/blog/(.*)",
+      destination: "https://blog.file.rocks/$1",
+    },
   ],
   webpack: (config) => {
     config.resolve.alias.canvas = false;
