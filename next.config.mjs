@@ -60,14 +60,6 @@ const nextConfig = {
       source: "/blog",
       destination: "https://blog.file.rocks",
     },
-    {
-      source: "/blog/(.*)",
-      destination: "https://blog.file.rocks/$1",
-    },
-    {
-      source: "/blog/(.*)",
-      destination: "https://blog.file.rocks/$1",
-    },
   ],
   webpack: (config) => {
     config.resolve.alias.canvas = false;
