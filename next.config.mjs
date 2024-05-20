@@ -39,14 +39,6 @@ const nextConfig = {
       },
     ];
   },
-  rewrites: async () => ({
-    fallback: [
-      {
-        source: "/_next/(.*?)([.]\\w{2,5})(\\?[^/]+)?",
-        destination: "https://blog.file.rocks/_next/$1$2$3",
-      },
-    ],
-  }),
   webpack: (config) => {
     config.resolve.alias.canvas = false;
 
