@@ -39,28 +39,6 @@ const nextConfig = {
       },
     ];
   },
-  rewrites: () => [
-    {
-      source: "/blog/(.*?)([.]\\w{2,5})(\\?[^/]+)?",
-      destination: "https://blog.file.rocks/$1$2$3",
-    },
-    {
-      source: "/blog/([\\S\\s]+)",
-      destination: "https://blog.file.rocks/$1",
-    },
-    {
-      source: "/blog/posts",
-      destination: "https://blog.file.rocks/posts",
-    },
-    {
-      source: "/blog/posts/([\\S\\s]+)",
-      destination: "https://blog.file.rocks/posts/$1",
-    },
-    {
-      source: "/blog",
-      destination: "https://blog.file.rocks",
-    },
-  ],
   webpack: (config) => {
     config.resolve.alias.canvas = false;
 
