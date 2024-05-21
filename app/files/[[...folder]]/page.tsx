@@ -179,7 +179,7 @@ const FilePage = () => {
         </BreadcrumbsTopbar>
 
         <div className="flex px-6 mt-6 items-center justify-between">
-          <div className="w-64 max-w-full">
+          <div className="w-64 max-w-full pr-2">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none">
                 <MagnifyingGlassIcon className="w-4 h-4 text-zinc-400" />
@@ -215,6 +215,7 @@ const FilePage = () => {
                     <FolderRow
                       key={folder.prefix}
                       label={folder.label}
+                      prefix={folder.prefix}
                       onClick={() => router.push(`/files/${folder.prefix}`)}
                     />
                   ))}

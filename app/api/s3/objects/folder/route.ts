@@ -4,12 +4,72 @@ import {
   S3Client,
   _Object,
   CommonPrefix,
-  GetObjectCommand,
   PutObjectCommand,
+  ListObjectsV2Command,
+  DeleteObjectsCommand,
 } from "@aws-sdk/client-s3";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
-import { generatePresignedUrl } from "../presign/generate-presigned-url";
+
+async function emptyS3Directory(bucket: Bucket, prefix: string) {
+  const s3Url = bucket.endpoint;
+  const bucketName = bucket.name;
+
+  const client = new S3Client({
+    endpoint: s3Url,
+    forcePathStyle: true,
+    region: bucket.region || "auto",
+    credentials: {
+      accessKeyId: bucket.accessKeyId ?? "",
+      secretAccessKey: bucket.secretAccessKey ?? "",
+    },
+  });
+  const listParams = {
+    Bucket: bucketName,
+    Prefix: `${prefix}/`,
+    Delimiter: "/",
+  };
+
+  const command = new ListObjectsV2Command(listParams);
+  const listedObjects = await client.send(command);
+
+  if (!listedObjects.Contents || listedObjects.Contents.length === 0) {
+    if (
+      listedObjects.CommonPrefixes &&
+      listedObjects.CommonPrefixes.length > 0
+    ) {
+      const prefixes = listedObjects.CommonPrefixes;
+      const folders = formatFolders(prefixes);
+
+      for (const folder of folders) {
+        if (!folder.prefix) return;
+        await emptyS3Directory(bucket, folder.prefix);
+      }
+    } else {
+      return;
+    }
+  }
+
+  if (!listedObjects.Contents || listedObjects.Contents.length === 0) return;
+
+  const deleteParams = {
+    Bucket: bucketName,
+    Delete: { Objects: [] as { Key: string }[] },
+  };
+
+  listedObjects.Contents?.forEach(({ Key }) => {
+    if (!Key) return;
+    deleteParams.Delete.Objects.push({ Key });
+  });
+
+  const deleteCommand = new DeleteObjectsCommand(deleteParams);
+
+  await client.send(deleteCommand);
+
+  if (listedObjects.IsTruncated) await emptyS3Directory(bucket, prefix);
+
+  return { message: "Folder deleted" };
+}
 
 const formatFolders = (prefixes?: CommonPrefix[]) => {
   if (!prefixes) return [];
@@ -72,4 +132,21 @@ export async function POST(req: NextRequest) {
     },
     { status: 200 }
   );
+}
+
+export async function DELETE(req: NextRequest) {
+  const session = await getUserSession(req);
+  const body = await req.json();
+  const prefix = body.prefix;
+  const bucket = await getBucketById(
+    ObjectId.createFromHexString(session.bucketId)
+  );
+
+  if (!bucket) {
+    return NextResponse.json("Bucket not found", { status: 404 });
+  }
+
+  const response = await emptyS3Directory(bucket, prefix);
+
+  return NextResponse.json(response, { status: 200 });
 }

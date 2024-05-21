@@ -15,9 +15,9 @@ const createQueryString = (
 
 export const useListFiles = ({
   folder,
-  search,
-  orderBy,
-  orderDir,
+  search = "",
+  orderBy = "Key",
+  orderDir = "asc",
 }: {
   folder?: string;
   search?: string;

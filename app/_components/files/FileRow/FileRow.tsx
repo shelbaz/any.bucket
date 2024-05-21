@@ -172,9 +172,6 @@ export const FileRow = ({
               <span className="text-tiny text-zinc-500">
                 {getSize(bytes ?? 0)}
               </span>
-              {/* <div className="hover:bg-zinc-100 text-zinc-500 hover:text-black h-6 w-6 justify-center items-center flex rounded cursor-pointer">
-                <EllipsisHorizontalIcon className="h-5 w-5" />
-              </div> */}
               <div
                 onClick={(e) => {
                   e.preventDefault();
