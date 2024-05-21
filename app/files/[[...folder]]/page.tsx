@@ -35,6 +35,7 @@ import { NewFolderModal } from "@/app/_components/modals/NewFolderModal";
 import { useCreateFolder } from "@/app/_hooks/files/use-create-folder";
 import { Input } from "@/app/_components/form/Input";
 import { useDebounce } from "@/app/_hooks/util";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 
 const FilePage = () => {
   const {
@@ -179,12 +180,21 @@ const FilePage = () => {
 
         <div className="flex px-6 mt-6 items-center justify-between">
           <div className="w-64 max-w-full">
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search"
-              className="w-full !border-zinc-400 focus:!border-zinc-500"
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none">
+                <MagnifyingGlassIcon className="w-4 h-4 text-zinc-400" />
+              </div>
+
+              <Input
+                type="search"
+                name="search"
+                id="search"
+                placeholder="Search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-8 !border-zinc-300 focus:!border-zinc-500"
+              />
+            </div>
           </div>
           <div>
             <Button
