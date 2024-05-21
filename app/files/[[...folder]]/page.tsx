@@ -33,6 +33,8 @@ import { PayButton } from "@/app/_components/PayButton/PayButton";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import { NewFolderModal } from "@/app/_components/modals/NewFolderModal";
 import { useCreateFolder } from "@/app/_hooks/files/use-create-folder";
+import { Input } from "@/app/_components/form/Input";
+import { useDebounce } from "@/app/_hooks/util";
 
 const FilePage = () => {
   const {
@@ -47,6 +49,10 @@ const FilePage = () => {
   const router = useRouter();
   const { setFiles, setUploadModalIsOpen } = useContext(UploadContext);
   const { folder } = useContext(AppContext);
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
+  const [orderBy, setOrderBy] = useState("Key");
+  const [orderDir, setOrderDir] = useState<"asc" | "desc">("asc");
   const { session, updateSession } = useContext(SessionContext);
   const [newFolderModalIsOpen, setNewFolderModalIsOpen] = useState(false);
   const crumbs =
@@ -71,6 +77,9 @@ const FilePage = () => {
 
   const files = useListFiles({
     folder,
+    search: debouncedSearch,
+    orderBy,
+    orderDir,
   });
 
   const uploadFiles = (files: File[]) => {
@@ -169,7 +178,14 @@ const FilePage = () => {
         </BreadcrumbsTopbar>
 
         <div className="flex px-6 mt-6 items-center justify-between">
-          <div></div>
+          <div className="w-64 max-w-full">
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search"
+              className="w-full !border-zinc-400 focus:!border-zinc-500"
+            />
+          </div>
           <div>
             <Button
               label="New Folder"
@@ -184,13 +200,14 @@ const FilePage = () => {
           <div className="px-6 mt-4">
             {fileLayout === "list" ? (
               <ul className="flex flex-col rounded-lg border border-zinc-200 divide-y divide-zinc-200">
-                {foldersData?.map((folder: Folder) => (
-                  <FolderRow
-                    key={folder.prefix}
-                    label={folder.label}
-                    onClick={() => router.push(`/files/${folder.prefix}`)}
-                  />
-                ))}
+                {(!page || page === "1") &&
+                  foldersData?.map((folder: Folder) => (
+                    <FolderRow
+                      key={folder.prefix}
+                      label={folder.label}
+                      onClick={() => router.push(`/files/${folder.prefix}`)}
+                    />
+                  ))}
                 {objectsData?.map((object: _Object & { url: string }) => (
                   <FileRow
                     key={object.Key}

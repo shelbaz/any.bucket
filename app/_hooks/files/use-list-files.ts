@@ -13,7 +13,17 @@ const createQueryString = (
     .join("&");
 };
 
-export const useListFiles = ({ folder }: { folder?: string }) => {
+export const useListFiles = ({
+  folder,
+  search,
+  orderBy,
+  orderDir,
+}: {
+  folder?: string;
+  search?: string;
+  orderBy?: string;
+  orderDir?: "asc" | "desc";
+}) => {
   const { page, pageSize } = useContext(AppContext);
   const { session } = useContext(SessionContext);
   const bucketId = session.bucketId;
@@ -25,6 +35,9 @@ export const useListFiles = ({ folder }: { folder?: string }) => {
           page,
           pageSize,
           bucketId,
+          search,
+          orderBy,
+          orderDir,
         })}`
       : undefined,
     fetcher

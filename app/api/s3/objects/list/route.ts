@@ -10,6 +10,8 @@ import {
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { generatePresignedUrl } from "../presign/generate-presigned-url";
+import _ from "lodash";
+import { Folder } from "@/app/_types";
 
 const formatFolders = (prefixes?: CommonPrefix[]) => {
   if (!prefixes) return [];
@@ -20,6 +22,11 @@ const formatFolders = (prefixes?: CommonPrefix[]) => {
     const label = split?.[split.length - 2] ?? "";
     return { prefix, label };
   });
+};
+
+const getFolderOrderBy = (sortBy: string) => {
+  if (sortBy === "Key") return "prefix";
+  return sortBy;
 };
 
 const listObjects = async (options?: { bucket: Bucket; prefix?: string }) => {
@@ -58,6 +65,10 @@ export async function GET(req: NextRequest) {
   const folder = searchParams.get("folder") ?? undefined;
   const size = Number(searchParams.get("size") ?? 24);
   const page = Number(searchParams.get("page") ?? 1);
+  const orderBy = searchParams.get("orderBy") ?? "Key";
+  const folderOrderBy = getFolderOrderBy(orderBy);
+  const orderDir = (searchParams.get("orderDir") ?? "asc") as "asc" | "desc";
+  const search = searchParams.get("search") ?? "";
 
   const bucketId = session.bucketId;
   const bucket = await getBucketById(ObjectId.createFromHexString(bucketId));
@@ -72,8 +83,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json("Failed to list objects", { status: 500 });
   }
 
-  const pageContents =
-    response.Contents?.slice(size * (page - 1), size * page) ?? [];
+  const pageContents = (
+    response.Contents?.slice(size * (page - 1), size * page) ?? []
+  ).filter((object: _Object) =>
+    object.Key?.toLowerCase()?.includes(search.toLowerCase())
+  );
 
   const pageContentsWithPresignedUrl = await Promise.all(
     pageContents.map(async (object: _Object) => {
@@ -91,14 +105,44 @@ export async function GET(req: NextRequest) {
     })
   );
 
+  const folders = formatFolders(response.CommonPrefixes).filter((folder) =>
+    folder.prefix?.toLowerCase()?.includes(search.toLowerCase())
+  );
+
   const totalPages = Math.ceil((response.Contents?.length ?? 0) / size);
 
   const moreBeforeContinue = (response.Contents?.length ?? 0) > size * page;
 
   return NextResponse.json(
     {
-      objects: pageContentsWithPresignedUrl,
-      folders: formatFolders(response.CommonPrefixes),
+      objects: _.orderBy(
+        pageContentsWithPresignedUrl,
+        [
+          (object: _Object) => {
+            if (typeof object?.[orderBy as keyof _Object] === "string") {
+              return (
+                object?.[orderBy as keyof _Object] as string
+              )?.toLowerCase();
+            }
+            return object?.[orderBy as keyof _Object];
+          },
+        ],
+        orderDir
+      ),
+      folders: _.orderBy(
+        folders,
+        [
+          (folder: Folder) => {
+            if (typeof folder?.[folderOrderBy as keyof Folder] === "string") {
+              return (
+                folder?.[folderOrderBy as keyof Folder] as string
+              )?.toLowerCase();
+            }
+            return folder?.[folderOrderBy as keyof Folder];
+          },
+        ],
+        orderDir
+      ),
       isTruncated: response.IsTruncated,
       continuationToken: response.NextContinuationToken,
       moreBeforeContinue,
