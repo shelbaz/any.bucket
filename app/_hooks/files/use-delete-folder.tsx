@@ -6,12 +6,17 @@ import { useContext } from "react";
 import { AppContext } from "@/app/_context/AppContext";
 import { Folder } from "@/app/_types";
 
-export const useDeleteFolder = ({ folderPrefix }: { folderPrefix: string }) => {
+export const useDeleteFolder = ({
+  folderPrefix,
+}: {
+  folderPrefix?: string;
+}) => {
   const { folder } = useContext(AppContext);
   const fetcher = useFetcher();
   const files = useListFiles({ folder });
 
   const deleteFolder = async () => {
+    if (!folderPrefix) return;
     const toastId = toast.loading("Deleting folder...");
     try {
       await fetcher("/api/s3/objects/folder", {
