@@ -101,6 +101,8 @@ export const FileRow = ({
   const isSelected = objectKey === mediaFile;
   const isPlaying = !mediaRef?.current?.paused && isSelected;
 
+  if (!label) return null;
+
   return (
     <li
       className={clsx(
@@ -163,7 +165,7 @@ export const FileRow = ({
                 className="text-zinc-900 flex text-sm font-medium group-hover:text-black"
                 title={label}
               >
-                {label || <span className="opacity-50">(untitled file)</span>}
+                {label}
               </span>
             </span>
             <div className="flex items-center space-x-3">

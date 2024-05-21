@@ -8,7 +8,7 @@ import { useListFiles } from "../../_hooks/files/use-list-files";
 import { useRouter } from "next/navigation";
 import { FolderCard } from "@/app/_components/files/FolderCard";
 import { FileCard } from "@/app/_components/files/FileCard";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "@/app/_context/AppContext";
 import { FolderRow } from "@/app/_components/files/FolderRow";
 import { FileRow } from "@/app/_components/files/FileRow";
@@ -31,6 +31,8 @@ import { Select } from "@/app/_components/form/Select";
 import { Button } from "@/app/_components/buttons/Button";
 import { PayButton } from "@/app/_components/PayButton/PayButton";
 import { PlusIcon } from "@heroicons/react/16/solid";
+import { NewFolderModal } from "@/app/_components/modals/NewFolderModal";
+import { useCreateFolder } from "@/app/_hooks/files/use-create-folder";
 
 const FilePage = () => {
   const {
@@ -46,6 +48,7 @@ const FilePage = () => {
   const { setFiles, setUploadModalIsOpen } = useContext(UploadContext);
   const { folder } = useContext(AppContext);
   const { session, updateSession } = useContext(SessionContext);
+  const [newFolderModalIsOpen, setNewFolderModalIsOpen] = useState(false);
   const crumbs =
     folder
       ?.split("/")
@@ -61,6 +64,7 @@ const FilePage = () => {
   const { renameFile } = useRenameFile({
     objectKey: renameFileModal.objectKey,
   });
+  const { createFolder } = useCreateFolder();
   const { moveFile } = useMoveFile({
     objectKey: moveFileModal.objectKey,
   });
@@ -83,11 +87,15 @@ const FilePage = () => {
     noClick: true,
   });
 
-  const hasFolders = !!files.data?.folders?.length;
-  const hasObjects = !!files.data?.objects?.length;
+  const foldersData =
+    files.data?.folders?.filter((folder: Folder) => !!folder.label) ?? [];
+  const objectsData =
+    files.data?.objects?.filter(
+      (object: _Object) => !!object.Key?.split("/").pop()
+    ) ?? [];
 
-  const foldersData = files.data?.folders ?? [];
-  const objectsData = files.data?.objects ?? [];
+  const hasFolders = !!foldersData?.length;
+  const hasObjects = !!objectsData?.length;
 
   const bucketOptions =
     bucketsData?.buckets?.map((bucket) => ({
@@ -167,10 +175,7 @@ const FilePage = () => {
               label="New Folder"
               Icon={<PlusIcon className="h-4 w-4" />}
               onClick={() => {
-                setMoveFileModal({
-                  isOpen: true,
-                  objectKey: "",
-                });
+                setNewFolderModalIsOpen(true);
               }}
             />
           </div>
@@ -278,6 +283,15 @@ const FilePage = () => {
           moveFile(folderName);
         }}
         isOpen={moveFileModal.isOpen}
+      />
+      <NewFolderModal
+        isOpen={newFolderModalIsOpen}
+        handleClose={() => {
+          setNewFolderModalIsOpen(false);
+        }}
+        handleSave={(name) => {
+          createFolder(name);
+        }}
       />
     </>
   );

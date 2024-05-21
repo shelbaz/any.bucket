@@ -22,6 +22,10 @@ interface AppContextType {
     objectKey: string;
   };
   setMoveFileModal: (modal: { isOpen: boolean; objectKey: string }) => void;
+  newFolderModal: {
+    isOpen: boolean;
+  };
+  setNewFolderModal: (modal: { isOpen: boolean }) => void;
   page: string;
   setPage: (page: string) => void;
   pageSize: string;
@@ -43,6 +47,10 @@ const initialValue: AppContextType = {
     objectKey: "",
   },
   setMoveFileModal: () => {},
+  newFolderModal: {
+    isOpen: false,
+  },
+  setNewFolderModal: () => {},
   page: "1",
   setPage: () => {},
   pageSize: "24",
@@ -64,6 +72,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [moveFileModal, setMoveFileModal] = useState<
     AppContextType["moveFileModal"]
   >(initialValue.moveFileModal);
+  const [newFolderModal, setNewFolderModal] = useState<
+    AppContextType["newFolderModal"]
+  >(initialValue.newFolderModal);
 
   const folder = useMemo(() => {
     return typeof params.folder === "object"
@@ -81,6 +92,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setRenameFileModal,
         moveFileModal,
         setMoveFileModal,
+        newFolderModal,
+        setNewFolderModal,
         page,
         setPage,
         pageSize,
