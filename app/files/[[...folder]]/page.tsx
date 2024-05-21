@@ -160,8 +160,23 @@ const FilePage = () => {
           </div>
         </BreadcrumbsTopbar>
 
+        <div className="flex px-6 mt-6 items-center justify-between">
+          <div></div>
+          <div>
+            <Button
+              label="New Folder"
+              Icon={<PlusIcon className="h-4 w-4" />}
+              onClick={() => {
+                setMoveFileModal({
+                  isOpen: true,
+                  objectKey: "",
+                });
+              }}
+            />
+          </div>
+        </div>
         {hasFolders || hasObjects ? (
-          <div className="p-6">
+          <div className="px-6 mt-4">
             {fileLayout === "list" ? (
               <ul className="flex flex-col rounded-lg border border-zinc-200 divide-y divide-zinc-200">
                 {foldersData?.map((folder: Folder) => (

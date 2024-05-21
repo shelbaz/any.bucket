@@ -21,12 +21,14 @@ export const MoveModal = ({
 }: Props) => {
   const [folderName, setFolderName] = useState("");
   const files = useListFiles({ folder: folderName });
-  const [objectKey, setObjectKey] = useState(currentObjectKey ?? "");
+
+  const currentFolderName = useMemo(() => {
+    return currentObjectKey?.split("/").slice(0, -1).join("/") ?? "";
+  }, [currentObjectKey]);
 
   useEffect(() => {
-    setObjectKey(currentObjectKey ?? "");
-    setFolderName(currentObjectKey?.split("/").slice(0, -1).join("/") ?? "");
-  }, [currentObjectKey]);
+    setFolderName(currentFolderName);
+  }, [currentFolderName]);
 
   const moveFile = (folderName: string) => {
     if (!isOpen) return;
@@ -52,39 +54,39 @@ export const MoveModal = ({
       title={`Move to ${prettyName}`}
       body={
         <div className="pb-2">
-          {!files.isLoading ? (
-            <ul className="flex flex-col rounded-lg border border-zinc-200 divide-y divide-zinc-200 h-[560px] overflow-y-auto">
-              {folderName && (
-                <FolderRow
-                  label=".."
-                  onClick={() =>
-                    setFolderName(folderName.split("/").slice(0, -1).join("/"))
-                  }
-                />
-              )}
-              {files.data?.folders?.map((folder: Folder) => (
-                <FolderRow
-                  key={folder.prefix}
-                  label={folder.label}
-                  onClick={() => setFolderName(folder.prefix)}
-                />
-              ))}
-            </ul>
-          ) : (
-            <div className="flex items-center justify-center h-24">
-              <Loader size={24} />
-            </div>
-          )}
-          {/* <h3 className="text-xl mb-3 text-zinc-900">
-            <span className="mr-2">📁</span>{" "}
-            {folderName ? folderName.split("/").pop() : "Files"}
-          </h3> */}
+          <ul className="flex flex-col rounded-lg border border-zinc-200 divide-y divide-zinc-200 h-[370px] overflow-y-auto">
+            {files.isLoading ? (
+              <div className="flex items-center justify-center h-full">
+                <Loader size={24} />
+              </div>
+            ) : (
+              <>
+                {folderName && (
+                  <FolderRow
+                    label=".."
+                    onClick={() =>
+                      setFolderName(
+                        folderName.split("/").slice(0, -1).join("/")
+                      )
+                    }
+                  />
+                )}
+                {files.data?.folders?.map((folder: Folder) => (
+                  <FolderRow
+                    key={folder.prefix}
+                    label={folder.label}
+                    onClick={() => setFolderName(folder.prefix)}
+                  />
+                ))}
+              </>
+            )}
+          </ul>
         </div>
       }
       confirmButton={{
         label: "Move",
         onClick: () => moveFile(folderName),
-        disabled: !folderName,
+        disabled: folderName === currentFolderName,
       }}
       cancelButton={{
         label: "Cancel",
