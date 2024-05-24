@@ -43,6 +43,7 @@ export const FileCard = ({
                 objectFit="cover"
                 alt={label ?? objectKey}
                 fill
+                unoptimized
               />
             </div>
           )}

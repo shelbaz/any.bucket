@@ -9,6 +9,7 @@ export const getBucketIcon = (provider: string) => {
           alt={provider}
           width={24}
           height={24}
+          unoptimized
         />
       );
     case "cloudflare":
@@ -18,6 +19,7 @@ export const getBucketIcon = (provider: string) => {
           alt={provider}
           width={24}
           height={24}
+          unoptimized
         />
       );
     case "minio":
@@ -27,6 +29,7 @@ export const getBucketIcon = (provider: string) => {
           alt={provider}
           width={24}
           height={24}
+          unoptimized
         />
       );
     case "wasabi":
@@ -36,6 +39,7 @@ export const getBucketIcon = (provider: string) => {
           alt={provider}
           width={24}
           height={24}
+          unoptimized
         />
       );
     case "backblaze":
@@ -45,6 +49,7 @@ export const getBucketIcon = (provider: string) => {
           alt={provider}
           width={24}
           height={24}
+          unoptimized
         />
       );
     default:
@@ -54,6 +59,7 @@ export const getBucketIcon = (provider: string) => {
           alt={provider}
           width={24}
           height={24}
+          unoptimized
         />
       );
   }

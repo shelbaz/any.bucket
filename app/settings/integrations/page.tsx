@@ -137,6 +137,7 @@ const KeysPage = () => {
                     alt={integration.name}
                     height={48}
                     width={48}
+                    unoptimized
                   />
                 </div>
               }

@@ -126,6 +126,7 @@ export const FileRow = ({
                         extension === "svg" ? "object-contain" : "object-cover"
                       }
                       sizes="(max-width: 64px), 64px"
+                      unoptimized
                     />
                   </div>
                 )}

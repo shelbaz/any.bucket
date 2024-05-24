@@ -192,6 +192,7 @@ const BucketsPage = () => {
                     alt={bucket.provider}
                     height={48}
                     width={48}
+                    unoptimized
                   />
                 </div>
               }

@@ -248,6 +248,7 @@ const ImagePage = () => {
                   src={imageBase64}
                   alt={`${image.revised_prompt} - ${index}`}
                   fill
+                  unoptimized
                 />
                 <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100">
                   <MoreButton
