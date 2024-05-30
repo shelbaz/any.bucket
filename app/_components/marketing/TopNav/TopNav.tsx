@@ -11,51 +11,13 @@ import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import {
-  ArrowPathIcon,
   Bars3Icon,
   BookmarkIcon,
-  CursorArrowRaysIcon,
   InformationCircleIcon,
-  Squares2X2Icon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { Button } from "../../buttons/Button";
 import { Logo } from "../../Logo";
-
-const solutions = [
-  {
-    name: "Analytics",
-    description:
-      "Get a better understanding of where your traffic is coming from.",
-    href: "/analytics",
-    icon: ChartBarIcon,
-  },
-  {
-    name: "Engagement",
-    description: "Speak directly to your customers in a more meaningful way.",
-    href: "/engagement",
-    icon: CursorArrowRaysIcon,
-  },
-  {
-    name: "Security",
-    description: "Your customers' data will be safe and secure.",
-    href: "/security",
-    icon: ShieldCheckIcon,
-  },
-  {
-    name: "Integrations",
-    description: "Connect with third-party tools that you're already using.",
-    href: "/integrations",
-    icon: Squares2X2Icon,
-  },
-  {
-    name: "Automations",
-    description:
-      "Build strategic funnels that will drive your customers to convert",
-    href: "/automations",
-    icon: ArrowPathIcon,
-  },
-];
 
 const resources = [
   {
@@ -115,89 +77,6 @@ export const TopNav = ({ className = "" }) => {
             <div className="flex items-center justify-end flex-1 lg:w-0">
               <div className="hidden md:flex-1 md:flex md:items-center md:justify-end md:mr-12">
                 <Popover.Group as="nav" className="hidden md:flex space-x-10">
-                  <Popover className="relative">
-                    {({ open }) => (
-                      <>
-                        <Popover.Button
-                          className={clsx(
-                            open ? "text-gray-900" : "text-black",
-                            "group rounded-md inline-flex items-center text-base font-medium hover:text-gray-900 focus:outline-none"
-                          )}
-                        >
-                          <span>Solutions</span>
-                          <ChevronDownIcon
-                            className={clsx(
-                              open ? "text-black" : "text-black",
-                              "ml-2 h-5 w-5 group-hover:text-black"
-                            )}
-                            aria-hidden="true"
-                          />
-                        </Popover.Button>
-
-                        <Transition
-                          show={open}
-                          as={Fragment}
-                          enter="transition ease-out duration-200"
-                          enterFrom="opacity-0 translate-y-1"
-                          enterTo="opacity-100 translate-y-0"
-                          leave="transition ease-in duration-150"
-                          leaveFrom="opacity-100 translate-y-0"
-                          leaveTo="opacity-0 translate-y-1"
-                        >
-                          <Popover.Panel
-                            static
-                            className="absolute z-10 -ml-4 mt-3 transform w-screen max-w-md right-0 lg:max-w-2xl"
-                          >
-                            <div className="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden">
-                              <div className="relative grid gap-6 px-5 py-6 sm:gap-8 sm:p-8 lg:grid-cols-2 bg-white">
-                                {solutions.map((item) => (
-                                  <a
-                                    key={item.name}
-                                    href={item.href}
-                                    className="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"
-                                  >
-                                    <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-indigo-500 text-white sm:h-12 sm:w-12">
-                                      <item.icon
-                                        className="h-6 w-6"
-                                        aria-hidden="true"
-                                      />
-                                    </div>
-                                    <div className="ml-4">
-                                      <p className="text-base font-medium text-gray-900">
-                                        {item.name}
-                                      </p>
-                                      <p className="mt-1 text-sm text-black">
-                                        {item.description}
-                                      </p>
-                                    </div>
-                                  </a>
-                                ))}
-                              </div>
-                              <div className="p-5 bg-gray-50 sm:p-8">
-                                <a
-                                  href="/enterprise"
-                                  className="-m-3 p-3 flow-root rounded-md hover:bg-gray-100"
-                                >
-                                  <div className="flex items-center">
-                                    <div className="text-base font-medium text-gray-900">
-                                      Enterprise
-                                    </div>
-                                    <span className="ml-3 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium leading-5 bg-indigo-100 text-indigo-800">
-                                      New
-                                    </span>
-                                  </div>
-                                  <p className="mt-1 text-sm text-black">
-                                    Empower your entire team with even more
-                                    advanced tools.
-                                  </p>
-                                </a>
-                              </div>
-                            </div>
-                          </Popover.Panel>
-                        </Transition>
-                      </>
-                    )}
-                  </Popover>
                   <a
                     href="/pricing"
                     className="text-base font-medium text-black hover:text-gray-900"
@@ -309,24 +188,6 @@ export const TopNav = ({ className = "" }) => {
                         <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                       </Popover.Button>
                     </div>
-                  </div>
-                  <div className="mt-6">
-                    <nav className="grid gap-6">
-                      {solutions.map((item) => (
-                        <a
-                          key={item.name}
-                          href={item.href}
-                          className="-m-3 p-3 flex items-center rounded-lg hover:bg-gray-50"
-                        >
-                          <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-indigo-500 text-white">
-                            <item.icon className="h-6 w-6" aria-hidden="true" />
-                          </div>
-                          <div className="ml-4 text-base font-medium text-gray-900">
-                            {item.name}
-                          </div>
-                        </a>
-                      ))}
-                    </nav>
                   </div>
                 </div>
                 <div className="py-6 px-5">

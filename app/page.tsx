@@ -11,20 +11,21 @@ const features = [
     description:
       "We support any S3-compatible object storage, including Amazon S3, Cloudflare R2, Backblaze B2, Wasabi, and more.",
     graphic:
-      "https://file.swell.so/file.rocks/Marketing%20Site/upload-bucket.svg",
+      "https://file.swell.so/file.rocks/Marketing%20Site/upload-bucket%20(1).svg",
   },
   {
     title: "Upload, manage, and share files",
     description:
-      "Each recipient has control of their own payout method and schedule.",
+      "Upload files, organize them into folders, and share them with flexible privacy settings.",
     graphic:
       "https://file.swell.so/file.rocks/Marketing%20Site/upload-files.svg",
   },
   {
-    title: "Say goodbye to ugly cloud storage consoles",
+    title: "No more ugly cloud storage consoles",
     description:
-      "We have out-of-the-box embeds for analytics, billing, and checkout.",
-    graphic: "/images/graphics/embed-graphic.png",
+      "Our out-of-the-way interface is designed to be simple, fast, and easy to use.",
+    graphic:
+      "https://file.swell.so/file.rocks/Marketing%20Site/ugly-console%20(1).png",
   },
 ];
 
@@ -34,7 +35,7 @@ export default function HomePage() {
     <>
       <div className="lg:pb-14 lg:overflow-hidden relative">
         <TopNav />
-        <div className="mx-auto max-w-7xl lg:px-8 pt-10 sm:pt-16 lg:pt-8">
+        <div className="mx-auto max-w-screen-2xl lg:px-8 pt-10 sm:pt-16 lg:pt-8">
           <div className="lg:grid lg:grid-cols-1 lg:gap-8">
             <div className="mx-auto max-w-md px-4 sm:max-w-3xl text-center sm:px-6 lg:px-0 lg:flex lg:items-center">
               <div className="py-8 lg:py-16">
@@ -63,17 +64,12 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="mx-auto max-w-md px-4 sm:max-w-none text-center sm:px-6 lg:px-0 lg:flex lg:items-center relative">
-              {/* <StyledImage
-                src={BackgroundCircles}
-                className="-top-2/3 left-1/2 -translate-x-1/2 absolute min-w-screen h-auto -z-10"
-                alt="Abstract circle outlines in the background"
-              />
-              <StyledImage
-                src={PipelineGraphic}
-                className="w-full h-auto"
+            <div className="text-center sm:px-6 lg:px-0 lg:flex lg:items-center relative w-full">
+              <img
+                src="https://file.swell.so/file.rocks/Marketing%20Site/hero-1.png"
+                className="h-auto w-full rounded-3xl"
                 alt="A depiction of the file.rocks web app, where a user has set up a payment pipeline called Vendors + Partners."
-              /> */}
+              />
             </div>
 
             <div className="py-20">
