@@ -40,7 +40,7 @@ export default function HomePage() {
             <div className="mx-auto max-w-md px-4 sm:max-w-3xl text-center sm:px-6 lg:px-0 lg:flex lg:items-center">
               <div className="py-8 lg:py-16">
                 <h1 className="mt-4 text-4xl md:text-6xl tracking-tight font-extrabold text-black sm:mt-5">
-                  <div>Own your own files.</div>
+                  <div>Own your files.</div>
                   <div className="mt-4 md:mt-0">Ditch the subscriptions.</div>
                 </h1>
                 <div className="mt-10 sm:mt-12">
