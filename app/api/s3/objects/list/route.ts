@@ -96,8 +96,6 @@ export async function GET(req: NextRequest) {
         Key: object.Key,
       });
       const url = await generatePresignedUrl({
-        fileName: object.Key ?? "",
-        folder,
         bucket,
         command,
       });

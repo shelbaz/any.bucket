@@ -154,9 +154,7 @@ const FilePage = () => {
                   files.mutate(undefined, { revalidate: false });
                   await updateSession({
                     bucketId: option.value?.toString(),
-                    publicDomain:
-                      bucket?.publicDomain ||
-                      `${bucket?.endpoint}/${bucket?.name}`,
+                    publicDomain: bucket?.publicDomain,
                   });
                   router.push("/files");
                   files.mutate();
@@ -230,6 +228,7 @@ const FilePage = () => {
                     }
                     publicDomain={session.publicDomain}
                     objectUrl={object.url}
+                    bucketName={currentBucket?.name}
                   />
                 ))}
               </ul>

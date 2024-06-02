@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { Document, Filter, ObjectId } from "mongodb";
 import { BaseEntity } from "./base-entity";
 import { connectToDatabase } from "./client";
 
@@ -13,6 +13,8 @@ export interface Bucket extends BaseEntity {
   region?: string;
   publicDomain?: string;
   connected?: boolean;
+  lastSynced?: Date;
+  thumbnails?: boolean;
 }
 
 export const createBucket = async (
@@ -51,6 +53,16 @@ export const getBucketsByUserId = async (userId: ObjectId) => {
   const buckets = await db
     .collection("buckets")
     .find<Bucket>({ userId })
+    .toArray();
+
+  return buckets;
+};
+
+export const getBuckets = async (filter?: any) => {
+  const db = await connectToDatabase();
+  const buckets = await db
+    .collection("buckets")
+    .find<Bucket>(filter ?? {})
     .toArray();
 
   return buckets;
