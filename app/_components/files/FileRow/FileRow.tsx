@@ -26,6 +26,7 @@ interface Props {
   publicDomain: string;
   objectUrl: string;
   bucketName?: string;
+  thumbnailUrl?: string;
 }
 
 export const FileRow = ({
@@ -36,6 +37,7 @@ export const FileRow = ({
   publicDomain,
   objectUrl,
   bucketName,
+  thumbnailUrl,
 }: Props) => {
   const { setRenameFileModal, renameFileModal, setMoveFileModal } =
     useContext(AppContext);
@@ -126,7 +128,7 @@ export const FileRow = ({
                 {fileType === "image" && (
                   <div className="w-8 h-8 bg-zinc-100 relative overflow-hidden rounded">
                     <Image
-                      src={fileUrl}
+                      src={thumbnailUrl ?? fileUrl}
                       alt={label ?? objectKey}
                       fill
                       className={

@@ -217,20 +217,23 @@ const FilePage = () => {
                       onClick={() => router.push(`/files/${folder.prefix}`)}
                     />
                   ))}
-                {objectsData?.map((object: _Object & { url: string }) => (
-                  <FileRow
-                    key={object.Key}
-                    objectKey={object.Key ?? ""}
-                    label={object.Key?.split("/").pop() ?? "File"}
-                    bytes={object.Size}
-                    extension={
-                      object.Key?.split(".").pop()?.toLowerCase() ?? "file"
-                    }
-                    publicDomain={session.publicDomain}
-                    objectUrl={object.url}
-                    bucketName={currentBucket?.name}
-                  />
-                ))}
+                {objectsData?.map(
+                  (object: _Object & { url: string; thumbnail?: string }) => (
+                    <FileRow
+                      key={object.Key}
+                      objectKey={object.Key ?? ""}
+                      label={object.Key?.split("/").pop() ?? "File"}
+                      bytes={object.Size}
+                      extension={
+                        object.Key?.split(".").pop()?.toLowerCase() ?? "file"
+                      }
+                      publicDomain={session.publicDomain}
+                      objectUrl={object.url}
+                      bucketName={currentBucket?.name}
+                      thumbnailUrl={object.thumbnail}
+                    />
+                  )
+                )}
               </ul>
             ) : (
               <ul className="grid grid-cols-12 gap-4">

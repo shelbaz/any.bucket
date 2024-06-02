@@ -54,7 +54,6 @@ export async function GET(req: NextRequest) {
         ) &&
         !object.Key.startsWith("_thumbnails/")
       ) {
-        console.log("CHECKING IF EXISTS:", object.Key);
         // Check if thumbnail exists
         if (
           thumbnails?.Contents?.find(
@@ -65,7 +64,6 @@ export async function GET(req: NextRequest) {
           continue;
         }
         // Get the image
-        console.log("GETTING OBJECT:", object.Key);
         const command = new GetObjectCommand({
           Bucket: bucket.name,
           Key: object.Key,
@@ -76,7 +74,6 @@ export async function GET(req: NextRequest) {
         });
         const imageResponse = await fetch(url);
         const imageBuffer = await imageResponse.arrayBuffer();
-        console.log("BUGGER:", imageBuffer);
         // Generate a thumbnail
         const newThumbnail = await generateThumbnailFromImage(imageBuffer);
         // Save to S3
@@ -85,7 +82,6 @@ export async function GET(req: NextRequest) {
           Key: `_thumbnails/${object.Key}`,
           Body: newThumbnail,
         });
-        console.log("SENDING");
         await s3.send(putCommand);
         s3.destroy();
       }

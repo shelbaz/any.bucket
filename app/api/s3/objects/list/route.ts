@@ -78,6 +78,10 @@ export async function GET(req: NextRequest) {
   }
 
   const response = await listObjects({ bucket, prefix: folder });
+  const thumbnailsResponse = await listObjects({
+    bucket,
+    prefix: "_thumbnails/",
+  });
 
   if (!response) {
     return NextResponse.json("Failed to list objects", { status: 500 });
@@ -85,9 +89,13 @@ export async function GET(req: NextRequest) {
 
   const pageContents = (
     response.Contents?.slice(size * (page - 1), size * page) ?? []
-  ).filter((object: _Object) =>
-    object.Key?.toLowerCase()?.includes(search.toLowerCase())
-  );
+  )
+    .filter((object: _Object) =>
+      object.Key?.toLowerCase()?.includes(search.toLowerCase())
+    )
+    .filter((object: _Object) => !object.Key?.startsWith("_thumbnails/"));
+
+  const thumbnails = thumbnailsResponse?.Contents;
 
   const pageContentsWithPresignedUrl = await Promise.all(
     pageContents.map(async (object: _Object) => {
@@ -99,13 +107,29 @@ export async function GET(req: NextRequest) {
         bucket,
         command,
       });
-      return { ...object, url };
+      let thumbnail;
+      if (
+        thumbnails?.find(
+          (thumbnail) => thumbnail.Key === `_thumbnails/${object.Key}`
+        )
+      ) {
+        thumbnail = await generatePresignedUrl({
+          bucket,
+          command: new GetObjectCommand({
+            Bucket: bucket.name,
+            Key: `_thumbnails/${object.Key}`,
+          }),
+        });
+      }
+      return { ...object, url, thumbnail };
     })
   );
 
-  const folders = formatFolders(response.CommonPrefixes).filter((folder) =>
-    folder.prefix?.toLowerCase()?.includes(search.toLowerCase())
-  );
+  const folders = formatFolders(response.CommonPrefixes)
+    .filter((folder) =>
+      folder.prefix?.toLowerCase()?.includes(search.toLowerCase())
+    )
+    .filter((folder) => folder.prefix !== "_thumbnails");
 
   const totalPages = Math.ceil((response.Contents?.length ?? 0) / size);
 
