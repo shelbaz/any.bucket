@@ -1,5 +1,5 @@
 import { getBuckets } from "@/app/_db/bucket";
-import { generateThumbnailFromImage } from "@/app/_helpers/files";
+import { generateThumbnailFromImage } from "@/app/_helpers/files/generate-thumbnail";
 import {
   S3Client,
   _Object,
@@ -13,12 +13,7 @@ import { generatePresignedUrl } from "../../s3/objects/presign/generate-presigne
 export async function GET(req: NextRequest) {
   // Get all buckets with lastSynced < 24 hours
   const buckets = await getBuckets({
-    $where: {
-      lastSynced: {
-        $lt: new Date(Date.now() - 24 * 60 * 60 * 1000),
-      },
-      thumbnails: true,
-    },
+    thumbnails: true,
   });
 
   // Get objects for each of those buckets, but do it 1 at a time
@@ -54,10 +49,12 @@ export async function GET(req: NextRequest) {
       // For all images, shrink the image to 40px x 40px
       if (
         object?.Key &&
-        [".jpg", ".jpeg", ".png", ".webp"].includes(
+        ["jpg", "jpeg", "png", "webp"].includes(
           object.Key.split(".").pop() ?? ""
-        )
+        ) &&
+        !object.Key.startsWith("_thumbnails/")
       ) {
+        console.log("CHECKING IF EXISTS:", object.Key);
         // Check if thumbnail exists
         if (
           thumbnails?.Contents?.find(
@@ -68,6 +65,7 @@ export async function GET(req: NextRequest) {
           continue;
         }
         // Get the image
+        console.log("GETTING OBJECT:", object.Key);
         const command = new GetObjectCommand({
           Bucket: bucket.name,
           Key: object.Key,
@@ -78,6 +76,7 @@ export async function GET(req: NextRequest) {
         });
         const imageResponse = await fetch(url);
         const imageBuffer = await imageResponse.arrayBuffer();
+        console.log("BUGGER:", imageBuffer);
         // Generate a thumbnail
         const newThumbnail = await generateThumbnailFromImage(imageBuffer);
         // Save to S3
@@ -86,6 +85,7 @@ export async function GET(req: NextRequest) {
           Key: `_thumbnails/${object.Key}`,
           Body: newThumbnail,
         });
+        console.log("SENDING");
         await s3.send(putCommand);
         s3.destroy();
       }
