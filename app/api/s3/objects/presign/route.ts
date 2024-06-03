@@ -24,8 +24,6 @@ export async function POST(req: NextRequest) {
   });
 
   const response = await generatePresignedUrl({
-    fileName,
-    folder,
     bucket,
     command,
   });
