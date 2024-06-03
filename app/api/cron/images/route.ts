@@ -1,5 +1,5 @@
 import { getBuckets } from "@/app/_db/bucket";
-import { generateThumbnailFromImage } from "@/app/_helpers/files/generate-thumbnail";
+import { generateThumbnailFromImage } from "./generate-thumbnail";
 import {
   S3Client,
   _Object,
