@@ -29,10 +29,15 @@ const getFolderOrderBy = (sortBy: string) => {
   return sortBy;
 };
 
-const listObjects = async (options?: { bucket: Bucket; prefix?: string }) => {
+const listObjects = async (options?: {
+  bucket: Bucket;
+  prefix?: string;
+  disableDelimiter?: boolean;
+}) => {
   const prefix = options?.prefix;
   const s3Url = options?.bucket.endpoint;
   const bucket = options?.bucket.name;
+  const Delimiter = options?.disableDelimiter ? undefined : "/";
 
   const client = new S3Client({
     endpoint: s3Url,
@@ -47,7 +52,7 @@ const listObjects = async (options?: { bucket: Bucket; prefix?: string }) => {
   const command = new ListObjectsV2Command({
     Bucket: bucket,
     Prefix: prefix,
-    Delimiter: "/",
+    Delimiter,
   });
 
   try {
@@ -81,6 +86,7 @@ export async function GET(req: NextRequest) {
   const thumbnailsResponse = await listObjects({
     bucket,
     prefix: "_thumbnails/",
+    disableDelimiter: true,
   });
 
   if (!response) {
