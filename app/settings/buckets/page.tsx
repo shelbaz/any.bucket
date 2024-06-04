@@ -88,7 +88,7 @@ const BucketsPage = () => {
     const toastId = toast.loading("Selecting bucket...");
     await updateSession({
       bucketId: bucket._id.toString(),
-      publicDomain: bucket.publicDomain || `${bucket.endpoint}/${bucket.name}`,
+      publicDomain: bucket.publicDomain,
     });
     await updateWorkspace(session.workspaceId, {
       defaultBucketId: bucket._id,

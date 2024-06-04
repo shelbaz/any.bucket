@@ -16,6 +16,7 @@ import { MoreButtonOption } from "../../buttons/MoreButton/MoreButton";
 import { AppContext } from "@/app/_context/AppContext";
 import { confirm } from "../../modals/ConfirmModal/ConfirmModal";
 import toast from "react-hot-toast";
+import { SessionContext } from "@/app/_context/SessionContext";
 
 interface Props {
   objectKey: string;
@@ -24,6 +25,8 @@ interface Props {
   extension: string;
   publicDomain: string;
   objectUrl: string;
+  bucketName?: string;
+  thumbnailUrl?: string;
 }
 
 export const FileRow = ({
@@ -33,6 +36,8 @@ export const FileRow = ({
   extension,
   publicDomain,
   objectUrl,
+  bucketName,
+  thumbnailUrl,
 }: Props) => {
   const { setRenameFileModal, renameFileModal, setMoveFileModal } =
     useContext(AppContext);
@@ -45,12 +50,16 @@ export const FileRow = ({
 
   const fileUrl = objectUrl || `${publicDomain}/${objectKey}`;
 
+  const downloadUrl = publicDomain
+    ? `${publicDomain}/${objectKey}`
+    : `${bucketName}.s3.amazonaws.com/${objectKey}`;
+
   const options: MoreButtonOption[] = [
     {
       label: "Copy link",
       action: async () => {
         const toastId = toast.loading("Copying");
-        await navigator.clipboard.writeText(fileUrl);
+        await navigator.clipboard.writeText(downloadUrl);
 
         toast.success("Link copied to clipboard", { id: toastId });
       },
@@ -58,7 +67,7 @@ export const FileRow = ({
     {
       label: "Download",
       action: () => {
-        downloadFile(fileUrl);
+        downloadFile(downloadUrl);
       },
     },
     {
@@ -119,7 +128,7 @@ export const FileRow = ({
                 {fileType === "image" && (
                   <div className="w-8 h-8 bg-zinc-100 relative overflow-hidden rounded">
                     <Image
-                      src={fileUrl}
+                      src={thumbnailUrl ?? fileUrl}
                       alt={label ?? objectKey}
                       fill
                       className={

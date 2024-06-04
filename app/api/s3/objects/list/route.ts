@@ -29,10 +29,15 @@ const getFolderOrderBy = (sortBy: string) => {
   return sortBy;
 };
 
-const listObjects = async (options?: { bucket: Bucket; prefix?: string }) => {
+const listObjects = async (options?: {
+  bucket: Bucket;
+  prefix?: string;
+  disableDelimiter?: boolean;
+}) => {
   const prefix = options?.prefix;
   const s3Url = options?.bucket.endpoint;
   const bucket = options?.bucket.name;
+  const Delimiter = options?.disableDelimiter ? undefined : "/";
 
   const client = new S3Client({
     endpoint: s3Url,
@@ -47,7 +52,7 @@ const listObjects = async (options?: { bucket: Bucket; prefix?: string }) => {
   const command = new ListObjectsV2Command({
     Bucket: bucket,
     Prefix: prefix,
-    Delimiter: "/",
+    Delimiter,
   });
 
   try {
@@ -78,6 +83,11 @@ export async function GET(req: NextRequest) {
   }
 
   const response = await listObjects({ bucket, prefix: folder });
+  const thumbnailsResponse = await listObjects({
+    bucket,
+    prefix: "_thumbnails/",
+    disableDelimiter: true,
+  });
 
   if (!response) {
     return NextResponse.json("Failed to list objects", { status: 500 });
@@ -85,9 +95,13 @@ export async function GET(req: NextRequest) {
 
   const pageContents = (
     response.Contents?.slice(size * (page - 1), size * page) ?? []
-  ).filter((object: _Object) =>
-    object.Key?.toLowerCase()?.includes(search.toLowerCase())
-  );
+  )
+    .filter((object: _Object) =>
+      object.Key?.toLowerCase()?.includes(search.toLowerCase())
+    )
+    .filter((object: _Object) => !object.Key?.startsWith("_thumbnails/"));
+
+  const thumbnails = thumbnailsResponse?.Contents;
 
   const pageContentsWithPresignedUrl = await Promise.all(
     pageContents.map(async (object: _Object) => {
@@ -96,18 +110,32 @@ export async function GET(req: NextRequest) {
         Key: object.Key,
       });
       const url = await generatePresignedUrl({
-        fileName: object.Key ?? "",
-        folder,
         bucket,
         command,
       });
-      return { ...object, url };
+      let thumbnail;
+      if (
+        thumbnails?.find(
+          (thumbnail) => thumbnail.Key === `_thumbnails/${object.Key}`
+        )
+      ) {
+        thumbnail = await generatePresignedUrl({
+          bucket,
+          command: new GetObjectCommand({
+            Bucket: bucket.name,
+            Key: `_thumbnails/${object.Key}`,
+          }),
+        });
+      }
+      return { ...object, url, thumbnail };
     })
   );
 
-  const folders = formatFolders(response.CommonPrefixes).filter((folder) =>
-    folder.prefix?.toLowerCase()?.includes(search.toLowerCase())
-  );
+  const folders = formatFolders(response.CommonPrefixes)
+    .filter((folder) =>
+      folder.prefix?.toLowerCase()?.includes(search.toLowerCase())
+    )
+    .filter((folder) => folder.prefix !== "_thumbnails");
 
   const totalPages = Math.ceil((response.Contents?.length ?? 0) / size);
 

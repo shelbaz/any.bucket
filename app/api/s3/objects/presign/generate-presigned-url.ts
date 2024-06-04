@@ -10,13 +10,10 @@ export const generatePresignedUrl = async ({
   bucket,
   command,
 }: {
-  fileName: string;
-  folder: string | undefined;
   bucket: Bucket;
   command: PutObjectCommand | GetObjectCommand;
 }) => {
   const s3Url = bucket.endpoint;
-  const name = bucket.name;
 
   const client = new S3Client({
     endpoint: s3Url,
