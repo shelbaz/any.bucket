@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generatePresignedUrl } from "../../s3/objects/presign/generate-presigned-url";
 
 export const maxDuration = 300;
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   // Get all buckets with lastSynced < 24 hours
