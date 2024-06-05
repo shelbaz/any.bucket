@@ -1,19 +1,11 @@
 export const Footer = () => {
   return (
     <footer className="relative py-12 overflow-hidden bg-black lg:py-20 xl:py-24 sm:py-16">
-      <div className="absolute inset-0">
-        <img
-          className="object-cover w-full h-full opacity-50"
-          src="https://landingfoliocom.imgix.net/store/collection/dusk/images/noise.png"
-          alt=""
-        />
-      </div>
-
       <div className="relative px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-y-12 lg:grid-cols-2 xl:grid-cols-7 gap-x-8 xl:gap-x-16">
           <div className="max-w-md mx-auto text-center xl:col-span-3 lg:max-w-sm lg:mx-0 lg:text-left">
             <p className="text-3xl font-normal text-white sm:text-4xl lg:text-5xl">
-              Let us handle payments.
+              No more cloud storage subscriptions.
             </p>
           </div>
 

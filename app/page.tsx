@@ -113,14 +113,12 @@ export default function HomePage() {
                       <div></div>
                       <div className="mt-6">
                         <h2 className="text-5xl font-extrabold tracking-tight text-zinc-900">
-                          Accept payments and set up flexible payouts
+                          Upload, rename, move, and share.
                         </h2>
                         <p className="mt-4 text-lg text-zinc-500">
-                          Semper curabitur ullamcorper posuere nunc sed. Ornare
-                          iaculis bibendum malesuada faucibus lacinia porttitor.
-                          Pulvinar laoreet sagittis viverra duis. In venenatis
-                          sem arcu pretium pharetra at. Lectus viverra dui
-                          tellus ornare pharetra.
+                          Files and folders are easy to manage with our simple
+                          interface. Upload files, organize them into folders,
+                          and share them with flexible privacy settings.
                         </p>
                         {/*<div className="mt-6">*/}
                         {/*  <Button label="Get started" onClick={() => console.log("CLICK")} />*/}
@@ -170,14 +168,11 @@ export default function HomePage() {
                     <div></div>
                     <div className="mt-6">
                       <h2 className="text-5xl font-extrabold tracking-tight text-zinc-900">
-                        A perfect fit for any product or marketplace
+                        Pay $19 once. Own forever.
                       </h2>
                       <p className="mt-4 text-lg text-zinc-500">
-                        Semper curabitur ullamcorper posuere nunc sed. Ornare
-                        iaculis bibendum malesuada faucibus lacinia porttitor.
-                        Pulvinar laoreet sagittis viverra duis. In venenatis sem
-                        arcu pretium pharetra at. Lectus viverra dui tellus
-                        ornare pharetra.
+                        No subscriptions, no recurring payments. Pay only for
+                        your S3-compatible storage, and own your files forever.
                       </p>
                       {/*<div className="mt-6">*/}
                       {/*  <Button label="Get started" onClick={() => console.log('CLICK')} />*/}
