@@ -4,6 +4,9 @@ import { Button } from "./_components/buttons/Button";
 import { Footer } from "./_components/marketing/Footer/Footer";
 import { StyledImage } from "./_components/marketing/StyledImage/StyledImage";
 import { TopNav } from "./_components/marketing/TopNav/TopNav";
+import { CheckIcon } from "@heroicons/react/20/solid";
+import clsx from "clsx";
+import { PayButton } from "./_components/PayButton";
 
 const features = [
   {
@@ -26,6 +29,26 @@ const features = [
       "Our out-of-the-way interface is designed to be simple, fast, and easy to use.",
     graphic:
       "https://file.swell.so/file.rocks/Marketing%20Site/ugly-console%20(1).png",
+  },
+];
+
+const tiers = [
+  {
+    id: "tier1",
+    name: "Pro (Lifetime)",
+    description: "For small teams just getting started",
+    price: "$19",
+    features: [
+      "Upload files",
+      "Download files",
+      "Move files",
+      "Create folders",
+      "Share files and folders",
+      "Pay only for what you use",
+      "No subscription",
+    ],
+    href: "#",
+    mostPopular: true,
   },
 ];
 
@@ -72,7 +95,7 @@ export default function HomePage() {
               />
             </div>
 
-            <div className="py-20">
+            <div className="py-20 bg-zinc-50 lg:rounded-3xl my-20 border-4 border-zinc-100">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <h2 className="mb-20 text-center text-3xl leading-8 font-extrabold tracking-tight text-zinc-900 sm:text-4xl">
                   How does it work?
@@ -105,91 +128,105 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="relative pt-20 pb-24">
-              <div className="relative">
-                <div className="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">
-                  <div className="px-4 max-w-xl mx-auto sm:px-6 lg:py-16 lg:max-w-none lg:mx-0 lg:px-0">
-                    <div>
-                      <div></div>
-                      <div className="mt-6">
-                        <h2 className="text-5xl font-extrabold tracking-tight text-zinc-900">
-                          Upload, rename, move, and share.
-                        </h2>
-                        <p className="mt-4 text-lg text-zinc-500">
-                          Files and folders are easy to manage with our simple
-                          interface. Upload files, organize them into folders,
-                          and share them with flexible privacy settings.
-                        </p>
-                        {/*<div className="mt-6">*/}
-                        {/*  <Button label="Get started" onClick={() => console.log("CLICK")} />*/}
-                        {/*</div>*/}
-                      </div>
-                    </div>
-                    {/*<div className="mt-8 border-t border-zinc-200 pt-6">*/}
-                    {/*  <blockquote>*/}
-                    {/*    <div>*/}
-                    {/*      <p className="text-base text-zinc-500">*/}
-                    {/*        &ldquo;Cras velit quis eros eget rhoncus lacus ultrices sed diam. Sit orci risus aenean curabitur*/}
-                    {/*        donec aliquet. Mi venenatis in euismod ut.&rdquo;*/}
-                    {/*      </p>*/}
-                    {/*    </div>*/}
-                    {/*    <footer className="mt-3">*/}
-                    {/*      <div className="flex items-center space-x-3">*/}
-                    {/*        <div className="flex-shrink-0">*/}
-                    {/*          <img*/}
-                    {/*            className="h-6 w-6 rounded-full"*/}
-                    {/*            src="https://images.unsplash.com/photo-1509783236416-c9ad59bae472?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80"*/}
-                    {/*            alt=""*/}
-                    {/*          />*/}
-                    {/*        </div>*/}
-                    {/*        <div className="text-base font-medium text-zinc-700">Marcia Hill, Digital Marketing Manager</div>*/}
-                    {/*      </div>*/}
-                    {/*    </footer>*/}
-                    {/*  </blockquote>*/}
+            <div className="relative py-20 bg-zinc-900 lg:rounded-3xl">
+              <div className="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">
+                <div className="px-4 max-w-xl mx-auto sm:px-6 lg:py-16 lg:max-w-none lg:mx-0 lg:px-0">
+                  <div className="mt-6">
+                    <h2 className="text-5xl font-extrabold tracking-tight text-white">
+                      Upload, move, rename, and organize.
+                    </h2>
+                    <p className="mt-4 text-lg text-zinc-300">
+                      Files and folders are easy to manage. Upload files,
+                      organize them into folders, view thumbnails and file
+                      types, and get shareable links.
+                    </p>
+                    {/*<div className="mt-6">*/}
+                    {/*  <Button label="Get started" onClick={() => console.log("CLICK")} />*/}
                     {/*</div>*/}
                   </div>
-                  <div className="mt-12 sm:mt-16 lg:mt-0">
-                    <div className="px-10 lg:px-0 lg:m-0 lg:relative lg:h-full">
-                      {/* <StyledImage
-                      className="w-full rounded-xl lg:absolute lg:left-0 lg:w-full lg:h-auto lg:max-w-none"
-                      src={PipelinesGraphic}
-                      alt="Pipelines"
-                    /> */}
-                    </div>
-                  </div>
+                </div>
+                <div className="flex items-center justify-center mt-12 lg:mt-0">
+                  <img
+                    className="w-96 rounded-2xl shadow-zinc-600 shadow-lg"
+                    alt="Upload files to your S3-compatible bucket"
+                    src="https://file.swell.so/file.rocks/Marketing Site/upload-files.gif"
+                  />
                 </div>
               </div>
             </div>
 
-            <div className="mt-24">
-              <div className="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">
-                <div className="px-4 max-w-xl mx-auto sm:px-6 lg:py-32 lg:max-w-none lg:mx-0 lg:px-0 lg:col-start-2">
-                  <div>
-                    <div></div>
-                    <div className="mt-6">
-                      <h2 className="text-5xl font-extrabold tracking-tight text-zinc-900">
-                        Pay $19 one time.
-                        <br />
-                        Own forever.
-                      </h2>
-                      <p className="mt-4 text-lg text-zinc-500">
-                        No subscriptions, no recurring payments. Pay only for
-                        your S3-compatible storage, and own your files forever.
-                      </p>
-                      {/*<div className="mt-6">*/}
-                      {/*  <Button label="Get started" onClick={() => console.log('CLICK')} />*/}
-                      {/*</div>*/}
-                    </div>
-                  </div>
+            <div className="py-24">
+              <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="mx-auto max-w-4xl text-center">
+                  <h2 className="text-base font-semibold leading-7 text-zinc-600">
+                    Pricing
+                  </h2>
+                  <p className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                    Pay Once, Own Forever
+                  </p>
                 </div>
-                <div className="mt-12 sm:mt-16 lg:mt-0 lg:col-start-1">
-                  <div className="px-10 lg:px-0 lg:m-0 lg:relative lg:h-full">
-                    {/* <StyledImage
-                      className="w-full h-auto lg:absolute lg:right-0 lg:h-full lg:w-auto lg:max-w-none"
-                      src={PipelineCardsGraphic}
-                      alt="Customer profile user interface"
-                    /> */}
-                  </div>
+                <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-8 text-gray-600">
+                  After you purchase, you&apos;ll have access to all current and
+                  future features.
+                </p>
+                <div className="isolate mx-auto mt-16 grid max-w-md grid-cols-1 gap-y-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                  {tiers.map((tier) => (
+                    <div
+                      key={tier.id}
+                      className={clsx(
+                        tier.mostPopular ? "lg:z-10" : "lg:mt-8",
+                        "flex flex-col justify-between rounded-3xl bg-white p-8 ring-1 ring-gray-200 xl:p-10 col-span-1 lg:col-start-2"
+                      )}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-x-4">
+                          <h3
+                            id={tier.id}
+                            className={clsx(
+                              "text-zinc-900",
+                              "text-lg font-semibold leading-8"
+                            )}
+                          >
+                            {tier.name}
+                          </h3>
+                          {tier.mostPopular ? (
+                            <p className="rounded-full bg-blue-600/10 px-2.5 py-1 text-xs font-semibold leading-5 text-blue-600">
+                              🐦&nbsp;&nbsp;Early Bird
+                            </p>
+                          ) : null}
+                        </div>
+                        <p className="mt-4 text-sm leading-6 text-gray-600">
+                          {tier.description}
+                        </p>
+                        <p className="mt-6 flex items-baseline gap-x-1">
+                          <span className="text-7xl font-bold tracking-tight text-gray-900">
+                            {tier.price}
+                          </span>
+                          <span className="text-lg ml-2 font-semibold leading-6 text-gray-600">
+                            one time
+                          </span>
+                        </p>
+                        <ul
+                          role="list"
+                          className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
+                        >
+                          {tier.features.map((feature) => (
+                            <li key={feature} className="flex gap-x-3">
+                              <CheckIcon
+                                className="h-6 w-5 flex-none text-zinc-600"
+                                aria-hidden="true"
+                              />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <PayButton
+                        buttonClassName="w-full mt-12 !bg-black hover:!bg-zinc-800"
+                        label="Purchase"
+                      />
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
