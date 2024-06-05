@@ -168,7 +168,9 @@ export default function HomePage() {
                     <div></div>
                     <div className="mt-6">
                       <h2 className="text-5xl font-extrabold tracking-tight text-zinc-900">
-                        Pay $19 once. Own forever.
+                        Pay $19 one time.
+                        <br />
+                        Own forever.
                       </h2>
                       <p className="mt-4 text-lg text-zinc-500">
                         No subscriptions, no recurring payments. Pay only for
