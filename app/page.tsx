@@ -9,6 +9,7 @@ import clsx from "clsx";
 import { PayButton } from "./_components/PayButton";
 import { useContext } from "react";
 import { SessionContext } from "./_context/SessionContext";
+import toast from "react-hot-toast";
 
 const features = [
   {
@@ -80,9 +81,17 @@ export default function HomePage() {
                       <Button
                         variant="secondary"
                         label="See how it works&nbsp;&nbsp;&nbsp;&#9658;"
-                        onClick={() =>
-                          console.log("HOW DOES THIS THING WORK?!")
-                        }
+                        onClick={() => {
+                          const toastId = toast.loading(
+                            "Awesome demo video loading..."
+                          );
+                          setTimeout(() => {
+                            toast.success(
+                              "Okay fine... There's no video yet. But I had to launch the marketing site, okay?",
+                              { id: toastId, duration: 8000 }
+                            );
+                          }, 2000);
+                        }}
                       />
                     </>
                   </div>
