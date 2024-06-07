@@ -158,7 +158,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="py-24">
+            <div className="py-24" id="pricing">
               <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="mx-auto max-w-4xl text-center">
                   <h2 className="text-base font-semibold leading-7 text-zinc-600">

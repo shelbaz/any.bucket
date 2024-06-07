@@ -76,7 +76,7 @@ export const TopNav = ({ className = "" }) => {
               <div className="hidden md:flex-1 md:flex md:items-center md:justify-end md:mr-12">
                 <Popover.Group as="nav" className="hidden md:flex space-x-10">
                   <a
-                    href="/pricing"
+                    href="#pricing"
                     className="text-base font-medium text-black hover:text-gray-900"
                   >
                     Pricing
