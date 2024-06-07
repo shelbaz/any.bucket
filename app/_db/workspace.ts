@@ -16,6 +16,7 @@ export interface Workspace extends BaseEntity {
 const mongoApi = createMongoDBDataAPI({
   apiKey: process.env.MONGODB_DATA_API_KEY ?? "",
   appId: process.env.MONGODB_DATA_API_APP_ID ?? "",
+  region: "us-east-2",
 });
 
 export const findOrCreateWorkspace = async (userId: string) => {

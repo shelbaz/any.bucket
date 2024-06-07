@@ -8,6 +8,7 @@ import { ObjectId } from "mongodb";
 const mongoApi = createMongoDBDataAPI({
   apiKey: process.env.MONGODB_DATA_API_KEY ?? "",
   appId: process.env.MONGODB_DATA_API_APP_ID ?? "",
+  region: "us-east-2",
 });
 
 export interface User extends BaseEntity {

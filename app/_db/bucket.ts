@@ -5,6 +5,7 @@ import { createMongoDBDataAPI } from "../_lib/mongo-data-api";
 const mongoApi = createMongoDBDataAPI({
   apiKey: process.env.MONGODB_DATA_API_KEY ?? "",
   appId: process.env.MONGODB_DATA_API_APP_ID ?? "",
+  region: "us-east-2",
 });
 
 export interface Bucket extends BaseEntity {
