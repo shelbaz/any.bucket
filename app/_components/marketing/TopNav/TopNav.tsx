@@ -3,9 +3,7 @@ import { Fragment, useContext } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { CalendarIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
 
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
-import clsx from "clsx";
 import {
   Bars3Icon,
   BookmarkIcon,
@@ -15,6 +13,7 @@ import {
 import { Button } from "../../buttons/Button";
 import { Logo } from "../../Logo";
 import { SessionContext } from "@/app/_context/SessionContext";
+import { useIsMobile } from "@/app/_hooks/util";
 
 const resources = [
   {
@@ -47,6 +46,7 @@ const resources = [
 ];
 
 export const TopNav = ({ className = "" }) => {
+  const isMobile = useIsMobile();
   const router = useRouter();
   const { session } = useContext(SessionContext);
 
@@ -61,8 +61,8 @@ export const TopNav = ({ className = "" }) => {
               <Logo
                 href="/"
                 src="https://file.swell.so/file.rocks/filerocks-logo-full.svg"
-                height={64}
-                width={200}
+                height={isMobile ? 48 : 64}
+                width={isMobile ? 140 : 200}
               />
             </div>
             <div className="-mr-2 -my-2 hidden">

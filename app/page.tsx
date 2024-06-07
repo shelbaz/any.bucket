@@ -93,8 +93,8 @@ export default function HomePage() {
             <div className="text-center sm:px-6 lg:px-0 lg:flex lg:items-center relative w-full">
               <img
                 src="https://file.swell.so/file.rocks/Marketing%20Site/hero-1.png"
-                className="h-auto w-full rounded-3xl"
-                alt="A depiction of the file.rocks web app, where a user has set up a payment pipeline called Vendors + Partners."
+                className=" min-h-96 sm:min-h-0 h-auto w-full sm:rounded-3xl object-cover object-left-top"
+                alt="A depiction of the file.rocks web app, where you can upload, manage, and share files."
               />
             </div>
 
@@ -148,7 +148,7 @@ export default function HomePage() {
                     {/*</div>*/}
                   </div>
                 </div>
-                <div className="flex items-center justify-center mt-12 lg:mt-0">
+                <div className="flex items-center justify-center mt-12 lg:mt-0 px-4">
                   <img
                     className="w-96 rounded-2xl shadow-zinc-600 shadow-lg"
                     alt="Upload files to your S3-compatible bucket"
