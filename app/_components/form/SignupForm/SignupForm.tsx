@@ -121,7 +121,7 @@ export function SignupForm() {
                 </div>
               </div>
 
-              <div className="overflow-hidden text-center bg-zinc-100 rounded-2xl ">
+              <div className="overflow-hidden text-center bg-zinc-100 rounded-2xl">
                 <div className="flex items-center justify-center px-8 py-12 sm:px-12 sm:py-16 md:py-24 md:px-20">
                   <div>
                     <img
