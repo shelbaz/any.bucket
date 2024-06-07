@@ -11,7 +11,7 @@ export async function POST(
     ...bucketDetails,
     workspaceId: ObjectId.createFromHexString(workspaceId),
   });
-  const bucket = await getBucketById(bucketId);
+  const bucket = await getBucketById(ObjectId.createFromHexString(bucketId));
 
   return NextResponse.json({ bucket }, { status: 200 });
 }

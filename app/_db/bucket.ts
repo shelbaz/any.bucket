@@ -1,6 +1,11 @@
-import { Document, Filter, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 import { BaseEntity } from "./base-entity";
-import { connectToDatabase } from "./client";
+import { createMongoDBDataAPI } from "../_lib/mongo-data-api";
+
+const mongoApi = createMongoDBDataAPI({
+  apiKey: process.env.MONGODB_DATA_API_KEY ?? "",
+  appId: process.env.MONGODB_DATA_API_APP_ID ?? "",
+});
 
 export interface Bucket extends BaseEntity {
   workspaceId: ObjectId;
@@ -20,11 +25,16 @@ export interface Bucket extends BaseEntity {
 export const createBucket = async (
   bucketDetails: Omit<Bucket, "_id" | "updatedAt" | "createdAt">
 ) => {
-  const db = await connectToDatabase();
-  const newBucket = await db.collection("buckets").insertOne({
-    ...bucketDetails,
-    updatedAt: new Date(),
-    createdAt: new Date(),
+  const newBucket = await mongoApi.insertOne<Bucket>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "buckets",
+    document: {
+      ...bucketDetails,
+      workspaceId: { $oid: bucketDetails.workspaceId },
+      updatedAt: { $date: new Date() },
+      createdAt: { $date: new Date() },
+    },
   });
 
   return newBucket.insertedId;
@@ -34,64 +44,79 @@ export const updateBucket = async (
   bucketId: ObjectId,
   bucketDetails: Partial<Bucket>
 ) => {
-  const db = await connectToDatabase();
-  const updatedBucket = await db.collection("buckets").findOneAndUpdate(
-    { _id: bucketId },
-    {
+  await mongoApi.updateOne<Bucket>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "buckets",
+    filter: { _id: { $oid: bucketId } },
+    update: {
       $set: {
         ...bucketDetails,
-        updatedAt: new Date(),
+        // @ts-ignore
+        updatedAt: { $date: new Date() },
       },
-    }
-  );
+    },
+  });
+  const updatedBucket = await getBucketById(bucketId);
 
-  return updatedBucket as Bucket;
+  return updatedBucket;
 };
 
 export const getBucketsByUserId = async (userId: ObjectId) => {
-  const db = await connectToDatabase();
-  const buckets = await db
-    .collection("buckets")
-    .find<Bucket>({ userId })
-    .toArray();
+  const mongoBuckets = await mongoApi.find<Bucket>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "buckets",
+    filter: { userId: { $oid: userId } },
+  });
+  const buckets = mongoBuckets?.documents;
 
   return buckets;
 };
 
 export const getBuckets = async (filter?: any) => {
-  const db = await connectToDatabase();
-  const buckets = await db
-    .collection("buckets")
-    .find<Bucket>(filter ?? {})
-    .toArray();
+  const mongoBuckets = await mongoApi.find<Bucket>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "buckets",
+    filter,
+  });
+  const buckets = mongoBuckets?.documents;
 
   return buckets;
 };
 
 export const getBucketsByWorkspaceId = async (workspaceId: ObjectId) => {
-  const db = await connectToDatabase();
-  const buckets = await db
-    .collection("buckets")
-    .find<Bucket>({ workspaceId })
-    .toArray();
+  const mongoBuckets = await mongoApi.find<Bucket>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "buckets",
+    filter: { workspaceId: { $oid: workspaceId } },
+  });
+  const buckets = mongoBuckets?.documents;
 
   return buckets;
 };
 
 export const getBucketById = async (bucketId: ObjectId) => {
-  const db = await connectToDatabase();
-  const bucket = await db
-    .collection("buckets")
-    .findOne<Bucket>({ _id: bucketId });
+  const mongoBucket = await mongoApi.findOne<Bucket>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "buckets",
+    filter: { _id: { $oid: bucketId } },
+  });
+  const bucket = mongoBucket?.document;
 
   return bucket;
 };
 
 export const deleteBucket = async (bucketId: ObjectId) => {
-  const db = await connectToDatabase();
-  const bucket = await db
-    .collection("buckets")
-    .findOneAndDelete({ _id: bucketId });
+  const deletedBucket = await mongoApi.deleteOne<Bucket>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "buckets",
+    filter: { _id: { $oid: bucketId } },
+  });
 
-  return bucket;
+  return deletedBucket;
 };

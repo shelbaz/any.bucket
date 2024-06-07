@@ -18,6 +18,8 @@ import { getWorkspacesByUserId } from "../_db/workspace-membership";
 import { getBucketById } from "../_db/bucket";
 import { Resend } from "resend";
 import { ResetPasswordTemplate } from "../_components/emails/ResetPasswordTemplate";
+import { updateWorkspace } from "../_db/workspace";
+import { ObjectId } from "mongodb";
 
 const resend = new Resend(process.env.RESEND_API_KEY ?? "");
 
@@ -123,7 +125,7 @@ export async function signup(
 
   const { user, workspace } = await createUser(formEmail, formPassword);
 
-  if (!user) {
+  if (!user || !workspace) {
     return { error: "Something went wrong!" };
   }
 

@@ -27,11 +27,11 @@ export async function PUT(
   const session = await getUserSession(req);
   const workspaceId = session.workspaceId;
   const body = await req.json();
-  const bucket = await updateIntegration({
+  const integration = await updateIntegration({
     integrationName: params.integrationName,
     integrationDetails: body,
     workspaceId: ObjectId.createFromHexString(workspaceId),
   });
 
-  return NextResponse.json({ bucket }, { status: 200 });
+  return NextResponse.json({ integration }, { status: 200 });
 }

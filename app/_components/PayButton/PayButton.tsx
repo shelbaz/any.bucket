@@ -5,6 +5,7 @@ import { useCallback, useContext, useEffect } from "react";
 import { SessionContext } from "@/app/_context/SessionContext";
 import { useUpdateWorkspace } from "@/app/_hooks/workspace/use-update-workspace";
 import { useIsMobile } from "@/app/_hooks/util";
+import { setCookie } from "cookies-next";
 
 export const PayButton = ({
   label = "Purchase - $19 (one time)",
@@ -21,7 +22,9 @@ export const PayButton = ({
     // @ts-ignore
     if (!window.LemonSqueezy) return;
     const params = new URLSearchParams();
-    params.set("checkout[email]", session.email);
+    if (session.email) {
+      params.set("checkout[email]", session.email);
+    }
     params.set("logo", "1");
     params.set("desc", "0");
     params.set("media", "0");
@@ -38,8 +41,12 @@ export const PayButton = ({
   const payHandler = useCallback(
     (event: any) => {
       if (event?.event === "Checkout.Success") {
-        updateSession({ plan: "pro" });
-        updateWorkspace(session.workspaceId, { plan: "pro" });
+        if (session.email) {
+          updateSession({ plan: "pro" });
+          updateWorkspace(session.workspaceId, { plan: "pro" });
+        } else {
+          setCookie("upgrade", "pro");
+        }
       }
     },
     [session, updateSession, updateWorkspace]

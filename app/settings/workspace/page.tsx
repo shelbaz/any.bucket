@@ -14,6 +14,7 @@ import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const WorkspacePage = () => {
+  const [loading, setLoading] = useState(false);
   const [workspaceName, setWorkspaceName] = useState("");
   const { session } = useContext(SessionContext);
   const { data: workspacesData, mutate: mutateWorkspaces } =
@@ -30,11 +31,13 @@ const WorkspacePage = () => {
 
   const handleSave = async () => {
     if (!currentWorkspace) return;
+    setLoading(true);
     const toastId = toast.loading("Saving...");
     await updateWorkspace(currentWorkspace._id.toString(), {
       name: workspaceName,
     });
     toast.success("Workspace updated!", { id: toastId });
+    setLoading(false);
   };
 
   return (
@@ -56,9 +59,11 @@ const WorkspacePage = () => {
           <Button
             label="Save Changes"
             onClick={() => {
+              handleSave();
               mutateWorkspaces();
             }}
-            isDisabled={workspaceName === currentWorkspace?.name}
+            isDisabled={workspaceName === currentWorkspace?.name || loading}
+            isLoading={loading}
           />
         </div>
         {workspacesData ? (

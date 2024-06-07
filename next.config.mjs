@@ -31,15 +31,6 @@ const nextConfig = {
       },
     ];
   },
-  redirects: async () => {
-    return [
-      {
-        source: "/",
-        destination: "/files",
-        permanent: true,
-      },
-    ];
-  },
   webpack: (config) => {
     config.resolve.alias.canvas = false;
 

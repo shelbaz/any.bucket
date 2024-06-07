@@ -115,7 +115,7 @@ export const Sidebar = ({ children }: { children?: React.ReactNode }) => {
                       height={1}
                       width={136}
                       src="https://file.swell.so/file.rocks/filerocks-logo-full.svg"
-                    />{" "}
+                    />
                   </div>
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
