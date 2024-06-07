@@ -11,9 +11,17 @@ export function SignupForm() {
 
   return (
     <>
+      <div className="bg-white fixed top-0 left-0 w-full px-6 py-4 z-50 border-b border-zinc-100 lg:border-transparent">
+        <Logo
+          href="/"
+          src="https://file.swell.so/file.rocks/filerocks-logo-full.svg"
+          height={64}
+          width={200}
+        />
+      </div>
       <form action={formAction}>
-        <section className="py-12 bg-white sm:py-16 lg:py-20">
-          <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl w-full">
+        <section className="py-36 bg-white lg:py-20">
+          <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-lg lg:max-w-7xl w-full">
             <div className="grid grid-cols-1 gap-y-12 lg:gap-x-20 lg:grid-cols-2 2xl:gap-x-8 w-full">
               <div className="flex items-center">
                 <div className="2xl:max-w-sm w-full">
@@ -145,15 +153,6 @@ export function SignupForm() {
           </div>
         </section>
       </form>
-
-      <div className="fixed top-4 left-6">
-        <Logo
-          href="/"
-          src="https://file.swell.so/file.rocks/filerocks-logo-full.svg"
-          height={64}
-          width={200}
-        />
-      </div>
     </>
   );
 }
