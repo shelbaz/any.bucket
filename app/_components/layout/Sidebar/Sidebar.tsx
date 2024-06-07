@@ -35,6 +35,8 @@ export const noSidebarPages = [
   "/",
   "/forgot-password",
   "/reset-password",
+  "/privacy",
+  "/terms",
 ];
 
 export const Sidebar = ({ children }: { children?: React.ReactNode }) => {

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const Footer = () => {
   return (
     <footer className="relative py-12 overflow-hidden bg-black lg:py-20 xl:py-24 sm:py-16">
@@ -20,45 +22,29 @@ export const Footer = () => {
                   <ul className="mt-6 space-y-4">
                     <li>
                       <a
-                        href="#"
+                        href="#pricing"
                         title=""
                         className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
                       >
-                        {" "}
-                        About{" "}
+                        Pricing
                       </a>
+                    </li>
+                    <li>
+                      <Link
+                        href="/login"
+                        className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
+                      >
+                        Log in
+                      </Link>
                     </li>
 
                     <li>
                       <a
-                        href="#"
+                        href="mailto:support@file.rocks"
                         title=""
                         className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
                       >
-                        {" "}
-                        Features{" "}
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        href="#"
-                        title=""
-                        className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
-                      >
-                        {" "}
-                        Pricing & Plans{" "}
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        href="#"
-                        title=""
-                        className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
-                      >
-                        {" "}
-                        Contact{" "}
+                        Contact Us
                       </a>
                     </li>
                   </ul>
@@ -72,96 +58,28 @@ export const Footer = () => {
                   <ul className="mt-6 space-y-4">
                     <li>
                       <a
-                        href="#"
-                        title=""
+                        href="https://blog.file.rocks"
+                        target="_blank"
+                        title="Files Rock - Block"
                         className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
                       >
-                        {" "}
-                        Account{" "}
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        href="#"
-                        title=""
-                        className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
-                      >
-                        {" "}
-                        Tools{" "}
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        href="#"
-                        title=""
-                        className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
-                      >
-                        {" "}
-                        Newsletter{" "}
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        href="#"
-                        title=""
-                        className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
-                      >
-                        {" "}
-                        FAQ{" "}
+                        Blog
                       </a>
                     </li>
                   </ul>
                 </div>
 
                 <div>
-                  <h6 className="text-base font-semibold text-white">Legals</h6>
+                  <h6 className="text-base font-semibold text-white">Legal</h6>
 
                   <ul className="mt-6 space-y-4">
                     <li>
-                      <a
-                        href="#"
-                        title=""
+                      <Link
+                        href="/privacy"
                         className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
                       >
-                        {" "}
-                        Guides{" "}
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        href="#"
-                        title=""
-                        className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
-                      >
-                        {" "}
-                        Terms & Conditions{" "}
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        href="#"
-                        title=""
-                        className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
-                      >
-                        {" "}
-                        Privacy Policy{" "}
-                      </a>
-                    </li>
-
-                    <li>
-                      <a
-                        href="#"
-                        title=""
-                        className="flex text-base font-normal text-gray-400 transition-all transform hover:text-white duration hover:translate-x-1"
-                      >
-                        {" "}
-                        Licensing{" "}
-                      </a>
+                        Privacy Policy
+                      </Link>
                     </li>
                   </ul>
                 </div>
