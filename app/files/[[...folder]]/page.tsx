@@ -8,7 +8,7 @@ import { useListFiles } from "../../_hooks/files/use-list-files";
 import { useRouter } from "next/navigation";
 import { FolderCard } from "@/app/_components/files/FolderCard";
 import { FileCard } from "@/app/_components/files/FileCard";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "@/app/_context/AppContext";
 import { FolderRow } from "@/app/_components/files/FolderRow";
 import { FileRow } from "@/app/_components/files/FileRow";
@@ -36,6 +36,8 @@ import { useCreateFolder } from "@/app/_hooks/files/use-create-folder";
 import { Input } from "@/app/_components/form/Input";
 import { useDebounce } from "@/app/_hooks/util";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { deleteCookie, getCookie } from "cookies-next";
+import { useUpdateWorkspace } from "@/app/_hooks/workspace/use-update-workspace";
 
 const FilePage = () => {
   const {
@@ -56,6 +58,7 @@ const FilePage = () => {
   const [orderDir, setOrderDir] = useState<"asc" | "desc">("asc");
   const { session, updateSession } = useContext(SessionContext);
   const [newFolderModalIsOpen, setNewFolderModalIsOpen] = useState(false);
+  const { updateWorkspace } = useUpdateWorkspace();
   const crumbs =
     folder
       ?.split("/")
@@ -118,6 +121,15 @@ const FilePage = () => {
       (bucket) => bucket._id.toString() === option.value
     );
   };
+
+  useEffect(() => {
+    const upgradeCookie = getCookie("upgrade");
+    if (upgradeCookie === "pro") {
+      updateWorkspace(session.workspaceId, { plan: "pro" });
+      updateSession({ plan: "pro" });
+      deleteCookie("upgrade");
+    }
+  }, [session.workspaceId, updateWorkspace, updateSession]);
 
   return (
     <>
