@@ -1,25 +1,34 @@
 import bcrypt from "bcrypt";
-import { connectToDatabase } from "./client";
 import { BaseEntity } from "./base-entity";
 import { createWorkspace } from "./workspace";
 import { createWorkspaceMembership } from "./workspace-membership";
+import { createMongoDBDataAPI } from "../_lib/mongo-data-api";
+import { ObjectId } from "mongodb";
+
+const mongoApi = createMongoDBDataAPI({
+  apiKey: process.env.MONGODB_DATA_API_KEY ?? "",
+  appId: process.env.MONGODB_DATA_API_APP_ID ?? "",
+});
 
 export interface User extends BaseEntity {
   email: string;
   password: string;
 }
 
-export const doesUserExist = async (email: string) => {
-  const db = await connectToDatabase();
-  const user = await db.collection("users").findOne<User>({ email });
+export const getUserByEmail = async (email: string) => {
+  const mongoUser = await mongoApi.findOne<User>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "users",
+    filter: { email },
+  });
 
-  return !!user;
+  const user = mongoUser?.document;
+  return user;
 };
 
 export const findUser = async (email: string, password: string) => {
-  const db = await connectToDatabase();
-
-  const user = await db.collection("users").findOne<User>({ email });
+  const user = await getUserByEmail(email);
 
   if (!user) return null;
 
@@ -28,24 +37,40 @@ export const findUser = async (email: string, password: string) => {
   return user;
 };
 
+export const doesUserExist = async (email: string) => {
+  const user = await getUserByEmail(email);
+
+  return !!user;
+};
+
 export const createUser = async (email: string, password: string) => {
-  const db = await connectToDatabase();
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = await db.collection("users").insertOne({
-    email,
-    password: hashedPassword,
-    updatedAt: new Date(),
-    createdAt: new Date(),
+  const user = await mongoApi.insertOne<User>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "users",
+    document: {
+      email,
+      password: hashedPassword,
+      updatedAt: { $date: new Date() },
+      createdAt: { $date: new Date() },
+    },
   });
 
   // Create workspace for user
-  const workspace = await createWorkspace("My Workspace", user.insertedId);
+  // TODO: Update
+  const workspace = await createWorkspace(
+    "My Workspace",
+    ObjectId.createFromHexString(user.insertedId)
+  );
+
+  if (!workspace) return { user, workspace };
 
   // Create workspace membership for user
   await createWorkspaceMembership({
-    workspaceId: workspace.insertedId,
-    userId: user.insertedId,
+    workspaceId: ObjectId.createFromHexString(workspace.insertedId),
+    userId: ObjectId.createFromHexString(user.insertedId),
     role: "owner",
   });
 
@@ -53,40 +78,51 @@ export const createUser = async (email: string, password: string) => {
 };
 
 export const createResetToken = async (email: string) => {
-  const db = await connectToDatabase();
   const newToken = await bcrypt.hash(
     Math.random().toString(36).substring(7),
     10
   );
-  const token = await db.collection("resetTokens").insertOne({
-    token: newToken,
-    createdAt: new Date(),
-    email,
+
+  const mongoToken = await mongoApi.insertOne({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "resetTokens",
+    document: {
+      token: newToken,
+      createdAt: { $date: new Date() },
+      email,
+    },
   });
+
+  if (!mongoToken.insertedId) return null;
 
   return newToken;
 };
 
-export const sendPasswordResetEmail = async (email: string, token: string) => {
-  // Send email here
-};
-
 export const validateResetToken = async (token: string, email: string) => {
-  const db = await connectToDatabase();
-  const resetToken = await db
-    .collection("resetTokens")
-    .findOne({ token, email });
+  const mongoToken = await mongoApi.findOne({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "resetTokens",
+    filter: { token, email },
+  });
+  const resetToken = mongoToken?.document;
 
   return !!resetToken;
 };
 
 export const updateUserPassword = async (email: string, password: string) => {
-  const db = await connectToDatabase();
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const updated = await db
-    .collection("users")
-    .updateOne({ email }, { $set: { password: hashedPassword } });
+  const updated = await mongoApi.updateOne({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "users",
+    filter: { email },
+    update: {
+      $set: { password: hashedPassword },
+    },
+  });
 
   return updated;
 };

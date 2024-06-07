@@ -1,6 +1,11 @@
 import { ObjectId } from "mongodb";
 import { BaseEntity } from "./base-entity";
-import { connectToDatabase } from "./client";
+import { createMongoDBDataAPI } from "../_lib/mongo-data-api";
+
+const mongoApi = createMongoDBDataAPI({
+  apiKey: process.env.MONGODB_DATA_API_KEY ?? "",
+  appId: process.env.MONGODB_DATA_API_APP_ID ?? "",
+});
 
 export interface Integration extends BaseEntity {
   workspaceId: ObjectId;
@@ -9,16 +14,18 @@ export interface Integration extends BaseEntity {
 }
 
 export const createIntegration = async (
-  integrationDetails: Omit<
-    Integration,
-    "workspaceId" | "_id" | "updatedAt" | "createdAt"
-  >
+  integrationDetails: Omit<Integration, "_id" | "updatedAt" | "createdAt">
 ) => {
-  const db = await connectToDatabase();
-  const newIntegration = await db.collection("integrations").insertOne({
-    ...integrationDetails,
-    updatedAt: new Date(),
-    createdAt: new Date(),
+  const newIntegration = await mongoApi.insertOne<Integration>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "integrations",
+    document: {
+      ...integrationDetails,
+      workspaceId: { $oid: integrationDetails.workspaceId },
+      updatedAt: { $date: new Date() },
+      createdAt: { $date: new Date() },
+    },
   });
 
   return newIntegration.insertedId;
@@ -33,47 +40,55 @@ export const updateIntegration = async ({
   integrationDetails: Partial<Integration>;
   workspaceId: ObjectId;
 }) => {
-  const db = await connectToDatabase();
-  const updatedIntegration = await db
-    .collection("integrations")
-    .findOneAndUpdate(
-      { name: integrationName, workspaceId },
-      {
-        $set: {
-          ...integrationDetails,
-          updatedAt: new Date(),
-        },
-      }
-    );
+  const updatedIntegration = await mongoApi.updateOne<Integration>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "integrations",
+    filter: { name: integrationName, workspaceId: { $oid: workspaceId } },
+    update: {
+      $set: {
+        ...integrationDetails,
+        // @ts-ignore
+        updatedAt: { $date: new Date() },
+      },
+    },
+  });
 
-  return updatedIntegration as Integration;
+  return updatedIntegration;
 };
 
 export const getIntegrationsByUserId = async (userId: ObjectId) => {
-  const db = await connectToDatabase();
-  const integrations = await db
-    .collection("integrations")
-    .find<Integration>({ userId })
-    .toArray();
+  const mongoIntegrations = await mongoApi.find<Integration>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "integrations",
+    filter: { userId: { $oid: userId } },
+  });
+  const integrations = mongoIntegrations?.documents;
 
   return integrations;
 };
 
 export const getIntegrationsByWorkspaceId = async (workspaceId: ObjectId) => {
-  const db = await connectToDatabase();
-  const integrations = await db
-    .collection("integrations")
-    .find<Integration>({ workspaceId })
-    .toArray();
+  const mongoIntegrations = await mongoApi.find<Integration>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "integrations",
+    filter: { workspaceId: { $oid: workspaceId } },
+  });
+  const integrations = mongoIntegrations?.documents;
 
   return integrations;
 };
 
 export const getIntegrationById = async (integrationId: ObjectId) => {
-  const db = await connectToDatabase();
-  const integration = await db
-    .collection("integrations")
-    .findOne<Integration>({ _id: integrationId });
+  const mongoIntegration = await mongoApi.findOne<Integration>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "integrations",
+    filter: { _id: { $oid: integrationId } },
+  });
+  const integration = mongoIntegration?.document;
 
   return integration;
 };
@@ -82,10 +97,13 @@ export const getIntegrationByNameAndWorkspaceId = async (
   name: string,
   workspaceId: ObjectId
 ) => {
-  const db = await connectToDatabase();
-  const integration = await db
-    .collection("integrations")
-    .findOne<Integration>({ name, workspaceId });
+  const mongoIntegration = await mongoApi.findOne<Integration>({
+    dataSource: "Cluster0",
+    database: process.env.MONGODB_DB_NAME,
+    collection: "integrations",
+    filter: { name, workspaceId: { $oid: workspaceId } },
+  });
+  const integration = mongoIntegration?.document;
 
   return integration;
 };

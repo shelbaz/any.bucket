@@ -12,7 +12,9 @@ export async function POST(
     ...integrationDetails,
     workspaceId: ObjectId.createFromHexString(workspaceId),
   });
-  const bucket = await getIntegrationById(integrationId);
+  const bucket = await getIntegrationById(
+    ObjectId.createFromHexString(integrationId)
+  );
 
   return NextResponse.json({ bucket }, { status: 200 });
 }

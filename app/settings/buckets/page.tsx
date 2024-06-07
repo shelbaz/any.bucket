@@ -64,17 +64,29 @@ const BucketsPage = () => {
     bucket: Omit<Bucket, "workspaceId" | "_id" | "updatedAt" | "createdAt">
   ) => {
     if (!bucket) return;
+    if (!bucketsData) return;
 
+    // @ts-ignore
     let response;
+    let newBuckets = [...bucketsData.buckets];
     if (!bucketId) {
       response = await createBucket(bucket);
+      if (response && response.bucket) {
+        newBuckets.push(response.bucket);
+      }
     } else {
       response = await updateBucket(bucketId, bucket);
+      if (response && response.bucket) {
+        newBuckets = newBuckets.map((b) =>
+          // @ts-ignore
+          b._id.toString() === bucketId.toString() ? response.bucket : b
+        );
+      }
     }
 
     if (response) {
       handleResetForm();
-      mutateBuckets();
+      mutateBuckets({ buckets: newBuckets }, { revalidate: true });
       updateSession({
         bucketId: response.bucket._id.toString(),
         publicDomain:

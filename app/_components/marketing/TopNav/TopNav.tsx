@@ -1,11 +1,7 @@
 "use client";
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { Popover, Transition } from "@headlessui/react";
-import {
-  CalendarIcon,
-  ChartBarIcon,
-  ShieldCheckIcon,
-} from "@heroicons/react/24/outline";
+import { CalendarIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
 
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
@@ -18,6 +14,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { Button } from "../../buttons/Button";
 import { Logo } from "../../Logo";
+import { SessionContext } from "@/app/_context/SessionContext";
 
 const resources = [
   {
@@ -51,6 +48,7 @@ const resources = [
 
 export const TopNav = ({ className = "" }) => {
   const router = useRouter();
+  const { session } = useContext(SessionContext);
 
   return (
     <Popover className="relative">
@@ -142,17 +140,28 @@ export const TopNav = ({ className = "" }) => {
                   </Popover>
                 </Popover.Group>
               </div>
-              <Button
-                variant="secondary"
-                label="Log in"
-                onClick={() => router.push("/login")}
-                className="mr-4 py-2"
-              />
-              <Button
-                label="Get Started"
-                onClick={() => router.push("/signup")}
-                className="py-2 shadow-none"
-              />
+              {session?.email ? (
+                <Button
+                  variant="primary"
+                  label="View My Files"
+                  onClick={() => router.push("/files")}
+                  className="mr-4 py-2"
+                />
+              ) : (
+                <>
+                  <Button
+                    variant="secondary"
+                    label="Log in"
+                    onClick={() => router.push("/login")}
+                    className="mr-4 py-2"
+                  />
+                  <Button
+                    label="Get Started"
+                    onClick={() => router.push("/signup")}
+                    className="py-2 shadow-none"
+                  />
+                </>
+              )}
             </div>
           </div>
 

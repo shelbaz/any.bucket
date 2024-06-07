@@ -16,6 +16,7 @@ specifiers:
   axios: ^1.6.8
   bcrypt: ^5.1.1
   clsx: ^2.1.0
+  cookies-next: ^4.2.1
   eslint: ^8
   eslint-config-next: 14.2.1
   iron-session: ^8.0.1
@@ -53,6 +54,7 @@ dependencies:
   axios: 1.6.8
   bcrypt: 5.1.1
   clsx: 2.1.1
+  cookies-next: 4.2.1
   iron-session: 8.0.1
   lodash: 4.17.21
   mongodb: 6.6.1
@@ -1812,6 +1814,10 @@ packages:
       '@types/node': 20.12.12
     dev: true
 
+  /@types/cookie/0.6.0:
+    resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
+    dev: false
+
   /@types/diff-match-patch/1.0.36:
     resolution: {integrity: sha512-xFdR6tkm0MWvBfO8xXCSsinYxHcqkQUlcHeSpMC2ukzOb6lwQAfDmW+Qt0AvlGd8HpsS28qKsB+oPeJn9I39jg==}
     dev: false
@@ -2448,6 +2454,13 @@ packages:
   /cookie/0.6.0:
     resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /cookies-next/4.2.1:
+    resolution: {integrity: sha512-qsjtZ8TLlxCSX2JphMQNhkm3V3zIMQ05WrLkBKBwu50npBbBfiZWIdmSMzBGcdGKfMK19E0PIitTfRFAdMGHXg==}
+    dependencies:
+      '@types/cookie': 0.6.0
+      cookie: 0.6.0
     dev: false
 
   /copy-to-clipboard/3.3.3:

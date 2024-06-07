@@ -7,6 +7,8 @@ import { TopNav } from "./_components/marketing/TopNav/TopNav";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { PayButton } from "./_components/PayButton";
+import { useContext } from "react";
+import { SessionContext } from "./_context/SessionContext";
 
 const features = [
   {
@@ -36,7 +38,7 @@ const tiers = [
   {
     id: "tier1",
     name: "Pro (Lifetime)",
-    description: "For small teams just getting started",
+    description: "",
     price: "$19",
     features: [
       "Upload files",
@@ -54,6 +56,7 @@ const tiers = [
 
 export default function HomePage() {
   const router = useRouter();
+  const { session } = useContext(SessionContext);
   return (
     <>
       <div className="lg:pb-14 lg:overflow-hidden relative">
@@ -184,13 +187,13 @@ export default function HomePage() {
                             id={tier.id}
                             className={clsx(
                               "text-zinc-900",
-                              "text-lg font-semibold leading-8"
+                              "text-xl font-semibold leading-8"
                             )}
                           >
                             {tier.name}
                           </h3>
                           {tier.mostPopular ? (
-                            <p className="rounded-full bg-blue-600/10 px-2.5 py-1 text-xs font-semibold leading-5 text-blue-600">
+                            <p className="rounded-full bg-blue-600/10 px-2.5 py-1 text-xs font-semibold leading-5 text-blue-700">
                               🐦&nbsp;&nbsp;Early Bird
                             </p>
                           ) : null}
@@ -199,7 +202,7 @@ export default function HomePage() {
                           {tier.description}
                         </p>
                         <p className="mt-6 flex items-baseline gap-x-1">
-                          <span className="text-7xl font-bold tracking-tight text-gray-900">
+                          <span className="text-6xl font-bold tracking-tight text-gray-900">
                             {tier.price}
                           </span>
                           <span className="text-lg ml-2 font-semibold leading-6 text-gray-600">
@@ -221,10 +224,18 @@ export default function HomePage() {
                           ))}
                         </ul>
                       </div>
-                      <PayButton
-                        buttonClassName="w-full mt-12 !bg-black hover:!bg-zinc-800"
-                        label="Purchase"
-                      />
+                      {!session?.plan || session?.plan === "free" ? (
+                        <PayButton
+                          buttonClassName="w-full mt-12 !bg-black hover:!bg-zinc-800"
+                          label="Purchase"
+                        />
+                      ) : (
+                        <Button
+                          label="Already Purchased"
+                          isDisabled={true}
+                          className="mt-12 w-full"
+                        />
+                      )}
                     </div>
                   ))}
                 </div>
