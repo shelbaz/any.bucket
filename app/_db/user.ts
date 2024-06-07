@@ -16,12 +16,15 @@ export interface User extends BaseEntity {
 }
 
 export const getUserByEmail = async (email: string) => {
+  console.log("API:", mongoApi);
   const mongoUser = await mongoApi.findOne<User>({
     dataSource: "Cluster0",
     database: process.env.MONGODB_DB_NAME,
     collection: "users",
     filter: { email },
   });
+
+  console.log("MONGO USER:", mongoUser);
 
   const user = mongoUser?.document;
   return user;
