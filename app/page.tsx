@@ -28,7 +28,7 @@ const features = [
   {
     title: "No more ugly cloud storage consoles",
     description:
-      "Our out-of-the-way interface is designed to be simple, fast, and easy to use.",
+      "Our out-of-the-way interface is designed to be simple, fast, and easy-to-use.",
     graphic:
       "https://file.swell.so/file.rocks/Marketing%20Site/ugly-console%20(1).png",
   },
