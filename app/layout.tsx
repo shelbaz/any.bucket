@@ -21,8 +21,9 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "S3 File Management - file.rocks",
-  description: "S3 file management system built with Next.js and Tailwind CSS.",
+  title: "Own Your Files, Ditch Your Subscriptions | file.rocks",
+  description:
+    "A clean bring-your-own S3 bucket cloud storage management system.",
 };
 
 export default async function RootLayout({

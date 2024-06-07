@@ -100,7 +100,7 @@ export default function HomePage() {
 
             <div className="py-20 bg-zinc-50 lg:rounded-3xl my-20 border-4 border-zinc-100">
               <div className="max-w-xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-                <h2 className="mb-20 text-center text-3xl leading-8 font-extrabold tracking-tight text-zinc-900 sm:text-4xl">
+                <h2 className="mb-20 text-center text-3xl leading-8 font-extrabold tracking-tight text-zinc-900 sm:text-5xl">
                   How does it work?
                 </h2>
                 <dl className="space-y-10 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-8">
@@ -135,8 +135,8 @@ export default function HomePage() {
               <div className="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-2 lg:grid-flow-col-dense lg:gap-24">
                 <div className="px-4 max-w-xl mx-auto sm:px-6 lg:py-16 lg:max-w-none lg:mx-0 lg:px-0">
                   <div className="mt-6">
-                    <h2 className="text-5xl font-extrabold tracking-tight text-white">
-                      Upload, move, rename, and organize.
+                    <h2 className="text-6xl font-extrabold tracking-tight text-white">
+                      Upload, organize, and share.
                     </h2>
                     <p className="mt-4 text-lg text-zinc-300">
                       Files and folders are easy to manage. Upload files,
