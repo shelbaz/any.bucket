@@ -81,8 +81,6 @@ export async function login(
 
   const user = await findUser(formEmail, formPassword);
 
-  console.log("USER:", user);
-
   if (!user) {
     return { error: "This email and password combo don't match. Try again!" };
   }
