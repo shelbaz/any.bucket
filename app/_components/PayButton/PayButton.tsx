@@ -76,10 +76,7 @@ export const PayButton = ({
         <Button
           type="button"
           label={isMobile ? "Purchase - $19" : label}
-          className={clsx(
-            "!bg-purple-600 hover:!bg-purple-800",
-            buttonClassName
-          )}
+          className={clsx("bg-purple-600 hover:bg-purple-800", buttonClassName)}
           onClick={openCheckout}
         />
       </div>
