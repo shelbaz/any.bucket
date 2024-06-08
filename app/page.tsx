@@ -83,12 +83,17 @@ export default function HomePage() {
                         label="See how it works&nbsp;&nbsp;&nbsp;&#9658;"
                         onClick={() => {
                           const toastId = toast.loading(
-                            "Awesome demo video loading..."
+                            "Awesome demo video loading...",
+                            { position: "top-center" }
                           );
                           setTimeout(() => {
                             toast.success(
                               "Okay fine... There's no video yet. But I had to launch the marketing site, okay?",
-                              { id: toastId, duration: 8000 }
+                              {
+                                id: toastId,
+                                duration: 8000,
+                                position: "top-center",
+                              }
                             );
                           }, 2000);
                         }}
